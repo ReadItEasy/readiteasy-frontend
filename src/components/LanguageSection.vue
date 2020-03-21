@@ -30,7 +30,7 @@
         </router-link>
       </p>
     </div>
-    <BaseIcon name="book" />
+    <BaseIcon name="phone" />
     <span>{{ books.length }} books</span>
   </div>
 </template>
