@@ -16,12 +16,12 @@ const routes = [
     component: LanguagesList
   },
   {
-    path: "/book/:textLang/:bookName/:chapter",
+    path: "/book/:textLang/:bookName/:chapterNumber",
     name: "book-show",
     component: BookShow,
     props(route) {
       const props = { ...route.params };
-      props.chapter = +props.chapter;
+      props.chapterNumber = +props.chapterNumber;
       return props;
     }
   },

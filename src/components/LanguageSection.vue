@@ -22,7 +22,7 @@
             params: {
               bookName: bookName,
               textLang: textLang,
-              chapter: 1
+              chapterNumber: 1
             }
           }"
         >
