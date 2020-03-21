@@ -1,23 +1,44 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
+// import EventCreate from "../views/EventCreate.vue";
+// import EventList from "../views/EventList.vue";
+import BookShow from "../views/BookShow.vue";
+import LanguagesList from "../views/LanguagesList.vue";
+import LanguageDetector from "../views/LanguageDetector.vue";
+import draft from "../views/draft.vue";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: "/",
-    name: "Home",
-    component: Home
+    name: "languages",
+    component: LanguagesList
   },
   {
-    path: "/about",
-    name: "About",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue")
+    path: "/book/:textLang/:bookName/:chapter",
+    name: "book-show",
+    component: BookShow,
+    props(route) {
+      const props = { ...route.params };
+      props.chapter = +props.chapter;
+      return props;
+    }
+  },
+  {
+    path: "/language-detector",
+    name: "language-detector",
+    component: LanguageDetector
+  },
+  // {
+  //   path: "/languages",
+  //   name: "languages",
+  //   component: Languages
+  // },
+  {
+    path: "/draft",
+    name: "draft",
+    component: draft
   }
 ];
 
