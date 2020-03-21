@@ -5,7 +5,6 @@ import VueRouter from "vue-router";
 import BookShow from "../views/BookShow.vue";
 import LanguagesList from "../views/LanguagesList.vue";
 import LanguageDetector from "../views/LanguageDetector.vue";
-import draft from "../views/draft.vue";
 
 Vue.use(VueRouter);
 
@@ -35,11 +34,6 @@ const routes = [
   //   name: "languages",
   //   component: Languages
   // },
-  {
-    path: "/draft",
-    name: "draft",
-    component: draft
-  }
 ];
 
 const router = new VueRouter({
