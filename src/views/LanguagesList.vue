@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import EventService from "@/services/EventService.js";
+import ApiService from "@/services/ApiService.js";
 import LanguageSection from "@/components/LanguageSection.vue";
 
 export default {
@@ -24,7 +24,7 @@ export default {
     };
   },
   created() {
-    EventService.getLanguages()
+    ApiService.getLanguages()
       .then(response => {
         this.languages = response.data.languages;
       })

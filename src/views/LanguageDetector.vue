@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import EventService from "@/services/EventService.js";
+import ApiService from "@/services/ApiService.js";
 
 export default {
   data() {
@@ -22,7 +22,7 @@ export default {
   },
   methods: {
     guessLanguage() {
-      EventService.getDetectedLanguage({
+      ApiService.getDetectedLanguage({
         textInput: this.textInput
       })
         .then(response => {

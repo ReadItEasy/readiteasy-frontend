@@ -5,7 +5,7 @@ import VueRouter from "vue-router";
 import BookShow from "../views/BookShow.vue";
 import LanguagesList from "../views/LanguagesList.vue";
 import LanguageDetector from "../views/LanguageDetector.vue";
-import store from '../store/index.js'
+import store from "../store/index.js";
 
 Vue.use(VueRouter);
 
@@ -43,9 +43,8 @@ const router = new VueRouter({
   routes
 });
 
-router.afterEach((to) => {
-  store.dispatch('loadKnownWords', to.params.targetLanguage)
-
-})
+router.afterEach(to => {
+  store.dispatch("loadKnownWords", to.params.targetLanguage);
+});
 
 export default router;

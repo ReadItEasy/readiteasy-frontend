@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import EventService from "@/services/EventService.js";
+import ApiService from "@/services/ApiService.js";
 
 export default {
   props: ["bookName", "targetLanguage", "chapterNumber"],
@@ -68,20 +68,13 @@ export default {
   },
   methods: {
     onLoad() {
-      EventService.getBook(this.$route.params)
+      ApiService.getBook(this.$route.params)
         .then(response => {
           this.chapterText = response.data.tokenized_chapter_text;
         })
         .catch(error => {
           console.log("there was an error :" + error.response);
         });
-      // EventService.getUserKnownWords(this.$route.params)
-      //   .then(response => {
-      //     this.userKnownWordsDict = response.data.user_known_words_dict;
-      //   })
-      //   .catch(error => {
-      //     console.log("there was an error :" + error.response);
-      //   });
     },
     switchStylingKnownWords() {
       this.isActiveColor = !this.isActiveColor;
