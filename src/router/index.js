@@ -1,7 +1,5 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-// import EventCreate from "../views/EventCreate.vue";
-// import EventList from "../views/EventList.vue";
 import BookShow from "../views/BookShow.vue";
 import LanguagesList from "../views/LanguagesList.vue";
 import LanguageDetector from "../views/LanguageDetector.vue";
@@ -30,11 +28,6 @@ const routes = [
     name: "language-detector",
     component: LanguageDetector
   }
-  // {
-  //   path: "/languages",
-  //   name: "languages",
-  //   component: Languages
-  // },
 ];
 
 const router = new VueRouter({

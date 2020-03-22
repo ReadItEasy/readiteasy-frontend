@@ -1,16 +1,4 @@
 <template>
-  <!-- <router-link
-    class="event-link"
-    :to="{ name: 'event-show', params: { id: event.id } }"
-  >
-    <div class="event-card -shadow">
-      <span class="eyebrow">@{{ event.time }} on {{ event.date }}</span>
-      <h4 class="title">{{ event.title }}</h4>
-      <BaseIcon name="user" />
-      <span>{{ event.attendees.length }} attending</span>
-    </div>
-  </router-link> -->
-
   <div class="language-section">
     <h3 class="title" @click="switchShow()">{{ targetLanguage }}</h3>
     <div class="books-section" v-show="showBoolean">
