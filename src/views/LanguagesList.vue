@@ -2,11 +2,10 @@
   <div>
     <h1>Languages</h1>
     <div v-for="(language, index) in languages" :key="index">
-      <LanguageSection :textLang="language.lang" :books="language.books" />
-      <!-- <h2 @click="show=true">{{ language }}</h2>
-      <div v-show="show">
-        <p>test</p>
-      </div> -->
+      <LanguageSection
+        :targetLanguage="language.lang"
+        :books="language.books"
+      />
     </div>
   </div>
 </template>

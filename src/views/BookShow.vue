@@ -10,7 +10,7 @@
           name: 'book-show',
           params: {
             bookName: bookName,
-            textLang: textLang,
+            targetLanguage: targetLanguage,
             chapterNumber: parseInt(chapterNumber) - 1
           }
         }"
@@ -23,7 +23,7 @@
           name: 'book-show',
           params: {
             bookName: bookName,
-            textLang: textLang,
+            targetLanguage: targetLanguage,
             chapterNumber: parseInt(chapterNumber) + 1
           }
         }"
@@ -37,7 +37,7 @@
         @=""
         v-for="(token, key) in chapterText"
         :key="key"
-        :isKnown="userKnownWordsDict[token]"
+        :isKnown="$store.state.userKnownWordsDict[token]"
         >{{ token }}</span
       >
     </div>
@@ -48,20 +48,15 @@
 import EventService from "@/services/EventService.js";
 
 export default {
-  props: ["bookName", "textLang", "chapterNumber"],
+  props: ["bookName", "targetLanguage", "chapterNumber"],
   data() {
     return {
       chapterText: [],
-      isKnownDict: [],
-      isKnownList: [],
-      isKnownDict2: {},
-      isActiveColor: true,
-      userKnownWordsDict: {}
+      isActiveColor: true
     };
   },
   watch: {
     "$route.params": function() {
-      console.log("watch", this.$route.params);
       this.onLoad();
     },
     "$this.test": function() {
@@ -69,38 +64,27 @@ export default {
     }
   },
   created() {
-    console.log("created", this.$route.params);
     this.onLoad();
   },
   methods: {
     onLoad() {
-      console.log("on load", this.$route.params);
       EventService.getBook(this.$route.params)
         .then(response => {
           this.chapterText = response.data.tokenized_chapter_text;
-          console.log("text fetched")
-
-          // this.isKnownDict = response.data.is_known_dict;
-          // this.isKnownList = response.data.is_known_list_2;
-          // this.isKnownDict2 = response.data.is_known_dict_2;
         })
         .catch(error => {
           console.log("there was an error :" + error.response);
         });
-      EventService.getUserKnownWords(this.$route.params)
-        .then(response => {
-          this.userKnownWordsDict = response.data.user_known_words_dict;
-          console.log("user known fetched")
-        })
-        .catch(error => {
-          console.log("there was an error :" + error.response);
-        });
+      // EventService.getUserKnownWords(this.$route.params)
+      //   .then(response => {
+      //     this.userKnownWordsDict = response.data.user_known_words_dict;
+      //   })
+      //   .catch(error => {
+      //     console.log("there was an error :" + error.response);
+      //   });
     },
     switchStylingKnownWords() {
       this.isActiveColor = !this.isActiveColor;
-    },
-    isInKnownList(token) {
-      return this.isKnownList.includes(token);
     }
   }
 };

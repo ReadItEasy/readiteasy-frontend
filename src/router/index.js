@@ -5,6 +5,7 @@ import VueRouter from "vue-router";
 import BookShow from "../views/BookShow.vue";
 import LanguagesList from "../views/LanguagesList.vue";
 import LanguageDetector from "../views/LanguageDetector.vue";
+import store from '../store/index.js'
 
 Vue.use(VueRouter);
 
@@ -15,7 +16,7 @@ const routes = [
     component: LanguagesList
   },
   {
-    path: "/book/:textLang/:bookName/:chapterNumber",
+    path: "/:targetLanguage/book/:bookName/:chapterNumber",
     name: "book-show",
     component: BookShow,
     props(route) {
@@ -41,5 +42,10 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 });
+
+router.afterEach((to) => {
+  store.dispatch('loadKnownWords', to.params.targetLanguage)
+
+})
 
 export default router;

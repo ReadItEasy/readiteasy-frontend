@@ -12,7 +12,7 @@
   </router-link> -->
 
   <div class="language-section">
-    <h3 class="title" @click="switchShow()">{{ textLang }}</h3>
+    <h3 class="title" @click="switchShow()">{{ targetLanguage }}</h3>
     <div class="books-section" v-show="showBoolean">
       <p a v-for="bookName in books" :key="bookName">
         <router-link
@@ -21,7 +21,7 @@
             name: 'book-show',
             params: {
               bookName: bookName,
-              textLang: textLang,
+              targetLanguage: targetLanguage,
               chapterNumber: 1
             }
           }"
@@ -38,7 +38,7 @@
 <script>
 export default {
   props: {
-    textLang: String,
+    targetLanguage: String,
     books: Array
   },
   data() {
