@@ -37,7 +37,7 @@
         @=""
         v-for="(token, key) in chapterText"
         :key="key"
-        :isKnown="isKnownDict[token]"
+        :isKnown="userKnownWordsDict[token]"
         >{{ token }}</span
       >
     </div>
@@ -53,7 +53,10 @@ export default {
     return {
       chapterText: [],
       isKnownDict: [],
-      isActiveColor: true
+      isKnownList: [],
+      isKnownDict2: {},
+      isActiveColor: true,
+      userKnownWordsDict: {}
     };
   },
   watch: {
@@ -62,7 +65,7 @@ export default {
       this.onLoad();
     },
     "$this.test": function() {
-      console.log("YOLALD");
+      console.log("this is a test because i'm curious about watchers");
     }
   },
   created() {
@@ -75,7 +78,19 @@ export default {
       EventService.getBook(this.$route.params)
         .then(response => {
           this.chapterText = response.data.tokenized_chapter_text;
-          this.isKnownDict = response.data.is_known_dict;
+          console.log("text fetched")
+
+          // this.isKnownDict = response.data.is_known_dict;
+          // this.isKnownList = response.data.is_known_list_2;
+          // this.isKnownDict2 = response.data.is_known_dict_2;
+        })
+        .catch(error => {
+          console.log("there was an error :" + error.response);
+        });
+      EventService.getUserKnownWords(this.$route.params)
+        .then(response => {
+          this.userKnownWordsDict = response.data.user_known_words_dict;
+          console.log("user known fetched")
         })
         .catch(error => {
           console.log("there was an error :" + error.response);
@@ -83,6 +98,9 @@ export default {
     },
     switchStylingKnownWords() {
       this.isActiveColor = !this.isActiveColor;
+    },
+    isInKnownList(token) {
+      return this.isKnownList.includes(token);
     }
   }
 };

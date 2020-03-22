@@ -28,7 +28,7 @@ const routes = [
     path: "/language-detector",
     name: "language-detector",
     component: LanguageDetector
-  },
+  }
   // {
   //   path: "/languages",
   //   name: "languages",
