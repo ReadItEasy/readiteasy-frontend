@@ -13,6 +13,19 @@ export default new Vuex.Store({
     SAVE_KNOWN_WORDS(state, new_state) {
       state.userKnownWordsDict = new_state.userKnownWordsDict;
       state.language = new_state.language;
+    },
+    TOOGLE_WORD(state, word) {
+      // state.userKnownWordsDict[word] = state.userKnownWordsDict[word] ? true : false
+      // console.log("before mutation", state.userKnownWordsDict[word])
+      // state.userKnownWordsDict[word] = !state.userKnownWordsDict[word]
+      // console.log("after mutation", state.userKnownWordsDict[word])
+      console.log(state.userKnownWordsDict[word])
+      if (word in state.userKnownWordsDict) {
+        delete state.userKnownWordsDict[word]
+      } else {
+        state.userKnownWordsDict[word] = true
+      }
+      console.log(state.userKnownWordsDict[word])
     }
   },
   actions: {
@@ -32,6 +45,9 @@ export default new Vuex.Store({
             );
           });
       }
+    },
+    toogleKnownWord({ commit }, word) {
+      commit("TOOGLE_WORD", word);
     }
   },
 

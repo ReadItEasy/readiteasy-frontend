@@ -1,0 +1,3 @@
+- put word in order exercise
+- get statistics on request word (to be able to compare evolution of mean rank of trouble words and the frequency of not known words)
+- add a timer mode

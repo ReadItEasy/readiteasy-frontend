@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <template>
   <div id="app">
     <NavBar />
@@ -16,6 +17,12 @@ export default {
 </script>
 
 <style>
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 html {
   -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
