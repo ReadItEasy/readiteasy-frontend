@@ -7,24 +7,30 @@
       @input="guessLanguage()"
     ></textarea>
     <h2>{{ prediction }}</h2>
+    <h3>the message is {{ message }}</h3>
+    <h3>{{ $store.state.user }}</h3>
   </div>
 </template>
 
 <script>
-import ApiService from "@/services/ApiService.js";
+import { apiBooks } from "@/services/ApiService.js";
 
 export default {
   data() {
     return {
       textInput: "",
-      prediction: "Come on !"
+      prediction: "Come on !",
+      message: "..."
     };
   },
   methods: {
     guessLanguage() {
-      ApiService.getDetectedLanguage({
-        textInput: this.textInput
-      })
+      apiBooks
+        .get("/api-books/language-detector", {
+          params: {
+            textInput: this.textInput
+          }
+        })
         .then(response => {
           this.prediction = response.data.prediction;
         })
@@ -32,6 +38,11 @@ export default {
           console.log("there was an error :" + error.response);
         });
     }
+  },
+  created() {
+    apiBooks.get("/hello").then(({ data }) => {
+      this.message = data.message;
+    });
   }
 };
 </script>

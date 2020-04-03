@@ -62,7 +62,8 @@
 </template>
 
 <script>
-import ApiService from "@/services/ApiService.js";
+// import ApiService from "@/services/ApiService.js";
+import { apiBooks } from "@/services/ApiService.js";
 import { mixin as clickaway } from "vue-clickaway";
 export default {
   mixins: [clickaway],
@@ -90,7 +91,18 @@ export default {
   },
   methods: {
     onLoad() {
-      ApiService.getBook(this.$route.params)
+      // ApiService.getBook(this.$route.params)
+      //   .then(response => {
+      //     this.chapterText = response.data.tokenized_chapter_text;
+      //   })
+      //   .catch(error => {
+      //     console.log("there was an error :" + error.response);
+      //   });
+      console.log("apiBooks.defaults.headers", apiBooks.defaults.headers);
+      apiBooks
+        .get("/api-books/book", {
+          params: this.$route.params
+        })
         .then(response => {
           this.chapterText = response.data.tokenized_chapter_text;
         })

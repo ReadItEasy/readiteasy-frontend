@@ -18,7 +18,7 @@
         </router-link>
       </p>
     </div>
-    <BaseIcon name="phone" />
+    <BaseIcon name="book" />
     <span>{{ books.length }} books</span>
   </div>
 </template>

@@ -2,14 +2,28 @@
   <div id="nav" class="nav">
     <router-link to="/" class="brand">ReadItEasy</router-link>
     <nav>
-      <router-link :to="{ name: 'languages' }">Languages</router-link> | 
-      <router-link :to="{ name: 'language-detector' }">Detector</router-link>
+      <router-link :to="{ name: 'languages' }">Languages</router-link> |
+      <router-link :to="{ name: 'language-detector' }">Detector</router-link> |
+      <router-link v-if="!loggedIn" :to="{ name: 'login' }">Login</router-link> |
+      <router-link v-if="!loggedIn" :to="{ name: 'register' }">Register</router-link>
+      <a v-else @click.prevent="logout" href="">Logout</a>
     </nav>
   </div>
 </template>
 
 <script>
-export default {};
+import { authComputed } from "../store/helpers.js";
+
+export default {
+  methods: {
+    logout() {
+      this.$store.dispatch("logout");
+    }
+  },
+  computed: {
+    ...authComputed
+  }
+};
 </script>
 
 <style scoped>

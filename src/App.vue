@@ -39,6 +39,7 @@ body {
   width: 100%;
   padding: 0 20px 20px;
   margin: 0 auto;
+  max-width: 700px;
 }
 hr {
   box-sizing: content-box;
