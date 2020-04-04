@@ -90,18 +90,18 @@ export default new Vuex.Store({
     //       this.login(credentials)
     //       // commit("LOGIN", credentials);
     //     });
-      // .then(({ data }) => {
-      //   commit("REGISTER", data);
-      // commit("SET_USER_DATA", data);
+    // .then(({ data }) => {
+    //   commit("REGISTER", data);
+    // commit("SET_USER_DATA", data);
 
-      //   axios
-      //   .post('http://127.0.0.1:8000/api/users/', {
-      //     email : "test@gmail.com",
-      //     username : 'test'
-      //   })
-      //   .then(response => (this.info = response.data))
+    //   axios
+    //   .post('http://127.0.0.1:8000/api/users/', {
+    //     email : "test@gmail.com",
+    //     username : 'test'
+    //   })
+    //   .then(response => (this.info = response.data))
 
-      // });
+    // });
     // },
     login({ commit }, credentials) {
       return apiBooks.post("/api/token/", credentials).then(({ data }) => {

@@ -13,7 +13,7 @@
       <label for="password">Password:</label>
       <input v-model="password" type="password" name="password" value />
       <button type="submit" name="button">
-        Login
+        Register
       </button>
     </form>
   </div>

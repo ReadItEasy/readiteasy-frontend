@@ -2,11 +2,16 @@
   <div id="nav" class="nav">
     <router-link to="/" class="brand">ReadItEasy</router-link>
     <nav>
-      <router-link :to="{ name: 'languages' }">Languages</router-link> |
-      <router-link :to="{ name: 'language-detector' }">Detector</router-link> |
-      <router-link v-if="!loggedIn" :to="{ name: 'login' }">Login</router-link> |
-      <router-link v-if="!loggedIn" :to="{ name: 'register' }">Register</router-link>
-      <a v-else @click.prevent="logout" href="">Logout</a>
+      <router-link :to="{ name: 'languages' }">Languages</router-link>
+      <router-link :to="{ name: 'language-detector' }">Detector</router-link>
+      <template v-if="!loggedIn">
+        <router-link :to="{ name: 'login' }">Login</router-link>
+        <router-link :to="{ name: 'register' }">Register</router-link>
+      </template>
+      <template v-else>
+        <router-link :to="{ name: 'profile'}">Profile</router-link>
+        <a @click.prevent="logout" href="">Logout</a>
+      </template>
     </nav>
   </div>
 </template>
@@ -49,5 +54,12 @@ export default {
 .nav .nav-item.router-link-exact-active {
   color: #39b982;
   border-bottom: solid 2px #39b982;
+}
+nav > a {
+  margin-right: 10px;
+}
+
+.router-link-exact-active {
+  color: rgb(138, 124, 124) !important;
 }
 </style>

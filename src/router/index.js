@@ -6,6 +6,7 @@ import LanguageDetector from "../views/LanguageDetector.vue";
 import store from "../store/index.js";
 import LoginUser from "../views/LoginUser.vue";
 import RegisterUser from "../views/RegisterUser.vue";
+import Profile from "../views/Profile.vue";
 
 Vue.use(VueRouter);
 
@@ -40,6 +41,13 @@ const routes = [
     path: "/register",
     name: "register",
     component: RegisterUser
+  },
+  {
+    path: "/profile",
+    name: "profile",
+    component: Profile,
+    meta: { requiresAuth: true }
+
   }
 ];
 
