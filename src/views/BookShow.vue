@@ -31,7 +31,7 @@
         <span>next chapter</span>
       </router-link>
     </div>
-    <button @click="switchStylingKnownWords()">button</button>
+    <button v-if="loggedIn" @click="switchStylingKnownWords()">button</button>
     <div class="text-container" :class="isActiveColor ? 'active' : ''">
       <span
         v-for="(token, key) in chapterText"
@@ -49,25 +49,22 @@
       ref="rightClickMenu"
     >
       <ul>
-        <li>option 1</li>
+        <li @click="rightClickWiktionary">See in wiktionary</li>
         <li>option 2</li>
         <li>option 3</li>
-        <li>option 2</li>
-        <li>option 2</li>
-        <li>option 2</li>
-        <li>option 2</li>
+        <li>option 4</li>
       </ul>
     </div>
   </div>
 </template>
 
 <script>
-// import ApiService from "@/services/ApiService.js";
 import { apiBooks } from "@/services/ApiService.js";
 import { mixin as clickaway } from "vue-clickaway";
+import { authComputed } from "../store/helpers.js";
+
 export default {
   mixins: [clickaway],
-
   props: ["bookName", "targetLanguage", "chapterNumber"],
   data() {
     return {
@@ -81,9 +78,6 @@ export default {
   watch: {
     "$route.params": function() {
       this.onLoad();
-    },
-    "$this.test": function() {
-      console.log("this is a test because i'm curious about watchers");
     }
   },
   created() {
@@ -91,13 +85,6 @@ export default {
   },
   methods: {
     onLoad() {
-      // ApiService.getBook(this.$route.params)
-      //   .then(response => {
-      //     this.chapterText = response.data.tokenized_chapter_text;
-      //   })
-      //   .catch(error => {
-      //     console.log("there was an error :" + error.response);
-      //   });
       console.log("apiBooks.defaults.headers", apiBooks.defaults.headers);
       apiBooks
         .get("/api-books/book", {
@@ -116,7 +103,7 @@ export default {
     toggleIsKnown(e) {
       const spanTarget = e.currentTarget;
       const textContent = spanTarget.textContent;
-      this.$store.dispatch("toogleKnownWord", textContent);
+      this.$store.dispatch("toggleKnownWord", textContent);
       this.$forceUpdate();
     },
     openMenu(e) {
@@ -124,6 +111,8 @@ export default {
       this.viewMenu = true;
       const myfunc = () => {
         let contextMenuDiv = this.$refs.rightClickMenu;
+        contextMenuDiv.setAttribute("targetWord", e.target.textContent);
+
         // console.log("xy", e.layerX, e.layerY);
         // console.log(contextMenuDiv.getBoundingClientRect());
         const pageWidth = document.documentElement.clientWidth;
@@ -166,8 +155,7 @@ export default {
       // to be able to fetch his size.
       setTimeout(myfunc, 0);
     },
-    closeMenu(e) {
-      console.log("closeMenu", e);
+    closeMenu() {
       this.viewMenu = false;
       let contextMenuDiv = this.$refs.rightClickMenu;
       contextMenuDiv.style.top = -20000 + "px";
@@ -187,7 +175,17 @@ export default {
       if (left > largestWidth) {
         left = largestWidth;
       }
+    },
+    rightClickWiktionary() {
+      var contextMenuDiv = this.$refs.rightClickMenu;
+      var targetWord = contextMenuDiv.getAttribute("targetWord");
+      console.log(targetWord);
+      window.open(`https://en.wiktionary.org/wiki/${targetWord}`, "_blank");
+      this.closeMenu();
     }
+  },
+  computed: {
+    ...authComputed
   }
 };
 </script>

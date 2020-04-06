@@ -8,7 +8,7 @@
     ></textarea>
     <h2>{{ prediction }}</h2>
     <h3>the message is {{ message }}</h3>
-    <h3>{{ $store.state.user }}</h3>
+    <h3>{{ $store.state.tokens }}</h3>
   </div>
 </template>
 

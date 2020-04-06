@@ -21,11 +21,6 @@
 
 <script>
 import { apiBooks } from "@/services/ApiService.js";
-// import axios from 'axios';
-
-// axios.defaults.xsrfCookieName = 'csrftoken'
-// axios.defaults.xsrfHeaderName = 'X-CSRFToken'
-// import Cookies from "js-cookie";
 export default {
   data() {
     return {
@@ -38,7 +33,6 @@ export default {
   },
   methods: {
     register() {
-      // console.log("Cookies : ", Cookies.get("csrftoken"))
       apiBooks
         .post("/users/", {
           email: this.email,
@@ -49,51 +43,21 @@ export default {
             country: this.country
           }
         })
-        .then(() => {
+        .then(response => {
           console.log("POST REGISTER SUCCEED");
+          console.log(response);
           return this.$store.dispatch("login", {
             email: this.email,
             password: this.password
           });
         })
         .then(() => {
-          this.$router.push({ name: "language-detector" });
+          this.$router.push({ name: "profile" });
         });
-      // this.$store
-      //   .dispatch("register", {
-      //     email: this.email,
-      //     password: this.password,
-      //     firstName: this.firstName,
-      //     lastName: this.lastName,
-      //     country: this.country
-      //   })
     }
   },
   created() {
-    // document.cookie = "blah";
     console.log("register created");
-    // console.log("Cookies.get('csrftoken')", Cookies.get("csrftoken"));
-    // var csrftoken = getCookie('csrftoken');
-    // console.log("csrftoken", csrftoken)
-    // apiBooks.post("/register/", {
-
-    //     firstName: "Fred",
-    //     lastName: "Flintstone"
-
-    // }, headers: { "X-CSRFToken": Cookies.get("csrftoken") });
-    // apiBooks({
-    //   method: "post",
-    //   url: "/api-register/",
-    //   data: {
-    //     firstName: "Finn",
-    //     lastName: "Williams"
-    //   },
-    // headers: { "X-CSRFToken": Cookies.get("csrftoken") }
-    // });
-    // axios({
-    //   method: "post",
-    //   url: 'http://127.0.0.1:8000/register/'
-    // })
   }
 };
 </script>

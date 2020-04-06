@@ -28,7 +28,8 @@ export default {
           password: this.password
         })
         .then(() => {
-          this.$router.push({ name: "language-detector" });
+          // this.$router.push({ name: "profile" });
+          this.$router.go(-1);
         });
     }
   }
