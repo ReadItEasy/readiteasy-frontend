@@ -38,11 +38,12 @@
         :key="key"
         :isKnown="$store.state.userKnownWordsDict[token]"
         @click="toggleIsKnown"
-        @contextmenu.prevent="openMenu"
+        @contextmenu.prevent="rightClick"
         >{{ token }}</span
       >
     </div>
-    <div
+    <contextMenu></contextMenu>
+    <!-- <div
       id="right-click-menu"
       v-show="viewMenu"
       v-on-clickaway="closeMenu"
@@ -54,17 +55,21 @@
         <li>option 3</li>
         <li>option 4</li>
       </ul>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script>
 import { apiBooks } from "@/services/ApiService.js";
 import { mixin as clickaway } from "vue-clickaway";
-import { authComputed } from "../store/helpers.js";
+import { authComputed } from "@/store/helpers.js";
+import contextMenu from "@/components/contextMenu.vue";
 
 export default {
   mixins: [clickaway],
+  components: {
+    contextMenu: contextMenu
+  },
   props: ["bookName", "targetLanguage", "chapterNumber"],
   data() {
     return {
@@ -182,6 +187,10 @@ export default {
       console.log(targetWord);
       window.open(`https://en.wiktionary.org/wiki/${targetWord}`, "_blank");
       this.closeMenu();
+    },
+    rightClick: function(e) {
+      console.log("the event in parent", e);
+      this.$emit("rightClick", e);
     }
   },
   computed: {
