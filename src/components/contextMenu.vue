@@ -1,13 +1,14 @@
 <template>
   <div
-    id="right-click-menu"
-    v-show="viewMenu"
-    v-on-clickaway="closeMenu"
-    ref="rightClickMenu"
+    id="context-menu"
+    v-if="viewMenu"
+    ref="contextMenu"
+    :target-word="targetWord"
   >
     <ul>
-      <li @click="rightClickWiktionary">See in wiktionary</li>
-      <li>option 2</li>
+      <li @click="openWikt">See in wiktionary</li>
+      <li v-if="isKnown">Remove from known words</li>
+      <li v-else>Add to known words</li>
       <li>option 3</li>
       <li>option 4</li>
     </ul>
@@ -15,25 +16,51 @@
 </template>
 
 <script>
-import { mixin as clickaway } from "vue-clickaway";
-
 export default {
   name: "ContextMenu",
-  mixins: [clickaway],
   data: () => ({
-    viewMenu: false
+    viewMenu: false,
+    targetWord: null,
+    isKnown: null
   }),
   created: function() {
-    this.$parent.$on("rightClick", this.openMenu);
+    this.$parent.$on("openContextMenu", this.openMenu);
+    document.addEventListener("click", this.onWindowClick);
   },
+
   methods: {
+    onWindowClick(e) {
+      if (this.viewMenu) {
+        var contextMenuDiv = this.$refs.contextMenu;
+        if (e.target.closest("#context-menu") !== contextMenuDiv) {
+          this.closeMenu();
+        }
+      }
+    },
+    // TODO : should we change the "right clicking on a normal element while
+    //        the custom contextMenu is open" behavior
+    // onWindowContextMenu(e) {
+    //   console.log("on window context menu", e);
+    //   if (this.viewMenu) {
+    //     var contextMenuDiv = this.$refs.contextMenu;
+    //     if (e.target.closest("#context-menu") !== contextMenuDiv) {
+    //       this.closeMenu()
+    //     }
+    //     }else {
+    //       this.openMenu(e)
+    //   }
+
+    // },
     openMenu(e) {
       console.log("this event in child", e);
       this.viewMenu = true;
+      this.targetWord = e.target.textContent;
+      this.isKnown = e.target.getAttribute("isKnown");
       const myfunc = () => {
-        let contextMenuDiv = this.$refs.rightClickMenu;
+        var contextMenuDiv = this.$refs.contextMenu;
         console.log("contextMenuDiv", contextMenuDiv);
-        contextMenuDiv.setAttribute("targetWord", e.target.textContent);
+        this.contextMenuDiv = contextMenuDiv;
+        console.log("e.target.textContent", e.target.textContent);
         const pageWidth = document.documentElement.clientWidth;
         const pageHeight = document.documentElement.clientHeight;
         const ctxWidth = contextMenuDiv.offsetWidth;
@@ -59,108 +86,25 @@ export default {
       // to be able to fetch his size.
       setTimeout(myfunc, 0);
     },
-    closeMenu(e) {
-      console.log("close menu", e);
+    closeMenu() {
+      console.log("close menu");
       this.viewMenu = false;
+      this.targetWord = null;
+      this.isKnown = null;
     },
-    rightClickWiktionary() {
-      console.log("right click wikt");
+    openWikt() {
+      window.open(
+        `https://en.wiktionary.org/wiki/${this.targetWord}`,
+        "_blank"
+      );
+      this.closeMenu();
     }
-    //   resetCtx() {
-    //     this.ctxMenuData = null;
-    //     this.ctxMenuRect = null;
-    //   },
-    //   onContextMenu(ev, ctxMenuData) {
-    //     // prevent default behaviours
-    //     ev.preventDefault();
-    //     ev.stopPropagation();
-    //     this.ctxMenuData = ctxMenuData;
-    //     this.ctxMenuRect = {
-    //       x: ev.x,
-    //       y: ev.y
-    //     };
-    //     // populate the option
-    //     this.onData();
-    //     // then reevaluate and set context-menu position
-    //     this.reevaluatePosition();
-    //   },
-    //   async reevaluatePosition() {
-    //     if (this.ctxMenuRect) {
-    //       // using $nextTick to daley and make sure that the context-menu
-    //       // options are fully rendered which will help us
-    //       // to get the accurate height
-    //       await this.$nextTick();
-    //       await this.$nextTick();
-    //       let { x, y } = this.ctxMenuRect;
-    //       // get the window current inner height and width
-    //       let { innerHeight, innerWidth } = window;
-    //       // get the component height and width through element.getClientRects
-    //       let { height, width } = this.$el.getClientRects()[0];
-    //       // then subtract window inner height and width with
-    //       // context-menu event source points (x, y)
-    //       let dY = innerHeight - y;
-    //       let dX = innerWidth - x;
-    //       // check if the context-menu height is not
-    //       // longer than the available
-    //       if (dY < height) {
-    //         y = y - height;
-    //       }
-    //       if (dX < width) {
-    //         x = x - width;
-    //       }
-    //       // set the position
-    //       this.style = { left: x + "px", top: y + "px" };
-    //     }
-    //   },
-    //   async onData() {
-    //     // validate if the ctxMenuData is an array and the lenght is not less then 1
-    //     if (Array.isArray(this.ctxMenuData) && this.ctxMenuData.length) {
-    //       // loop through the options
-    //       this.ctxMenuData.forEach((item, index) => {
-    //         // if this option type is equal's to divider and the handler property value is a function
-    //         if (item.type !== "divider" && typeof item.handler === "function") {
-    //           // select the option element with the help of the refs id
-    //           let refs = this.$refs["ctx_" + index];
-    //           // accessing $refs prooerty with object square bracket notation alwasys returns arrays of
-    //           // HTML Elements of Vue components instance
-    //           // so you have to validate
-    //           if (Array.isArray(refs)) {
-    //             let el = refs[0];
-    //             // then attach click event and pass an arrow function as a the
-    //             // event handler callback
-    //             el.addEventListener(
-    //               "click",
-    //               () => {
-    //                 // then on click on the option
-    //                 // envoke the handler
-    //                 // and reset the the ctxMenuData to hide the context-menu
-    //                 item.handler();
-    //                 this.resetCtx();
-    //               },
-    //               false
-    //             );
-    //           }
-    //         }
-    //       });
-    //     }
-    //   }
-    // },
-    // mounted() {
-    //   // Listen on contextmenu event through the $root instance
-    //   this.$root.$on("contextmenu", data => {
-    //     // if the data is null reset and handler the action
-    //     if (data === null) this.resetCtx();
-    //     else this.onContextMenu(data.event, data.ctxMenuData);
-    //   });
-    // },
-    // beforeDestroy() {
-    //   this.$root.$off("contextmenu", () => {});
   }
 };
 </script>
 
 <style scoped>
-#right-click-menu {
+div {
   background: white;
   border: 1px solid #bdbdbd;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2),
@@ -174,7 +118,7 @@ export default {
   z-index: 999;
 }
 
-#right-click-menu li {
+div li {
   list-style: none;
 
   cursor: pointer;
@@ -184,12 +128,16 @@ export default {
   padding: 5px 5px;
 }
 
-#right-click-menu li:last-child {
+div li:last-child {
   border-bottom: none;
 }
 
-#right-click-menu li:hover {
+div li:hover {
   background: #39b982;
   color: white;
+}
+
+ul {
+  padding: 0 1em;
 }
 </style>
