@@ -26,7 +26,7 @@ export default {
   methods: {
     guessLanguage() {
       apiBooks
-        .get("/api-books/language-detector", {
+        .get("/api/books/language-detector", {
           params: {
             textInput: this.textInput
           }
@@ -40,7 +40,7 @@ export default {
     }
   },
   created() {
-    apiBooks.get("/hello").then(({ data }) => {
+    apiBooks.get("api/users/hello").then(({ data }) => {
       this.message = data.message;
     });
   }

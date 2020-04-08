@@ -20,10 +20,10 @@ export default new Vuex.Store({
     TOGGLE_WORD(state, word) {
       if (word in state.userKnownWordsDict) {
         delete state.userKnownWordsDict[word];
-        apiBooks.post(`/users/${state.userId}/remove_word/`, { word: word });
+        apiBooks.post(`api/users/${state.userId}/remove_word/`, { word: word });
       } else {
         state.userKnownWordsDict[word] = true;
-        apiBooks.post(`/users/${state.userId}/add_word/`, { word: word });
+        apiBooks.post(`api/users/${state.userId}/add_word/`, { word: word });
       }
     },
     LOGIN(state, tokens) {
@@ -49,7 +49,7 @@ export default new Vuex.Store({
     loadKnownWords({ commit }, targetLanguage) {
       if (targetLanguage && targetLanguage != this.state.targetLanguage) {
         apiBooks
-          .get(`/users/${this.state.userId}/`)
+          .get(`api/users/${this.state.userId}/`)
           .then(response => {
             var mandarinKnownWordsField =
               response.data.profile.mandarin_known_words;
@@ -74,7 +74,7 @@ export default new Vuex.Store({
       commit("TOGGLE_WORD", word);
     },
     login({ commit }, credentials) {
-      return apiBooks.post("/api/token/", credentials).then(response => {
+      return apiBooks.post("api/users/token/", credentials).then(response => {
         console.log("login response", response);
         commit("LOGIN", response.data);
       });
@@ -88,7 +88,7 @@ export default new Vuex.Store({
     refreshTokens({ commit }) {
       commit("TODO : Create a commit");
       apiBooks
-        .post("/api/token/refresh/", {
+        .post("/api/users/token/refresh/", {
           refresh: this.$store.state.tokens.refresh
         })
         .then(response => {

@@ -25,7 +25,7 @@ export default {
   },
   created() {
     apiBooks
-      .get("/api-books/languages")
+      .get("/api/books/languages")
       .then(response => {
         this.languages = response.data.languages;
       })

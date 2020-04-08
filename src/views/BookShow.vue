@@ -74,7 +74,7 @@ export default {
     onLoad() {
       console.log("apiBooks.defaults.headers", apiBooks.defaults.headers);
       apiBooks
-        .get("/api-books/book", {
+        .get("/api/books/book", {
           params: this.$route.params
         })
         .then(response => {
