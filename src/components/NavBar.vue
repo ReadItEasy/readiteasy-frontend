@@ -1,5 +1,5 @@
 <template>
-  <div id="nav" class="nav">
+  <div id="nav" class="nav header">
     <router-link to="/" class="brand">ReadItEasy</router-link>
     <nav>
       <router-link :to="{ name: 'languages' }">Languages</router-link>
@@ -32,11 +32,12 @@ export default {
 </script>
 
 <style scoped>
+
 .nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 60px;
+
 }
 .nav > .brand {
   font-family: "Montserrat", sans-serif;
@@ -44,6 +45,7 @@ export default {
   font-size: 1.5em;
   color: #39b982;
   text-decoration: none;
+  padding: 0 10px;
 }
 .nav .nav-item {
   box-sizing: border-box;

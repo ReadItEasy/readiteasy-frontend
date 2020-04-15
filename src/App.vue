@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <template>
   <div id="app">
-    <NavBar />
-    <router-view />
+    <NavBar class="fixed-header" />
+    <router-view class="content"/>
   </div>
 </template>
 
@@ -36,10 +36,10 @@ body {
 }
 #app {
   box-sizing: border-box;
-  /* width: 100%; */
+  width: 100%;
   padding: 0 20px 20px;
   margin: 0 auto;
-  max-width: 700px;
+  /* max-width: 700px; */
 }
 hr {
   box-sizing: content-box;
@@ -226,9 +226,7 @@ select {
   height: 52px;
   padding: 0 24px 0 10px;
   vertical-align: middle;
-  background: #fff
-    url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3Cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3E%3C/svg%3E")
-    no-repeat right 12px center;
+  background: #fff;
   background-size: 8px 10px;
   border: solid 1px rgba(0, 0, 0, 0.4);
   border-radius: 0;
@@ -246,5 +244,21 @@ select:focus::ms-value {
 }
 select::ms-expand {
   opacity: 0;
+}
+
+.fixed-header {
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 60px;
+  z-index: 100;
+  background-color: white;
+  box-shadow: 0 1px 6px 0 rgba(32,33,36,.28);
+}
+
+.content {
+  position: relative;
+  top: 60px;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="book-show">
     <h1>{{ bookName }}</h1>
     <h2>Chapter {{ chapterNumber }}</h2>
     <div>
@@ -37,11 +37,15 @@
         v-for="(token, key) in chapterText"
         :key="key"
         :isKnown="$store.state.userKnownWordsDict[token]"
-        @click="toggleIsKnown"
+        @click="wordInfo"
+        @mouseenter="mouseEnter"
+        @mouseleave="mouseLeave"
         @contextmenu.prevent="openContextMenu"
         >{{ token }}</span
       >
+      <!-- @click="toggleIsKnown" -->
     </div>
+    <Burger />
     <contextMenu></contextMenu>
   </div>
 </template>
@@ -50,16 +54,19 @@
 import { apiBooks } from "@/services/ApiService.js";
 import { authComputed } from "@/store/helpers.js";
 import contextMenu from "@/components/contextMenu.vue";
+import Burger from "@/components/lab/Burger.vue";
 
 export default {
   components: {
-    contextMenu: contextMenu
+    contextMenu: contextMenu,
+    Burger: Burger
   },
   props: ["bookName", "targetLanguage", "chapterNumber"],
   data() {
     return {
       chapterText: [],
-      isActiveColor: true
+      isActiveColor: true,
+      hoveredWord: null
     };
   },
   watch: {
@@ -69,6 +76,13 @@ export default {
   },
   created() {
     this.onLoad();
+  },
+  mounted() {
+    document.addEventListener("keydown", () => {
+      if (event.keyCode == "65" && this.hoveredWord) {
+        this.toggleIsKnown(this.hoveredWord);
+      }
+    });
   },
   methods: {
     onLoad() {
@@ -87,15 +101,33 @@ export default {
     switchStylingKnownWords() {
       this.isActiveColor = !this.isActiveColor;
     },
-    toggleIsKnown(e) {
-      const spanTarget = e.currentTarget;
-      const textContent = spanTarget.textContent;
+    toggleIsKnown(wordSpan) {
+      // const spanTarget = e.currentTarget;
+      const textContent = wordSpan.textContent;
       this.$store.dispatch("toggleKnownWord", textContent);
       this.$forceUpdate();
+    },
+    wordInfo: function(e) {
+      console.log(e.target.innerText);
+      apiBooks
+        .get("/api/words/mandarin/", {
+          params: {
+            simplified: e.target.innerText
+          }
+        })
+        .then(({ data }) => {
+          console.log(data);
+        });
     },
     openContextMenu: function(e) {
       console.log("the event in parent", e);
       this.$emit("openContextMenu", e);
+    },
+    mouseEnter: function(e) {
+      this.hoveredWord = e.target;
+    },
+    mouseLeave: function() {
+      this.hoveredWord = null;
     }
   },
   computed: {
@@ -105,6 +137,10 @@ export default {
 </script>
 
 <style scoped>
+#book-show {
+  max-width: 60%;
+}
+
 .active > span:not([isKnown="true"]) {
   color: red;
 }
