@@ -34,7 +34,7 @@ export default {
   methods: {
     register() {
       apiBooks
-        .post("/users/", {
+        .post("api/users/", {
           email: this.email,
           first_name: this.firstName,
           last_name: this.lastName,

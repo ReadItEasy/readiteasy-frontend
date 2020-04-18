@@ -16,6 +16,8 @@
 </template>
 
 <script>
+import EventBus from "@/services/EventBus.js";
+
 export default {
   name: "ContextMenu",
   data: () => ({
@@ -24,8 +26,8 @@ export default {
     isKnown: null
   }),
   created: function() {
-    this.$parent.$on("openContextMenu", this.openMenu);
     document.addEventListener("click", this.onWindowClick);
+    EventBus.$on("openContextMenu", this.openMenu);
   },
 
   methods: {

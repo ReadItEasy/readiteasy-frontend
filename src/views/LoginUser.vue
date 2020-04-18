@@ -1,5 +1,32 @@
 <template>
-  <div class="login-div">
+  <v-card width="400" class="mx-auto mt-5">
+    <v-card-title>
+      <h1 class="display-1">Login</h1>
+    </v-card-title>
+    <v-card-text>
+      <v-form @submit.prevent="login">
+        <v-text-field
+          v-model="email"
+          label="username"
+          prepend-icon="mdi-account-circle"
+        />
+        <v-text-field
+          v-model="password"
+          :type="showPassword ? 'text' : 'password'"
+          label="password"
+          prepend-icon="mdi-lock"
+          :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+          @click:append="showPassword = !showPassword"
+        />
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-btn type="submit" color="info">Login</v-btn>
+        </v-card-actions>
+      </v-form>
+    </v-card-text>
+  </v-card>
+
+  <!-- <div class="login-div">
     <form @submit.prevent="login">
       <label for="username">Email:</label>
       <input v-model="email" type="email" name="email" value />
@@ -9,7 +36,7 @@
         Login
       </button>
     </form>
-  </div>
+  </div> -->
 </template>
 
 <script>
@@ -17,11 +44,13 @@ export default {
   data() {
     return {
       email: "",
-      password: ""
+      password: "",
+      showPassword: false
     };
   },
   methods: {
     login() {
+      console.log(this.email, this.password);
       this.$store
         .dispatch("login", {
           email: this.email,
@@ -37,7 +66,7 @@ export default {
 </script>
 
 <style scoped>
-.login-div {
+/* .login-div {
   margin-top: 5%;
 }
 
@@ -75,5 +104,5 @@ input {
   margin-bottom: 1em;
   border-radius: 5px;
   font: 1em "Avenir", Helvetica, sans-serif;
-}
+} */
 </style>

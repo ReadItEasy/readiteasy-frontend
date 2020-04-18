@@ -5,6 +5,7 @@ import store from "./store";
 import upperFirst from "lodash/upperFirst";
 import camelCase from "lodash/camelCase";
 import "nprogress/nprogress.css";
+import vuetify from "./plugins/vuetify";
 
 const requireComponent = require.context(
   "./components",
@@ -27,5 +28,6 @@ Vue.config.productionTip = false;
 new Vue({
   router,
   store,
+  vuetify,
   render: h => h(App)
 }).$mount("#app");

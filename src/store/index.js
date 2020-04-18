@@ -18,11 +18,15 @@ export default new Vuex.Store({
       state.targetLanguage = data.targetLanguage;
     },
     TOGGLE_WORD(state, word) {
-      if (word in state.userKnownWordsDict) {
-        delete state.userKnownWordsDict[word];
+      if (state.userKnownWordsDict[word]) {
+        // delete state.userKnownWordsDict[word];
+        state.userKnownWordsDict[word] = false;
         apiBooks.post(`api/users/${state.userId}/remove_word/`, { word: word });
       } else {
-        state.userKnownWordsDict[word] = true;
+        // state.userKnownWordsDict[word] = true;
+        // state.userKnownWordsDict = Object.assign({}, state.userKnownWordsDict, {word: true})
+        Vue.set(state.userKnownWordsDict, word, true)
+        // state.userKnownWordsDict = Object.assign({}, state.userKnownWordsDict, {word: true})
         apiBooks.post(`api/users/${state.userId}/add_word/`, { word: word });
       }
     },

@@ -1,72 +1,93 @@
 <template>
   <div id="book-show">
-    <h1>{{ bookName }}</h1>
-    <h2>Chapter {{ chapterNumber }}</h2>
-    <div>
-      <router-link
-        v-if="chapterNumber > 1"
-        class="book-link"
-        :to="{
-          name: 'book-show',
-          params: {
-            bookName: bookName,
-            targetLanguage: targetLanguage,
-            chapterNumber: parseInt(chapterNumber) - 1
-          }
-        }"
+    <ReaderDrawer
+      :navbar="navbar"
+      :clickedWord="clickedWord"
+      :wordData="wordData"
+    />
+    <v-content class="mx-5">
+      <h1 @click="test">{{ bookName }}</h1>
+      <h2>Chapter {{ chapterNumber }}</h2>
+      <div>
+        <router-link
+          v-if="chapterNumber > 1"
+          class="book-link"
+          :to="{
+            name: 'book-show',
+            params: {
+              bookName: bookName,
+              targetLanguage: targetLanguage,
+              chapterNumber: parseInt(chapterNumber) - 1
+            }
+          }"
+        >
+          <span class="nav-chapter">previous chapter</span>
+        </router-link>
+        <router-link
+          class="book-link"
+          :to="{
+            name: 'book-show',
+            params: {
+              bookName: bookName,
+              targetLanguage: targetLanguage,
+              chapterNumber: parseInt(chapterNumber) + 1
+            }
+          }"
+        >
+          <span>next chapter</span>
+        </router-link>
+      </div>
+      <!-- <button v-if="loggedIn" @click="switchStylingKnownWords()">button</button> -->
+      <v-btn v-if="loggedIn" @click="switchStylingKnownWords"
+        >toggle known words</v-btn
       >
-        <span class="nav-chapter">previous chapter</span>
-      </router-link>
-      <router-link
-        class="book-link"
-        :to="{
-          name: 'book-show',
-          params: {
-            bookName: bookName,
-            targetLanguage: targetLanguage,
-            chapterNumber: parseInt(chapterNumber) + 1
-          }
-        }"
-      >
-        <span>next chapter</span>
-      </router-link>
-    </div>
-    <button v-if="loggedIn" @click="switchStylingKnownWords()">button</button>
-    <div class="text-container" :class="isActiveColor ? 'active' : ''">
-      <span
-        v-for="(token, key) in chapterText"
-        :key="key"
-        :isKnown="$store.state.userKnownWordsDict[token]"
-        @click="wordInfo"
-        @mouseenter="mouseEnter"
-        @mouseleave="mouseLeave"
-        @contextmenu.prevent="openContextMenu"
-        >{{ token }}</span
-      >
-      <!-- @click="toggleIsKnown" -->
-    </div>
-    <Burger />
-    <contextMenu></contextMenu>
+      <v-switch
+        v-if="loggedIn"
+        v-model="isActiveColor"
+        :label="`isActiveColor 1: ${isActiveColor.toString()}`"
+      ></v-switch>
+      <div class="text-container" :class="isActiveColor ? 'active' : ''">
+        <span
+          v-for="(token, key) in chapterText"
+          :key="key"
+          :isKnown="$store.state.userKnownWordsDict[token]"
+          @click.prevent="wordInfo"
+          @mouseenter="mouseEnter"
+          @mouseleave="mouseLeave"
+          @contextmenu.prevent="openContextMenu"
+          >{{ token }}</span
+        >
+        <!-- @click="toggleIsKnown" -->
+      </div>
+      <Burger />
+      <ContextMenu></ContextMenu>
+    </v-content>
   </div>
 </template>
 
 <script>
 import { apiBooks } from "@/services/ApiService.js";
 import { authComputed } from "@/store/helpers.js";
-import contextMenu from "@/components/contextMenu.vue";
+import EventBus from "@/services/EventBus.js";
+import ContextMenu from "@/components/ContextMenu.vue";
+import ReaderDrawer from "@/components/lab/ReaderDrawer.vue";
 import Burger from "@/components/lab/Burger.vue";
 
 export default {
   components: {
-    contextMenu: contextMenu,
-    Burger: Burger
+    ContextMenu: ContextMenu,
+    Burger: Burger,
+    ReaderDrawer: ReaderDrawer
   },
   props: ["bookName", "targetLanguage", "chapterNumber"],
   data() {
     return {
       chapterText: [],
-      isActiveColor: true,
-      hoveredWord: null
+      isActiveColor: false,
+      hoveredWord: null,
+      navbar: false,
+      clickedWord: null,
+      wordData: null
     };
   },
   watch: {
@@ -105,10 +126,15 @@ export default {
       // const spanTarget = e.currentTarget;
       const textContent = wordSpan.textContent;
       this.$store.dispatch("toggleKnownWord", textContent);
-      this.$forceUpdate();
+      // this.$forceUpdate();
     },
     wordInfo: function(e) {
-      console.log(e.target.innerText);
+      this.clickedWord = e.target;
+
+      if (this.navbar == false) {
+        this.navbar = !this.navbar;
+      }
+      // console.log("e.target", e.target);
       apiBooks
         .get("/api/words/mandarin/", {
           params: {
@@ -116,18 +142,23 @@ export default {
           }
         })
         .then(({ data }) => {
-          console.log(data);
+          this.wordData = data;
+          // console.log("then", data);
         });
     },
     openContextMenu: function(e) {
       console.log("the event in parent", e);
-      this.$emit("openContextMenu", e);
+      EventBus.$emit("openContextMenu", e);
     },
     mouseEnter: function(e) {
       this.hoveredWord = e.target;
     },
     mouseLeave: function() {
       this.hoveredWord = null;
+    },
+    test: function() {
+      console.log("close drawer");
+      this.navbar = false;
     }
   },
   computed: {
@@ -137,10 +168,6 @@ export default {
 </script>
 
 <style scoped>
-#book-show {
-  max-width: 60%;
-}
-
 .active > span:not([isKnown="true"]) {
   color: red;
 }
@@ -151,11 +178,21 @@ export default {
 
 .text-container {
   white-space: pre-line;
+  font-size: 32px;
+}
+
+.text-container > span {
+  transition: 0.3s;
+  border-radius: 5px;
+  padding: 5px 0px;
+  /* margin: 0px; */
 }
 
 .text-container > span:hover {
-  background-color: #39b982;
+  /* transition: .3s; */
+  background-color: #35ea614d;
   cursor: pointer;
+  box-shadow: 0 0 6px rgba(33, 33, 33, 0.2);
 }
 
 .location {

@@ -1,5 +1,34 @@
 <template>
-  <div id="nav" class="nav header">
+  <v-app-bar app clipped-right hide-on-scroll color="white" dark>
+    <router-link :to="{ name: 'home' }" class="toolbar-title"
+      ><v-toolbar-title class="primary--text">ReadItEasy</v-toolbar-title>
+    </router-link>
+    <v-spacer></v-spacer>
+    <v-btn
+      class="primary--text"
+      router
+      :to="{ name: 'languages' }"
+      text
+      rounded
+    >
+      Languages</v-btn
+    >
+    <template v-if="!loggedIn">
+      <v-btn class="primary--text" router :to="{ name: 'login' }" text rounded>
+        <v-icon>mdi-account</v-icon>
+
+        Login </v-btn
+      >>
+    </template>
+    <template v-else>
+      <v-btn class="primary--text" @click.prevent="logout" text rounded>
+        <v-icon>mdi-account-off</v-icon>
+
+        Logout</v-btn
+      >
+    </template>
+  </v-app-bar>
+  <!-- <div id="nav" class="nav header">
     <router-link to="/" class="brand">ReadItEasy</router-link>
     <nav>
       <router-link :to="{ name: 'languages' }">Languages</router-link>
@@ -9,11 +38,11 @@
         <router-link :to="{ name: 'register' }">Register</router-link>
       </template>
       <template v-else>
-        <router-link :to="{ name: 'profile'}">Profile</router-link>
+        <router-link :to="{ name: 'profile' }">Profile</router-link>
         <a @click.prevent="logout" href="">Logout</a>
       </template>
     </nav>
-  </div>
+  </div> -->
 </template>
 
 <script>
@@ -32,12 +61,14 @@ export default {
 </script>
 
 <style scoped>
-
-.nav {
+.toolbar-title {
+  color: inherit;
+  text-decoration: inherit;
+}
+/* .nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-
 }
 .nav > .brand {
   font-family: "Montserrat", sans-serif;
@@ -63,5 +94,5 @@ nav > a {
 
 .router-link-exact-active {
   color: rgb(138, 124, 124) !important;
-}
+} */
 </style>

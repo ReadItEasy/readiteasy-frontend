@@ -1,5 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import Home from "../views/Home.vue";
 import BookShow from "../views/BookShow.vue";
 import LanguagesList from "../views/LanguagesList.vue";
 import LanguageDetector from "../views/LanguageDetector.vue";
@@ -13,6 +14,11 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "/",
+    name: "home",
+    component: Home
+  },
+  {
+    path: "/languages",
     name: "languages",
     component: LanguagesList
   },

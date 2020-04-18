@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <template>
-  <div id="app">
-    <NavBar class="fixed-header" />
-    <router-view class="content"/>
-  </div>
+  <v-app>
+    <NavBar />
+    <!-- <v-content> -->
+    <!-- <NavBar class="fixed-header" /> -->
+    <router-view class="content" />
+    <!-- </v-content> -->
+  </v-app>
 </template>
 
 <script>
@@ -31,7 +34,7 @@ html {
 body {
   margin: 0;
   font-family: "Open Sans", sans-serif;
-  font-size: 20px;
+  font-size: 26px;
   line-height: 1.5;
 }
 #app {
@@ -39,7 +42,6 @@ body {
   width: 100%;
   padding: 0 20px 20px;
   margin: 0 auto;
-  /* max-width: 700px; */
 }
 hr {
   box-sizing: content-box;
@@ -254,7 +256,7 @@ select::ms-expand {
   height: 60px;
   z-index: 100;
   background-color: white;
-  box-shadow: 0 1px 6px 0 rgba(32,33,36,.28);
+  box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28);
 }
 
 .content {
