@@ -1,12 +1,12 @@
 <template>
   <div id="book-show">
     <ReaderDrawer
-      :navbar="navbar"
+      :drawerBool="drawerBool"
       :clickedWord="clickedWord"
       :wordData="wordData"
     />
     <v-content class="mx-5">
-      <h1 @click="test">{{ bookName }}</h1>
+      <h1 @click="closeDrawer">{{ bookName }}</h1>
       <h2>Chapter {{ chapterNumber }}</h2>
       <div>
         <router-link
@@ -83,9 +83,9 @@ export default {
   data() {
     return {
       chapterText: [],
-      isActiveColor: false,
+      isActiveColor: null,
       hoveredWord: null,
-      navbar: false,
+      drawerBool: false,
       clickedWord: null,
       wordData: null
     };
@@ -97,6 +97,10 @@ export default {
   },
   created() {
     this.onLoad();
+    EventBus.$on("lightenUknWordsBoolChange", (lightenUknWordsBool)=>{
+      console.log("event caught in parent", lightenUknWordsBool)
+      this.isActiveColor = lightenUknWordsBool
+    })
   },
   mounted() {
     document.addEventListener("keydown", () => {
@@ -131,8 +135,8 @@ export default {
     wordInfo: function(e) {
       this.clickedWord = e.target;
 
-      if (this.navbar == false) {
-        this.navbar = !this.navbar;
+      if (this.drawerBool == false) {
+        this.drawerBool = !this.drawerBool;
       }
       // console.log("e.target", e.target);
       apiBooks
@@ -156,9 +160,9 @@ export default {
     mouseLeave: function() {
       this.hoveredWord = null;
     },
-    test: function() {
+    closeDrawer: function() {
       console.log("close drawer");
-      this.navbar = false;
+      this.drawerBool = false;
     }
   },
   computed: {

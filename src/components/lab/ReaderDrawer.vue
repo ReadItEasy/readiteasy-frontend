@@ -1,6 +1,6 @@
 <template>
   <v-navigation-drawer
-    v-model="navbar"
+    v-model="drawerBool"
     clipped
     app
     right
@@ -9,7 +9,6 @@
     persistent
     width="300px"
     mobile-break-point="800"
-    style="resize:both"
   >
     <!-- <template v-slot:prepend > -->
 
@@ -27,41 +26,6 @@
           :key="word.id"
           :word="word"
         ></WordCardMandarin>
-        <!-- <v-card v-for="word in wordDataComp" :key="word.id">
-          <v-container class="info-container">
-            <v-row>
-              <v-col>{{ word.simplified }}</v-col>
-              <v-col v-if="word.simplified != word.traditional">{{
-                word.traditional
-              }}</v-col>
-            </v-row>
-            <v-row>
-              <v-col class="body-2">
-                {{ word.pronunciation }}
-              </v-col>
-            </v-row>
-            <v-row v-if="wordData">
-              <v-col class="body-1">
-                <ul class="definitions-container">
-                  <li v-for="definition in word.definitions" :key="definition">
-                    {{ definition }}
-                  </li>
-                </ul>
-              </v-col>
-            </v-row>
-            <v-checkbox large v-model="checkbox1" :label="`Checkbox 1: ${checkbox1.toString()}`"></v-checkbox>
-            <v-btn
-              right
-              @click.prevent="clicked = !clicked"
-              icon
-              :color="clicked ? 'red' : 'grey'"
-            >
-              <v-icon>mdi-heart</v-icon>
-            </v-btn> 
-            <p>    <template v-if="simComp!=tradComp">[]</template><template v-else>[ - ]</template></p>
-            <p>{{ wordData ? wordData.pronunciation : "NaN" }}</p> 
-          </v-container>
-        </v-card> -->
       </v-tab-item>
       <v-tab-item value="tab-2">
         <v-card flat tile>
@@ -69,12 +33,12 @@
         </v-card>
       </v-tab-item>
       <v-tab-item value="tab-3">
-        <v-card flat tile>
-        <!-- v-if="loggedIn" -->
+        <v-card flat tile class="px-5">
+          <!-- v-if="loggedIn" -->
           <v-switch
-        :label="`isActiveColor 1:`"
-        input-value="false"
-      ></v-switch>
+            v-model="lightenUknWordsBoolComp"
+            :label="`show unknown words ${lightenUknWordsBoolComp}`"
+          ></v-switch>
         </v-card>
       </v-tab-item>
     </v-tabs>
@@ -83,42 +47,30 @@
 
 <script>
 import WordCardMandarin from "@/components/lab/WordCardMandarin.vue";
+import EventBus from "@/services/EventBus.js";
+
 
 export default {
   components: {
-    WordCardMandarin: WordCardMandarin
+    WordCardMandarin: WordCardMandarin,
   },
-  props: ["navbar", "clickedWord", "wordData"],
+  props: ["drawerBool", "clickedWord", "wordData"],
   data() {
     return {
-      wordData0: this.wordData,
       tab: null,
       tabs: 3,
       tabNames: ["words", "stats", "settings"],
       checkbox1: false,
-      clicked: false
+      clicked: false,
+      lightenUknWordsBool: false
     };
   },
-  watch: {
-    wordData: function(newValue, oldValue) {
-      console.log("WATCHER", newValue, oldValue);
-      // console.log(newValue.definitions.split("/").filter(Boolean));
-    }
-  },
+  // mounted() {
+  //   this.lightenUknWordsBool = true
+  // },
   computed: {
     drawerIsVisible: function() {
-      return this.navbar;
-    },
-    tradComp: function() {
-      return this.wordData0 ? this.wordData0.traditional : "NaN";
-    },
-    definitionsProcessed: function() {
-      if (this.wordData0) {
-        return ["ok"];
-        // return this.wordData0.definitions.split("/").filter(Boolean);
-      } else {
-        return ["NaN"];
-      }
+      return this.drawerBool;
     },
     wordDataComp: function() {
       if (this.wordData) {
@@ -134,19 +86,18 @@ export default {
       } else {
         return null;
       }
-    }
-  },
-  methods: {
-    test1() {
-      console.log(this.clicked);
-      this.clicked = !this.clicked;
+    },
+    lightenUknWordsBoolComp: {
+      get() {
+        return this.lightenUknWordsBool;
+      },
+      set(val) {
+        EventBus.$emit("lightenUknWordsBoolChange", val);
+        console.log("setter lightenUknWordsBool", val);
+        this.lightenUknWordsBool = val;
+      }
     }
   }
-  // data() {
-  //   return {
-  //     clickedWord: null
-  //   }
-  // },
 };
 </script>
 <style scoped>
