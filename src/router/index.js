@@ -1,6 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import BookShow from "../views/BookShow.vue";
+import ReaderTool from "../views/ReaderTool.vue";
 import LanguagesList from "../views/LanguagesList.vue";
 import LanguageDetector from "../views/LanguageDetector.vue";
 import store from "../store/index.js";
@@ -18,8 +18,8 @@ const routes = [
   },
   {
     path: "/:targetLanguage/book/:bookName/:chapterNumber",
-    name: "book-show",
-    component: BookShow,
+    name: "reader-tool",
+    component: ReaderTool,
     props(route) {
       const props = { ...route.params };
       props.chapterNumber = +props.chapterNumber;

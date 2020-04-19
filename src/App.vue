@@ -2,7 +2,7 @@
 <template>
   <div id="app">
     <NavBar class="fixed-header" />
-    <router-view class="content"/>
+    <router-view class="content" />
   </div>
 </template>
 
@@ -254,7 +254,7 @@ select::ms-expand {
   height: 60px;
   z-index: 100;
   background-color: white;
-  box-shadow: 0 1px 6px 0 rgba(32,33,36,.28);
+  box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28);
 }
 
 .content {

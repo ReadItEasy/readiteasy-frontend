@@ -6,7 +6,7 @@
         <router-link
           class="book-link"
           :to="{
-            name: 'book-show',
+            name: 'reader-tool',
             params: {
               bookName: bookName,
               targetLanguage: targetLanguage,
