@@ -2,10 +2,18 @@
 <template>
   <v-app>
     <NavBar />
-    <!-- <v-content> -->
+    <v-content class="content mx-5">
     <!-- <NavBar class="fixed-header" /> -->
-    <router-view class="content" />
-    <!-- </v-content> -->
+    <router-view  />
+    <v-pagination
+      v-model="page"
+      :circle="false"
+      :disabled="false"
+      :length="10"
+      :page="page"
+      :total-visible="10"
+    ></v-pagination>
+    </v-content>
   </v-app>
 </template>
 
@@ -15,12 +23,17 @@ import NavBar from "@/components/NavBar.vue";
 export default {
   components: {
     NavBar
+  },
+  data() {
+  return {
+    page: 2
   }
+},
 };
 </script>
 
 <style>
-*,
+/* *,
 *::before,
 *::after {
   box-sizing: border-box;
@@ -262,5 +275,5 @@ select::ms-expand {
 .content {
   position: relative;
   top: 60px;
-}
+} */
 </style>

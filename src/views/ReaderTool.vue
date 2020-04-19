@@ -5,9 +5,20 @@
       :clickedWord="clickedWord"
       :wordData="wordData"
     />
-    <v-content class="mx-5">
+    <v-content class="py-0 px-0">
       <h1 @click="closeDrawer">{{ bookName }}</h1>
       <h2>Chapter {{ chapterNumber }}</h2>
+      <v-container>
+
+      <v-pagination
+      v-model="page"
+      :circle="false"
+      :disabled="false"
+      :length="10"
+      :page="page"
+      :total-visible="10"
+    ></v-pagination>
+      </v-container>
       <div>
         <router-link
           v-if="chapterNumber > 1"
@@ -38,19 +49,12 @@
         </router-link>
       </div>
       <!-- <button v-if="loggedIn" @click="switchStylingKnownWords()">button</button> -->
-      <v-btn v-if="loggedIn" @click="switchStylingKnownWords"
-        >toggle known words</v-btn
-      >
-      <v-switch
-        v-if="loggedIn"
-        v-model="isActiveColor"
-        :label="`isActiveColor 1: ${isActiveColor.toString()}`"
-      ></v-switch>
-      <div class="text-container" :class="isActiveColor ? 'active' : ''">
+      <div class="text-container" :class="lightenUknWordsBool ? 'active' : ''">
         <span
           v-for="(token, key) in chapterText"
           :key="key"
           :isKnown="$store.state.userKnownWordsDict[token]"
+          :class="$store.state.userKnownWordsDict[token] ? 'notknown' : ''"
           @click.prevent="wordInfo"
           @mouseenter="mouseEnter"
           @mouseleave="mouseLeave"
@@ -84,10 +88,11 @@ export default {
     return {
       chapterText: [],
       isActiveColor: null,
-      hoveredWord: null,
+      lightenUknWordsBool: null,
       drawerBool: false,
       clickedWord: null,
-      wordData: null
+      wordData: null,
+      page:2,
     };
   },
   watch: {
@@ -99,19 +104,19 @@ export default {
     this.onLoad();
     EventBus.$on("lightenUknWordsBoolChange", (lightenUknWordsBool)=>{
       console.log("event caught in parent", lightenUknWordsBool)
-      this.isActiveColor = lightenUknWordsBool
+      this.lightenUknWordsBool = lightenUknWordsBool
     })
   },
   mounted() {
     document.addEventListener("keydown", () => {
-      if (event.keyCode == "65" && this.hoveredWord) {
-        this.toggleIsKnown(this.hoveredWord);
+      if (event.keyCode == "65" && this.hoveredWordSpan) {
+        let hoveredWordText = this.hoveredWordSpan.innerText
+        this.$store.dispatch("toggleKnownWord", hoveredWordText);
       }
     });
   },
   methods: {
     onLoad() {
-      console.log("apiBooks.defaults.headers", apiBooks.defaults.headers);
       apiBooks
         .get("/api/books/book", {
           params: this.$route.params
@@ -122,15 +127,6 @@ export default {
         .catch(error => {
           console.log("there was an error :" + error.response);
         });
-    },
-    switchStylingKnownWords() {
-      this.isActiveColor = !this.isActiveColor;
-    },
-    toggleIsKnown(wordSpan) {
-      // const spanTarget = e.currentTarget;
-      const textContent = wordSpan.textContent;
-      this.$store.dispatch("toggleKnownWord", textContent);
-      // this.$forceUpdate();
     },
     wordInfo: function(e) {
       this.clickedWord = e.target;
@@ -151,17 +147,15 @@ export default {
         });
     },
     openContextMenu: function(e) {
-      console.log("the event in parent", e);
       EventBus.$emit("openContextMenu", e);
     },
     mouseEnter: function(e) {
-      this.hoveredWord = e.target;
+      this.hoveredWordSpan = e.target;
     },
     mouseLeave: function() {
-      this.hoveredWord = null;
+      this.hoveredWordSpan = null;
     },
     closeDrawer: function() {
-      console.log("close drawer");
       this.drawerBool = false;
     }
   },
@@ -176,8 +170,8 @@ export default {
   color: red;
 }
 
-.active > span[isKnown="true"] {
-  /* color:#00ff80; */
+.active > .notknown {
+  color: red;
 }
 
 .text-container {
@@ -219,5 +213,15 @@ export default {
 }
 .nav-chapter {
   margin-right: 1em;
+}
+
+.v-pagination {
+    align-items: center;
+    display: inline-flex;
+    list-style-type: none;
+    justify-content: center;
+    margin: 0;
+    max-width: 100%;
+    width: 100%;
 }
 </style>
