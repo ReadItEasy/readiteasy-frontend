@@ -187,10 +187,24 @@ export default {
   font-size: 28px;
 }
 
+.text-container > span {
+  /* transition: 0.3s; */
+  border-radius: 5px;
+  padding: 5px 0px;
+  /* margin: 0px; */
+}
+
 .text-container > span:hover {
+  /* transition: .3s; */
+  background-color: #35ea614d;
+  cursor: pointer;
+  box-shadow: 0 0 6px rgba(33, 33, 33, 0.2);
+}
+
+/* .text-container > span:hover {
   background-color: #39b982;
   cursor: pointer;
-}
+} */
 
 .location {
   margin-bottom: 0;
