@@ -2,18 +2,15 @@
 <template>
   <div id="app">
     <NavBar class="fixed-header" />
-    <SideBar2 />
     <router-view class="content" />
   </div>
 </template>
 
 <script>
 import NavBar from "@/components/NavBar.vue";
-import SideBar2 from "@/components/lab/SideBar2.vue"
 export default {
   components: {
-    NavBar,
-    SideBar2,
+    NavBar
   }
 };
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div id="reader-tool">
-    <ReaderDrawer v-show="showReaderDrawer" />
+    <ReaderDrawer v-show="showReaderDrawer" :clickedWord="clickedWord" />
     <transition name="slide-fade">
       <div
         id="reader-content"
@@ -9,7 +9,7 @@
             ? 'padding-left:10px;padding-right:310px'
             : 'padding-left:160px;padding-right:160px'
         "
-        @click="drawerHandler"
+        @click="onClickHandler"
       >
         <h1>{{ bookName }}</h1>
         <h2>Chapter {{ chapterNumber }}</h2>
@@ -50,7 +50,6 @@
             v-for="(token, key) in chapterText"
             :key="key"
             :isKnown="$store.state.userKnownWordsDict[token]"
-            @click="wordInfo"
             @mouseenter="mouseEnter"
             @mouseleave="mouseLeave"
             @contextmenu.prevent="openContextMenu"
@@ -84,7 +83,8 @@ export default {
       chapterText: [],
       isActiveColor: true,
       hoveredWord: null,
-      showReaderDrawer: false
+      showReaderDrawer: false,
+      clickedWord: ""
     };
   },
   watch: {
@@ -112,7 +112,7 @@ export default {
   },
   methods: {
     onLoad() {
-      console.log("apiBooks.defaults.headers", apiBooks.defaults.headers);
+      // console.log("apiBooks.defaults.headers", apiBooks.defaults.headers);
       apiBooks
         .get("/api/books/book", {
           params: this.$route.params
@@ -134,7 +134,7 @@ export default {
       this.$forceUpdate();
     },
     wordInfo: function(e) {
-      console.log(e.target.innerText);
+      // console.log(e.target.innerText);
       apiBooks
         .get("/api/words/mandarin/", {
           params: {
@@ -157,6 +157,12 @@ export default {
     },
     toggleDrawer: function() {
       this.showReaderDrawer = !this.showReaderDrawer;
+    },
+    onClickHandler: function() {
+      this.drawerHandler();
+      if (this.hoveredWord) {
+        this.clickedWord = this.hoveredWord.innerText;
+      }
     },
     drawerHandler: function() {
       if (this.hoveredWord && !this.showReaderDrawer) {
