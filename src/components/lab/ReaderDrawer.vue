@@ -17,7 +17,7 @@ export default {};
   top: 60px;
   right: 0px;
   height: 100vh;
-  width:300px;
+  width: 300px;
   background-color: white;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.13);
   border-style: none none none solid;
@@ -28,12 +28,13 @@ export default {};
 }
 
 .slide-fade-enter-active {
-  transition: all .3s ease;
+  transition: all 0.3s ease;
 }
 .slide-fade-leave-active {
-  transition: all .3s ease;
+  transition: all 0.3s ease;
 }
-.slide-fade-enter, .slide-fade-leave-to {
+.slide-fade-enter,
+.slide-fade-leave-to {
   transform: translateX(100%);
 }
 </style>
