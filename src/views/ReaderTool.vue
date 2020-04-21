@@ -180,7 +180,7 @@ export default {
 }
 
 .text-container > span {
-  transition: 0.3s;
+  /* transition: 0.3s; */
   border-radius: 5px;
   padding: 5px 0px;
   /* margin: 0px; */
