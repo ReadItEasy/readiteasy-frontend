@@ -1,12 +1,22 @@
 <template>
   <transition name="slide-fade">
     <div id="reader-drawer" class="drawer">
-      <h1>{{ clickedWord }}</h1>
-      <WordCardMandarin
-        v-for="word in processedWord"
-        :key="word.id"
-        :word="word"
-      ></WordCardMandarin>
+      <span class="clicked-word">{{ clickedWord }}</span>
+      <tabs>
+        <tab name="Words" :selected="true">
+          <WordCardMandarin
+            v-for="word in processedWord"
+            :key="word.id"
+            :word="word"
+          ></WordCardMandarin>
+        </tab>
+        <tab name="Statistics">
+          <h1>Add Statistics</h1>
+        </tab>
+        <tab name="Others">
+          <h1>Add Others</h1>
+        </tab>
+      </tabs>
     </div>
   </transition>
 </template>
@@ -14,10 +24,14 @@
 <script>
 import { apiBooks } from "@/services/ApiService.js";
 import WordCardMandarin from "@/components/lab/WordCardMandarin.vue";
+import tab from "@/components/lab/Tab.vue";
+import tabs from "@/components/lab/Tabs.vue";
 
 export default {
   components: {
-    WordCardMandarin
+    WordCardMandarin,
+    tab,
+    tabs
   },
   props: {
     clickedWord: {
@@ -67,18 +81,33 @@ export default {
 <style>
 .drawer {
   z-index: 1;
+  overflow-y: scroll;
+  /* overflow: hidden; */
   position: fixed;
   top: 60px;
   right: 0px;
-  height: 100vh;
+  height: calc(100% - 60px);
+  /* height: -webkit-calc(100vh - 60px); 
+    height:    -moz-calc(100vh - 60px); 
+    height:      -o-calc(100vh - 60px); */
   width: 300px;
   background-color: white;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.13);
+  /* box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.13); */
   border-style: none none none solid;
-  border-color: grey;
+  border-color: rgba(212, 212, 212);
   border-width: 1px;
   display: flex;
   flex-direction: column;
+}
+
+.drawer::-webkit-scrollbar {
+  display: none;
+}
+
+.clicked-word {
+  text-align: center;
+  font-size: 30px;
+  font-weight: 800;
 }
 
 .slide-fade-enter-active {

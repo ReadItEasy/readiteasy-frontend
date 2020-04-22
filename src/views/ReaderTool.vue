@@ -1,79 +1,84 @@
 <template>
-  <div id="reader-tool">
-    <ReaderDrawer v-show="showReaderDrawer" :clickedWord="clickedWord" />
-    <transition name="slide-fade">
-      <div
-        id="reader-content"
-        :style="
-          showReaderDrawer
-            ? 'padding-left:10px;padding-right:310px'
-            : 'padding-left:160px;padding-right:160px'
-        "
-        @click="onClickHandler"
-      >
-        <h1>{{ bookName }}</h1>
-        <h2>Chapter {{ chapterNumber }}</h2>
-        <div>
-          <router-link
-            v-if="chapterNumber > 1"
-            class="book-link"
-            :to="{
-              name: 'reader-tool',
-              params: {
-                bookName: bookName,
-                targetLanguage: targetLanguage,
-                chapterNumber: parseInt(chapterNumber) - 1
-              }
-            }"
-          >
-            <span class="nav-chapter">previous chapter</span>
-          </router-link>
-          <router-link
-            class="book-link"
-            :to="{
-              name: 'reader-tool',
-              params: {
-                bookName: bookName,
-                targetLanguage: targetLanguage,
-                chapterNumber: parseInt(chapterNumber) + 1
-              }
-            }"
-          >
-            <span>next chapter</span>
-          </router-link>
-        </div>
-        <button v-if="loggedIn" @click="switchStylingKnownWords()">
-          button
-        </button>
-        <div class="text-container" :class="isActiveColor ? 'active' : ''">
-          <span
-            v-for="(token, key) in chapterText"
-            :key="key"
-            :isKnown="$store.state.userKnownWordsDict[token]"
-            @mouseenter="mouseEnter"
-            @mouseleave="mouseLeave"
-            @contextmenu.prevent="openContextMenu"
-            >{{ token }}</span
-          >
-          <!-- @click="toggleIsKnown" -->
-        </div>
-        <Burger />
-        <contextMenu></contextMenu>
+  <div id="book-show">
+    <ReaderDrawer
+      :drawerBool="drawerBool"
+      :clickedWord="clickedWord"
+      :wordData="wordData"
+    />
+    <v-content class="py-0 px-0">
+      <h1 @click="closeDrawer">{{ bookName }}</h1>
+      <h2>Chapter {{ chapterNumber }}</h2>
+      <v-container>
+        <v-pagination
+          v-model="page"
+          :circle="false"
+          :disabled="false"
+          :length="10"
+          :page="page"
+          :total-visible="10"
+        ></v-pagination>
+      </v-container>
+      <div>
+        <router-link
+          v-if="chapterNumber > 1"
+          class="book-link"
+          :to="{
+            name: 'book-show',
+            params: {
+              bookName: bookName,
+              targetLanguage: targetLanguage,
+              chapterNumber: parseInt(chapterNumber) - 1
+            }
+          }"
+        >
+          <span class="nav-chapter">previous chapter</span>
+        </router-link>
+        <router-link
+          class="book-link"
+          :to="{
+            name: 'book-show',
+            params: {
+              bookName: bookName,
+              targetLanguage: targetLanguage,
+              chapterNumber: parseInt(chapterNumber) + 1
+            }
+          }"
+        >
+          <span>next chapter</span>
+        </router-link>
       </div>
-    </transition>
+      <!-- <button v-if="loggedIn" @click="switchStylingKnownWords()">button</button> -->
+      <div class="text-container" :class="lightenUknWordsBool ? 'active' : ''">
+        <span
+          v-for="(token, key) in chapterText"
+          :key="key"
+          :isKnown="$store.state.userKnownWordsDict[token]"
+          :class="$store.state.userKnownWordsDict[token] ? 'notknown' : ''"
+          @click.prevent="wordInfo"
+          @mouseenter="mouseEnter"
+          @mouseleave="mouseLeave"
+          @contextmenu.prevent="openContextMenu"
+          >{{ token }}</span
+        >
+        <!-- @click="toggleIsKnown" -->
+      </div>
+      <Burger />
+      <ContextMenu></ContextMenu>
+    </v-content>
   </div>
 </template>
 
 <script>
 import { apiBooks } from "@/services/ApiService.js";
 import { authComputed } from "@/store/helpers.js";
-import contextMenu from "@/components/contextMenu.vue";
-import Burger from "@/components/lab/Burger.vue";
+import EventBus from "@/services/EventBus.js";
+import ContextMenu from "@/components/ContextMenu.vue";
 import ReaderDrawer from "@/components/lab/ReaderDrawer.vue";
+import Burger from "@/components/lab/Burger.vue";
 
 export default {
   components: {
-    contextMenu: contextMenu,
+    ContextMenu: ContextMenu,
     Burger: Burger,
     ReaderDrawer: ReaderDrawer
   },
@@ -81,10 +86,12 @@ export default {
   data() {
     return {
       chapterText: [],
-      isActiveColor: true,
-      hoveredWord: null,
-      showReaderDrawer: false,
-      clickedWord: ""
+      isActiveColor: null,
+      lightenUknWordsBool: null,
+      drawerBool: false,
+      clickedWord: null,
+      wordData: null,
+      page: 2
     };
   },
   watch: {
@@ -94,25 +101,21 @@ export default {
   },
   created() {
     this.onLoad();
+    EventBus.$on("lightenUknWordsBoolChange", lightenUknWordsBool => {
+      console.log("event caught in parent", lightenUknWordsBool);
+      this.lightenUknWordsBool = lightenUknWordsBool;
+    });
   },
   mounted() {
     document.addEventListener("keydown", () => {
-      if (event.keyCode == "65" && this.hoveredWord) {
-        this.toggleIsKnown(this.hoveredWord);
+      if (event.keyCode == "65" && this.hoveredWordSpan) {
+        let hoveredWordText = this.hoveredWordSpan.innerText;
+        this.$store.dispatch("toggleKnownWord", hoveredWordText);
       }
     });
-    // document.addEventListener("click", () => {
-    //   if (this.hoveredWord && !this.showReaderDrawer) {
-    //     this.showReaderDrawer = true;
-    //   }
-    //   if (!this.hoveredWord && this.showReaderDrawer) {
-    //     this.showReaderDrawer = false;
-    //   }
-    // });
   },
   methods: {
     onLoad() {
-      // console.log("apiBooks.defaults.headers", apiBooks.defaults.headers);
       apiBooks
         .get("/api/books/book", {
           params: this.$route.params
@@ -124,17 +127,13 @@ export default {
           console.log("there was an error :" + error.response);
         });
     },
-    switchStylingKnownWords() {
-      this.isActiveColor = !this.isActiveColor;
-    },
-    toggleIsKnown(wordSpan) {
-      // const spanTarget = e.currentTarget;
-      const textContent = wordSpan.textContent;
-      this.$store.dispatch("toggleKnownWord", textContent);
-      this.$forceUpdate();
-    },
     wordInfo: function(e) {
-      // console.log(e.target.innerText);
+      this.clickedWord = e.target;
+
+      if (this.drawerBool == false) {
+        this.drawerBool = !this.drawerBool;
+      }
+      // console.log("e.target", e.target);
       apiBooks
         .get("/api/words/mandarin/", {
           params: {
@@ -142,35 +141,21 @@ export default {
           }
         })
         .then(({ data }) => {
-          console.log(data);
+          this.wordData = data;
+          // console.log("then", data);
         });
     },
     openContextMenu: function(e) {
-      console.log("the event in parent", e);
-      this.$emit("openContextMenu", e);
+      EventBus.$emit("openContextMenu", e);
     },
     mouseEnter: function(e) {
-      this.hoveredWord = e.target;
+      this.hoveredWordSpan = e.target;
     },
     mouseLeave: function() {
-      this.hoveredWord = null;
+      this.hoveredWordSpan = null;
     },
-    toggleDrawer: function() {
-      this.showReaderDrawer = !this.showReaderDrawer;
-    },
-    onClickHandler: function() {
-      this.drawerHandler();
-      if (this.hoveredWord) {
-        this.clickedWord = this.hoveredWord.innerText;
-      }
-    },
-    drawerHandler: function() {
-      if (this.hoveredWord && !this.showReaderDrawer) {
-        this.showReaderDrawer = true;
-      }
-      if (!this.hoveredWord && this.showReaderDrawer) {
-        this.showReaderDrawer = false;
-      }
+    closeDrawer: function() {
+      this.drawerBool = false;
     }
   },
   computed: {
@@ -184,13 +169,13 @@ export default {
   color: red;
 }
 
-/* .active > span[isKnown="true"] {
-  color:#00ff80; 
-} */
+.active > .notknown {
+  color: red;
+}
 
 .text-container {
   white-space: pre-line;
-  font-size: 28px;
+  font-size: 32px;
 }
 
 .text-container > span {
@@ -206,11 +191,6 @@ export default {
   cursor: pointer;
   box-shadow: 0 0 6px rgba(33, 33, 33, 0.2);
 }
-
-/* .text-container > span:hover {
-  background-color: #39b982;
-  cursor: pointer;
-} */
 
 .location {
   margin-bottom: 0;
@@ -232,5 +212,15 @@ export default {
 }
 .nav-chapter {
   margin-right: 1em;
+}
+
+.v-pagination {
+  align-items: center;
+  display: inline-flex;
+  list-style-type: none;
+  justify-content: center;
+  margin: 0;
+  max-width: 100%;
+  width: 100%;
 }
 </style>
