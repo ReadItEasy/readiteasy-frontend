@@ -43,9 +43,9 @@ export default {
             country: this.country
           }
         })
-        .then(response => {
-          console.log("POST REGISTER SUCCEED");
-          console.log(response);
+        .then(() => {
+          // console.log("POST REGISTER SUCCEED");
+          // console.log(response);
           return this.$store.dispatch("login", {
             email: this.email,
             password: this.password
@@ -57,7 +57,7 @@ export default {
     }
   },
   created() {
-    console.log("register created");
+    // console.log("register created");
   }
 };
 </script>

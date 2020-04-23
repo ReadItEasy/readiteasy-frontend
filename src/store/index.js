@@ -62,11 +62,11 @@ export default new Vuex.Store({
             data["mandarinKnownWordsDict"] = mandarinKnownWordsDict;
             data["targetLanguage"] = targetLanguage;
             commit("LOAD_KNOWN_WORDS", data);
-          })
-          .catch(error => {
-            console.log(
-              "there was an error in actions store :" + error.response
-            );
+          // })
+          // .catch(error => {
+          //   console.log(
+          //     "there was an error in actions store :" + error.response
+          //   );
           });
       }
     },
@@ -75,7 +75,7 @@ export default new Vuex.Store({
     },
     login({ commit }, credentials) {
       return apiBooks.post("api/users/token/", credentials).then(response => {
-        console.log("login response", response);
+        // console.log("login response", response);
         commit("LOGIN", response.data);
       });
     },
@@ -91,9 +91,9 @@ export default new Vuex.Store({
         .post("/api/users/token/refresh/", {
           refresh: this.$store.state.tokens.refresh
         })
-        .then(response => {
-          console.log("this is the new access", response.data.access);
-        });
+        // .then(response => {
+        //   console.log("this is the new access", response.data.access);
+        // });
     }
   },
   getters: {

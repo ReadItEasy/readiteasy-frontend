@@ -23,8 +23,13 @@ export default {
 
   mounted() {
     this.isActive = this.selected;
+  },
+  methods: {
+    // beforeEnter(e) {
+      // console.log("beforeEnter", e);
+    // }
   }
 };
 </script>
 
-<style></style>
+<style scoped></style>

@@ -2,7 +2,7 @@ import axios from "axios";
 import NProgress from "nprogress";
 
 const apiBooks = axios.create({
-  baseURL: `http://127.0.0.1:8000`,
+  baseURL: `https://readiteasy.com`,
   withCredentials: false, // This is the default
   headers: {
     Accept: "application/json",

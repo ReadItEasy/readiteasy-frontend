@@ -2,21 +2,49 @@
   <transition name="slide-fade">
     <div id="reader-drawer" class="drawer">
       <span class="clicked-word">{{ clickedWord }}</span>
-      <tabs>
-        <tab name="Words" :selected="true">
-          <WordCardMandarin
-            v-for="word in processedWord"
-            :key="word.id"
-            :word="word"
-          ></WordCardMandarin>
-        </tab>
-        <tab name="Statistics">
-          <h1>Add Statistics</h1>
-        </tab>
-        <tab name="Others">
-          <h1>Add Others</h1>
-        </tab>
-      </tabs>
+      <div class="tab-header">
+        <a
+          class="btn-tab"
+          @click="btnTabClick"
+          tab="0"
+          :class="tab == 0 ? 'active' : ''"
+          >WORDS</a
+        >
+        <a
+          class="btn-tab"
+          @click="btnTabClick"
+          tab="1"
+          :class="tab == 1 ? 'active' : ''"
+          >STATS</a
+        >
+        <a
+          class="btn-tab"
+          @click="btnTabClick"
+          tab="2"
+          :class="tab == 2 ? 'active' : ''"
+          >BOOK</a
+        >
+      </div>
+
+      <div class="slide-container">
+        <transition name="slide">
+          <div v-if="tab == 0" :key="0" class="slide-item">
+            <WordCardMandarin
+              v-for="word in processedWord"
+              :key="word.id"
+              :word="word"
+            ></WordCardMandarin>
+          </div>
+
+          <div v-if="tab == 1" :key="1" class="slide-item">
+            <p>rank : {{ wordStatistics.rank }}</p>
+            <p>freq in corpus : {{ wordStatistics.freq }}</p>
+          </div>
+          <div v-if="tab == 2" :key="2" class="slide-item">
+            <span>My third tab</span>
+          </div>
+        </transition>
+      </div>
     </div>
   </transition>
 </template>
@@ -24,14 +52,10 @@
 <script>
 import { apiBooks } from "@/services/ApiService.js";
 import WordCardMandarin from "@/components/lab/WordCardMandarin.vue";
-import tab from "@/components/lab/Tab.vue";
-import tabs from "@/components/lab/Tabs.vue";
 
 export default {
   components: {
-    WordCardMandarin,
-    tab,
-    tabs
+    WordCardMandarin
   },
   props: {
     clickedWord: {
@@ -41,7 +65,9 @@ export default {
   },
   data() {
     return {
-      processedWord: null
+      processedWord: null,
+      wordStatistics: {},
+      tab: 0
     };
   },
   watch: {
@@ -53,25 +79,42 @@ export default {
           }
         })
         .then(({ data }) => {
-          console.log("clickedWord watcher ReaderDrawer", data);
+          // console.log("clickedWord watcher ReaderDrawer", data);
           this.processedWord = this.wordJSONToObject(data);
+        });
+      apiBooks
+        .get("/api/words/mandarin/word_statistics", {
+          params: {
+            word: newValue
+          }
+        })
+        .then(({ data }) => {
+          // console.log("clickedWord watcher statistics", data);
+          this.wordStatistics = data;
         });
     }
   },
   methods: {
     wordJSONToObject: function(wordJSON) {
       if (wordJSON) {
-        console.log("COMP", wordJSON);
+        // console.log("COMP", wordJSON);
         var clickedWordProcessed = [];
         for (var word of wordJSON) {
-          console.log("check", word.definitions.split("/").filter(Boolean));
+          // console.log("check", word.definitions.split("/").filter(Boolean));
           word.definitions = word.definitions.split("/").filter(Boolean);
           clickedWordProcessed.push(word);
         }
-        console.log("finished list", clickedWordProcessed);
+        // console.log("finished list", clickedWordProcessed);
         return clickedWordProcessed;
       } else {
         return null;
+      }
+    },
+    btnTabClick: function(e) {
+      // console.log("e.target", e.target);
+      let clikedTab = e.target.getAttribute("tab");
+      if (this.tab != clikedTab) {
+        this.tab = clikedTab;
       }
     }
   }
@@ -119,5 +162,60 @@ export default {
 .slide-fade-enter,
 .slide-fade-leave-to {
   transform: translateX(100%);
+}
+
+.tab-header {
+  display: flex;
+  /* height: 50px; */
+  /* display: flex; */
+  /* justify-content: center;
+  align-items: center; */
+}
+
+.tab-header a {
+  flex-basis: 100%;
+  text-align: center;
+  cursor: pointer;
+  font-weight: 300;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  /* height: 100%; */
+  /* -webkit-box-align: center;
+  height: 100px;
+  line-height: 100px; */
+}
+
+.tab-header a:hover {
+  background-color: rgba(212, 212, 212, 0.1);
+}
+
+.btn-tab:not(.active) {
+  color: grey;
+}
+
+.btn-tab.active {
+  border-bottom: solid 2px;
+}
+
+.btn-tab.active:hover {
+  background-color: rgba(57, 185, 130, 0.1);
+}
+
+.slide-item {
+  width: 300px;
+  position: absolute;
+}
+
+.slide-enter-active {
+  transition: all 0.3s ease;
+}
+.slide-leave-active {
+  transition: all 0.3s ease;
+}
+.slide-enter {
+  transform: translateX(100%);
+}
+.slide-leave-to {
+  transform: translateX(-100%);
 }
 </style>

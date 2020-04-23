@@ -57,9 +57,6 @@ Vue.component("tabs", {
   }
 });
 
-
-
-
 new Vue({
   router,
   store,

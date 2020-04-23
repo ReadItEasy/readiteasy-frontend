@@ -52,7 +52,7 @@ ul {
 }
 
 li:not(.is-active) a {
-  color:grey;
+  color: grey;
 }
 
 li {

@@ -3,7 +3,7 @@
     <router-link to="/" class="brand">ReadItEasy</router-link>
     <nav>
       <router-link :to="{ name: 'languages' }">Languages</router-link>
-      <router-link :to="{ name: 'language-detector' }">Detector</router-link>
+      <!-- <router-link :to="{ name: 'language-detector' }">Detector</router-link> -->
       <template v-if="!loggedIn">
         <router-link :to="{ name: 'login' }">Login</router-link>
         <router-link :to="{ name: 'register' }">Register</router-link>

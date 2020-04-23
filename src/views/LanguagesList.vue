@@ -28,9 +28,10 @@ export default {
       .get("/api/books/languages")
       .then(response => {
         this.languages = response.data.languages;
-      })
-      .catch(error => {
-        console.log("there was an error :" + error.response);
+        // console.log(response.data)
+      // })
+      // .catch(error => {
+      //   console.log("there was an error :" + error.response);
       });
   }
 };
