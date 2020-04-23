@@ -10,7 +10,8 @@ export default new Vuex.Store({
     userKnownWordsDict: {},
     targetLanguage: "",
     tokens: null,
-    userId: null
+    userId: null,
+    firstName: null
   },
   mutations: {
     LOAD_KNOWN_WORDS(state, data) {
@@ -33,6 +34,7 @@ export default new Vuex.Store({
         "Authorization"
       ] = `Bearer ${tokens.access}`;
       state.userId = VueJwtDecode.decode(tokens.access).user_id;
+      state.firstName = VueJwtDecode.decode(tokens.access).first_name;
     },
     LOGOUT() {
       localStorage.removeItem("tokens");
@@ -43,31 +45,30 @@ export default new Vuex.Store({
         "Authorization"
       ] = `Bearer ${state.tokens.access}`;
       state.userId = VueJwtDecode.decode(state.tokens.access).user_id;
+      state.firstName = VueJwtDecode.decode(state.tokens.access).first_name;
     }
   },
   actions: {
     loadKnownWords({ commit }, targetLanguage) {
       if (targetLanguage && targetLanguage != this.state.targetLanguage) {
-        apiBooks
-          .get(`api/users/${this.state.userId}/`)
-          .then(response => {
-            var mandarinKnownWordsField =
-              response.data.profile.mandarin_known_words;
-            var mandarinKnownWordsList = mandarinKnownWordsField.split("\n");
-            var mandarinKnownWordsDict = {};
-            for (const word of mandarinKnownWordsList) {
-              mandarinKnownWordsDict[word] = true;
-            }
-            var data = {};
-            data["mandarinKnownWordsDict"] = mandarinKnownWordsDict;
-            data["targetLanguage"] = targetLanguage;
-            commit("LOAD_KNOWN_WORDS", data);
+        apiBooks.get(`api/users/${this.state.userId}/`).then(response => {
+          var mandarinKnownWordsField =
+            response.data.profile.mandarin_known_words;
+          var mandarinKnownWordsList = mandarinKnownWordsField.split("\n");
+          var mandarinKnownWordsDict = {};
+          for (const word of mandarinKnownWordsList) {
+            mandarinKnownWordsDict[word] = true;
+          }
+          var data = {};
+          data["mandarinKnownWordsDict"] = mandarinKnownWordsDict;
+          data["targetLanguage"] = targetLanguage;
+          commit("LOAD_KNOWN_WORDS", data);
           // })
           // .catch(error => {
           //   console.log(
           //     "there was an error in actions store :" + error.response
           //   );
-          });
+        });
       }
     },
     toggleKnownWord({ commit }, word) {
@@ -87,13 +88,12 @@ export default new Vuex.Store({
     },
     refreshTokens({ commit }) {
       commit("TODO : Create a commit");
-      apiBooks
-        .post("/api/users/token/refresh/", {
-          refresh: this.$store.state.tokens.refresh
-        })
-        // .then(response => {
-        //   console.log("this is the new access", response.data.access);
-        // });
+      apiBooks.post("/api/users/token/refresh/", {
+        refresh: this.$store.state.tokens.refresh
+      });
+      // .then(response => {
+      //   console.log("this is the new access", response.data.access);
+      // });
     }
   },
   getters: {

@@ -24,15 +24,13 @@ export default {
     };
   },
   created() {
-    apiBooks
-      .get("/api/books/languages")
-      .then(response => {
-        this.languages = response.data.languages;
-        // console.log(response.data)
+    apiBooks.get("/api/books/languages").then(response => {
+      this.languages = response.data.languages;
+      // console.log(response.data)
       // })
       // .catch(error => {
       //   console.log("there was an error :" + error.response);
-      });
+    });
   }
 };
 </script>

@@ -1,12 +1,11 @@
 <template>
   <div>
     <h1>Profile</h1>
-    <h2>My information :</h2>
-    <ul>
-      <li>ID : {{ $store.state.userId }}</li>
-      <li>Access Token : {{ $store.state.tokens.access }}</li>
-      <li>Refresh Token : {{ $store.state.tokens.refresh }}</li>
-    </ul>
+    <p>
+      Hello <strong>{{ $store.state.firstName }}</strong
+      >. Here will soon be displayed tons of statistics about your known words,
+      target languages and time spent reading !
+    </p>
   </div>
 </template>
 

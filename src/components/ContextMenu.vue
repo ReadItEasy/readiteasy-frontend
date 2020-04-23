@@ -7,15 +7,20 @@
   >
     <ul>
       <li @click="openWikt">See in wiktionary</li>
-      <li v-if="isKnown">Remove from known words</li>
-      <li v-else>Add to known words</li>
-      <li>option 3</li>
-      <li>option 4</li>
+      <template v-if="loggedIn">
+        <li v-if="isKnown">Remove from known words</li>
+        <li v-else>Add to known words</li>
+      </template>
+
+      <!-- <li>option 3</li>
+      <li>option 4</li> -->
     </ul>
   </div>
 </template>
 
 <script>
+import { authComputed } from "@/store/helpers.js";
+
 export default {
   name: "ContextMenu",
   data: () => ({
@@ -99,6 +104,9 @@ export default {
       );
       this.closeMenu();
     }
+  },
+  computed: {
+    ...authComputed
   }
 };
 </script>
@@ -116,6 +124,10 @@ div {
   position: absolute;
   width: 250px;
   z-index: 999;
+}
+ul {
+  padding: 10px;
+  margin: 0;
 }
 
 div li {
@@ -137,7 +149,5 @@ div li:hover {
   color: white;
 }
 
-ul {
-  padding: 0 1em;
-}
+
 </style>

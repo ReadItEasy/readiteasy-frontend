@@ -5,7 +5,8 @@
       <div
         id="reader-content"
         :style="
-          showReaderDrawer
+        $mq === 'tablet' || $mq==='mobile' ? 'no-resize' : 
+          showReaderDrawer 
             ? 'padding-left:10px;padding-right:310px'
             : 'padding-left:160px;padding-right:160px'
         "
@@ -45,7 +46,10 @@
         <button v-if="loggedIn" @click="switchStylingKnownWords()">
           button
         </button>
-        <div class="text-container" :class="isActiveColor ? 'active' : ''">
+        <div
+          class="text-container"
+          :class="isActiveColor && loggedIn ? 'active' : ''"
+        >
           <span
             v-for="(token, key) in chapterText"
             :key="key"
@@ -67,12 +71,12 @@
 <script>
 import { apiBooks } from "@/services/ApiService.js";
 import { authComputed } from "@/store/helpers.js";
-import contextMenu from "@/components/contextMenu.vue";
+import ContextMenu from "@/components/ContextMenu.vue";
 import Burger from "@/components/lab/Burger.vue";
 import ReaderDrawer from "@/components/lab/ReaderDrawer.vue";
 export default {
   components: {
-    contextMenu: contextMenu,
+    ContextMenu: ContextMenu,
     Burger: Burger,
     ReaderDrawer: ReaderDrawer
   },
@@ -96,7 +100,7 @@ export default {
   },
   mounted() {
     document.addEventListener("keydown", () => {
-      if (event.keyCode == "65" && this.hoveredWord) {
+      if (event.keyCode == "65" && this.hoveredWord && this.loggedIn) {
         this.toggleIsKnown(this.hoveredWord);
       }
     });
@@ -118,9 +122,9 @@ export default {
         })
         .then(response => {
           this.chapterText = response.data.tokenized_chapter_text;
-        // })
-        // .catch(error => {
-        //   console.log("there was an error :" + error.response);
+          // })
+          // .catch(error => {
+          //   console.log("there was an error :" + error.response);
         });
     },
     switchStylingKnownWords() {
@@ -134,15 +138,14 @@ export default {
     },
     wordInfo: function(e) {
       // console.log(e.target.innerText);
-      apiBooks
-        .get("/api/words/mandarin/", {
-          params: {
-            simplified: e.target.innerText
-          }
+      apiBooks.get("/api/words/mandarin/", {
+        params: {
+          simplified: e.target.innerText
+        }
         // })
         // .then(({ data }) => {
         //   console.log(data);
-        });
+      });
     },
     openContextMenu: function(e) {
       // console.log("the event in parent", e);

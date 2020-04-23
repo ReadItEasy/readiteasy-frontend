@@ -33,9 +33,9 @@ export default {
         })
         .then(response => {
           this.prediction = response.data.prediction;
-        // })
-        // .catch(error => {
-        //   console.log("there was an error :" + error.response);
+          // })
+          // .catch(error => {
+          //   console.log("there was an error :" + error.response);
         });
     }
   },

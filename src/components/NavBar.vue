@@ -9,7 +9,7 @@
         <router-link :to="{ name: 'register' }">Register</router-link>
       </template>
       <template v-else>
-        <router-link :to="{ name: 'profile'}">Profile</router-link>
+        <router-link :to="{ name: 'profile' }">Profile</router-link>
         <a @click.prevent="logout" href="">Logout</a>
       </template>
     </nav>
@@ -32,12 +32,10 @@ export default {
 </script>
 
 <style scoped>
-
 .nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-
 }
 .nav > .brand {
   font-family: "Montserrat", sans-serif;
