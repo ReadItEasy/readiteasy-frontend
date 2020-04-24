@@ -1,12 +1,16 @@
 <template>
   <div id="reader-tool">
-    <ReaderDrawer v-show="showReaderDrawer" :clickedWord="clickedWord" />
+    <v-touch @swiperight="doSomething">
+
+      <ReaderDrawer v-show="showReaderDrawer" :clickedWord="clickedWord" />
+    </v-touch>
     <transition name="slide-fade">
       <div
         id="reader-content"
         :style="
-        $mq === 'tablet' || $mq==='mobile' ? 'no-resize' : 
-          showReaderDrawer 
+          $mq === 'tablet' || $mq === 'mobile'
+            ? 'no-resize'
+            : showReaderDrawer
             ? 'padding-left:10px;padding-right:310px'
             : 'padding-left:160px;padding-right:160px'
         "
@@ -134,7 +138,7 @@ export default {
       // const spanTarget = e.currentTarget;
       const textContent = wordSpan.textContent;
       this.$store.dispatch("toggleKnownWord", textContent);
-      this.$forceUpdate();
+      // this.$forceUpdate();
     },
     wordInfo: function(e) {
       // console.log(e.target.innerText);
@@ -172,6 +176,11 @@ export default {
       }
       if (!this.hoveredWord && this.showReaderDrawer) {
         this.showReaderDrawer = false;
+      }
+    },
+    doSomething: function() {
+      if (this.showReaderDrawer) {
+        this.showReaderDrawer = false
       }
     }
   },

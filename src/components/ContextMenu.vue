@@ -8,8 +8,8 @@
     <ul>
       <li @click="openWikt">See in wiktionary</li>
       <template v-if="loggedIn">
-        <li v-if="isKnown">Remove from known words</li>
-        <li v-else>Add to known words</li>
+        <li v-if="isKnown" @click="toggleIsKnown">Remove from known words</li>
+        <li v-else @click="toggleIsKnown">Add to known words</li>
       </template>
 
       <!-- <li>option 3</li>
@@ -103,6 +103,10 @@ export default {
         "_blank"
       );
       this.closeMenu();
+    },
+    toggleIsKnown() {
+      this.$store.dispatch("toggleKnownWord", this.targetWord);
+      this.closeMenu();
     }
   },
   computed: {
@@ -148,6 +152,4 @@ div li:hover {
   background: #39b982;
   color: white;
 }
-
-
 </style>

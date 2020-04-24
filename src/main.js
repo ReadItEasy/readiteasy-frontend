@@ -5,16 +5,19 @@ import store from "./store";
 import upperFirst from "lodash/upperFirst";
 import camelCase from "lodash/camelCase";
 import "nprogress/nprogress.css";
-import VueMq from "vue-mq"
+import VueMq from "vue-mq";
+import VueTouch from "vue-touch";
 
 Vue.use(VueMq, {
   breakpoints: {
     mobile: 450,
     tablet: 800,
     laptop: 1250,
-    desktop: Infinity,
+    desktop: Infinity
   }
-})
+});
+
+Vue.use(VueTouch);
 
 const requireComponent = require.context(
   "./components",
@@ -33,7 +36,6 @@ requireComponent.keys().forEach(fileName => {
 });
 
 Vue.config.productionTip = false;
-
 
 new Vue({
   router,
