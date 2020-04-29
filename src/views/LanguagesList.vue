@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="languages">
     <h1>Languages</h1>
     <div v-for="(language, index) in languages" :key="index">
       <LanguageSection
@@ -35,4 +35,4 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped></style>

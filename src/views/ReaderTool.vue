@@ -1,8 +1,12 @@
 <template>
   <div id="reader-tool">
     <v-touch @swiperight="doSomething">
-
-      <ReaderDrawer v-show="showReaderDrawer" :clickedWord="clickedWord" />
+      <ReaderDrawer
+        v-show="showReaderDrawer"
+        :clickedWord="clickedWord"
+        :bookName="bookName"
+        :targetLanguage="targetLanguage"
+      />
     </v-touch>
     <transition name="slide-fade">
       <div
@@ -16,7 +20,7 @@
         "
         @click="onClickHandler"
       >
-        <h1>{{ bookName }}</h1>
+        <h1>{{ bookName.replace(/_/g, " ") }}</h1>
         <h2>Chapter {{ chapterNumber }}</h2>
         <div>
           <router-link
@@ -65,7 +69,6 @@
           >
           <!-- @click="toggleIsKnown" -->
         </div>
-        <Burger />
         <contextMenu></contextMenu>
       </div>
     </transition>
@@ -76,12 +79,10 @@
 import { apiBooks } from "@/services/ApiService.js";
 import { authComputed } from "@/store/helpers.js";
 import ContextMenu from "@/components/ContextMenu.vue";
-import Burger from "@/components/lab/Burger.vue";
-import ReaderDrawer from "@/components/lab/ReaderDrawer.vue";
+import ReaderDrawer from "@/components/ReaderDrawer.vue";
 export default {
   components: {
     ContextMenu: ContextMenu,
-    Burger: Burger,
     ReaderDrawer: ReaderDrawer
   },
   props: ["bookName", "targetLanguage", "chapterNumber"],
@@ -180,7 +181,7 @@ export default {
     },
     doSomething: function() {
       if (this.showReaderDrawer) {
-        this.showReaderDrawer = false
+        this.showReaderDrawer = false;
       }
     }
   },
@@ -191,6 +192,10 @@ export default {
 </script>
 
 <style scoped>
+#reader-tool {
+  max-width: 100%;
+}
+
 .active > span:not([isKnown="true"]) {
   color: red;
 }
@@ -212,6 +217,13 @@ export default {
   /* transition: .3s; */
   background-color: #35ea614d;
   cursor: pointer;
+  box-shadow: 0 0 6px rgba(33, 33, 33, 0.2);
+}
+
+.text-container > span::selection {
+  /* transition: .3s; */
+  background-color: red;
+  /* cursor: pointer; */
   box-shadow: 0 0 6px rgba(33, 33, 33, 0.2);
 }
 /* .text-container > span:hover {

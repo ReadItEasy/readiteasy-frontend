@@ -256,8 +256,22 @@ select::ms-expand {
   box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28);
 }
 
+@media screen and (max-width: 900px) {
+  .content {
+    max-width: 90%;
+  }
+}
+
+@media screen and (min-width: 900px) {
+  .content {
+    max-width: 80%;
+  }
+}
+
 .content {
   position: relative;
   top: 60px;
+  margin: auto;
+  margin-bottom: 100px;
 }
 </style>

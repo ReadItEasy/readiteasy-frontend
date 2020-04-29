@@ -32,9 +32,4 @@
 export default {};
 </script>
 
-<style scoped>
-div {
-  max-width: 80%;
-  margin: auto;
-}
-</style>
+<style scoped></style>

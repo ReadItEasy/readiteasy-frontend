@@ -22,7 +22,7 @@
           @click="btnTabClick"
           tab="2"
           :class="tab == 2 ? 'active' : ''"
-          >BOOK</a
+          >SIMILAR</a
         >
       </div>
 
@@ -37,11 +37,48 @@
           </div>
 
           <div v-if="tab == 1" :key="1" class="slide-item">
-            <p>rank : {{ wordStatistics.rank }}</p>
-            <p>freq in corpus : {{ wordStatistics.freq }}</p>
+            <table>
+              <tr>
+                <th></th>
+                <th>book</th>
+                <th>corpus</th>
+              </tr>
+              <tr>
+                <th>rank</th>
+                <td>{{ wordBookStatistics.rank }}</td>
+                <td>{{ wordCorpusStatistics.rank }}</td>
+              </tr>
+              <tr>
+                <th>freq</th>
+                <td>
+                  {{
+                    (
+                      (1000000 * wordBookStatistics.count) /
+                      wordBookStatistics.n_tokens
+                    ).toFixed(0)
+                  }}
+                </td>
+                <td>
+                  {{
+                    (
+                      (1000000 * wordCorpusStatistics.count) /
+                      wordCorpusStatistics.n_tokens
+                    ).toFixed(0)
+                  }}
+                </td>
+              </tr>
+            </table>
           </div>
           <div v-if="tab == 2" :key="2" class="slide-item">
-            <span>My third tab</span>
+            <ol>
+              <li
+                v-for="(similarWord,
+                index) in wordSimilarWords.target_similar_words"
+                :key="index"
+              >
+                {{ similarWord }}
+              </li>
+            </ol>
           </div>
         </transition>
       </div>
@@ -51,7 +88,7 @@
 
 <script>
 import { apiBooks } from "@/services/ApiService.js";
-import WordCardMandarin from "@/components/lab/WordCardMandarin.vue";
+import WordCardMandarin from "@/components/WordCardMandarin.vue";
 
 export default {
   components: {
@@ -61,12 +98,20 @@ export default {
     clickedWord: {
       type: String,
       required: true
+    },
+    bookName: {
+      type: String
+    },
+    targetLanguage: {
+      type: String
     }
   },
   data() {
     return {
       processedWord: null,
-      wordStatistics: {},
+      wordCorpusStatistics: {},
+      wordBookStatistics: {},
+      wordSimilarWords: {},
       tab: 0
     };
   },
@@ -83,14 +128,36 @@ export default {
           this.processedWord = this.wordJSONToObject(data);
         });
       apiBooks
-        .get("/api/words/mandarin/word_statistics", {
+        .get("/api/words/mandarin/word_corpus_statistics", {
           params: {
             word: newValue
           }
         })
         .then(({ data }) => {
           // console.log("clickedWord watcher statistics", data);
-          this.wordStatistics = data;
+          this.wordCorpusStatistics = data;
+        });
+      apiBooks
+        .get("/api/words/mandarin/word_book_statistics", {
+          params: {
+            word: newValue,
+            bookName: this.bookName,
+            targetLanguage: this.targetLanguage
+          }
+        })
+        .then(({ data }) => {
+          // console.log("clickedWord watcher statistics", data);
+          this.wordBookStatistics = data;
+        });
+      apiBooks
+        .get("/api/words/mandarin/word_similar_words", {
+          params: {
+            word: newValue
+          }
+        })
+        .then(({ data }) => {
+          // console.log("clickedWord watcher statistics", data);
+          this.wordSimilarWords = data;
         });
     }
   },
