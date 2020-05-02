@@ -36,8 +36,10 @@
             }}
             % <br />
             95% percentile word :
-            {{ booksStatistics[bookName].book_char_95percentile }} <br>
-            95% percentile rank :{{ booksStatistics[bookName].book_rank_95percentile }}
+            {{ booksStatistics[bookName].book_char_95percentile }} <br />
+            95% percentile rank :{{
+              booksStatistics[bookName].book_rank_95percentile
+            }}
           </p>
         </template>
       </div>
@@ -61,10 +63,7 @@ export default {
     };
   },
   created() {
-    console.log("TEST");
-    console.log(this.loggedIn);
     if (this.loggedIn) {
-      console.log("LOGGED IN");
       for (const bookName of this.books) {
         apiBooks
           .get(`/api/users/${this.$store.state.userId}/book_known_words`, {
@@ -74,7 +73,6 @@ export default {
             }
           })
           .then(({ data }) => {
-            console.log(data);
             this.$set(this.booksStatistics, bookName, data);
             // this.booksStatistics[bookName] = data;
           });

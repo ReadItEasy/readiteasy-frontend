@@ -5,7 +5,7 @@
       @click="closeSidebarPanel"
       v-if="isPanelOpen"
     ></div>
-    <transition name="slide">
+    <transition name="slidebar">
       <div v-if="isPanelOpen" class="sidebar-panel">
         <slot></slot>
       </div>
@@ -14,24 +14,32 @@
 </template>
 <script>
 export default {
-  data: () => ({
-    isPanelOpen: true
-  }),
+  // data: () => ({
+  //   isPanelOpen: true
+  // }),
+  computed: {
+    isPanelOpen() {
+      return this.$store.state.isNavOpen;
+    }
+  },
   methods: {
     closeSidebarPanel() {
-      this.isPanelOpen = false;
+      this.$store.dispatch("toggleNav");
     }
   }
 };
 </script>
-<style>
-.slide-enter-active,
-.slide-leave-active {
+<style scoped>
+.sidebar {
+  position: absolute;
+}
+.slidebar-enter-active,
+.slidebar-leave-active {
   transition: transform 0.2s ease;
 }
 
-.slide-enter,
-.slide-leave-to {
+.slidebar-enter,
+.slidebar-leave-to {
   transform: translateX(-100%);
   transition: all 150ms ease-in 0s;
 }
@@ -48,13 +56,13 @@ export default {
 
 .sidebar-panel {
   overflow-y: auto;
-  background-color: #130f40;
+  background-color: #ffffff;
   position: fixed;
   left: 0;
   top: 0;
   height: 100vh;
   z-index: 999;
   padding: 3rem 20px 2rem 20px;
-  width: 300px;
+  width: 250px;
 }
 </style>

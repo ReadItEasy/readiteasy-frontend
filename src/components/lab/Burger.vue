@@ -11,17 +11,25 @@
 </template>
 <script>
 export default {
-  data: () => ({
-    isBurgerActive: false
-  }),
+  // data: () => ({
+  //   isBurgerActive: false
+  // }),
+  computed: {
+    isBurgerActive() {
+      return this.$store.state.isNavOpen;
+    }
+  },
   methods: {
     toggle() {
-      this.isBurgerActive = !this.isBurgerActive;
+      this.$store.dispatch("toggleNav");
     }
   }
 };
 </script>
-<style>
+<style scoped>
+#burger {
+  transform: scale(1.3);
+}
 .hidden {
   visibility: hidden;
 }
@@ -36,11 +44,12 @@ button:focus {
 }
 
 .burger-button {
+  /* transform: scale(1.3); */
   position: relative;
   height: 30px;
   width: 32px;
   display: block;
-  z-index: 999;
+  z-index: 1000;
   border: 0;
   border-radius: 0;
   background-color: transparent;
@@ -49,7 +58,7 @@ button:focus {
 }
 
 .burger-bar {
-  background-color: #130f40;
+  background-color: #39b982;
   position: absolute;
   top: 50%;
   right: 6px;
@@ -89,7 +98,7 @@ button:focus {
 }
 
 #burger.active .burger-bar {
-  background-color: #fff;
+  background-color: #39b982;
 }
 
 #burger.active .burger-bar--1 {
@@ -102,5 +111,9 @@ button:focus {
 
 #burger.active .burger-bar--3 {
   transform: rotate(-45deg);
+}
+
+#burger.hover .burger-bar {
+  background-color: #39b982;
 }
 </style>

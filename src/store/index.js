@@ -11,7 +11,8 @@ export default new Vuex.Store({
     targetLanguage: "",
     tokens: null,
     userId: null,
-    firstName: null
+    firstName: null,
+    isNavOpen: false
   },
   mutations: {
     LOAD_KNOWN_WORDS(state, data) {
@@ -47,6 +48,9 @@ export default new Vuex.Store({
       ] = `Bearer ${state.tokens.access}`;
       state.userId = VueJwtDecode.decode(state.tokens.access).user_id;
       state.firstName = VueJwtDecode.decode(state.tokens.access).first_name;
+    },
+    TOGGLE_NAV(state) {
+      state.isNavOpen = !state.isNavOpen;
     }
   },
   actions: {
@@ -95,6 +99,9 @@ export default new Vuex.Store({
       // .then(response => {
       //   console.log("this is the new access", response.data.access);
       // });
+    },
+    toggleNav({ commit }) {
+      commit("TOGGLE_NAV");
     }
   },
   getters: {

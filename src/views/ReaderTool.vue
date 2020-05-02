@@ -92,7 +92,8 @@ export default {
       isActiveColor: true,
       hoveredWord: null,
       showReaderDrawer: false,
-      clickedWord: ""
+      clickedWord: "",
+      ontouchmove: false
     };
   },
   watch: {
@@ -107,6 +108,21 @@ export default {
     document.addEventListener("keydown", () => {
       if (event.keyCode == "65" && this.hoveredWord && this.loggedIn) {
         this.toggleIsKnown(this.hoveredWord);
+      }
+    });
+    // document.addEventListener("touchstart", () => {console.log("touchstart")})
+    document.addEventListener("touchmove", () => {
+      if (this.ontouchmove == false) {
+        // console.log("touchmove");
+        this.ontouchmove = true;
+      }
+    });
+    document.addEventListener("touchend", () => {
+      if (this.ontouchmove == true) {
+        setTimeout(() => {
+          this.ontouchmove = false;
+          // console.log("touchend");
+        }, 1500);
       }
     });
     // document.addEventListener("click", () => {
@@ -166,9 +182,11 @@ export default {
       this.showReaderDrawer = !this.showReaderDrawer;
     },
     onClickHandler: function() {
-      this.drawerHandler();
-      if (this.hoveredWord) {
-        this.clickedWord = this.hoveredWord.innerText;
+      if (!this.ontouchmove) {
+        this.drawerHandler();
+        if (this.hoveredWord) {
+          this.clickedWord = this.hoveredWord.innerText;
+        }
       }
     },
     drawerHandler: function() {
@@ -250,5 +268,9 @@ export default {
 }
 .nav-chapter {
   margin-right: 1em;
+}
+
+.avoid-clicks {
+  pointer-events: none;
 }
 </style>
