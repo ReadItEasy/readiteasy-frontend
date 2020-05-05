@@ -61,7 +61,8 @@
           <span
             v-for="(token, key) in chapterText"
             :key="key"
-            :isKnown="$store.state.userKnownWordsDict[token]"
+            :isKnown="$store.state.userKnownWordsDict[token.toLowerCase()]"
+            :isPunct="isPunctDict[token]"
             @mouseenter="mouseEnter"
             @mouseleave="mouseLeave"
             @contextmenu.prevent="openContextMenu"
@@ -69,7 +70,7 @@
           >
           <!-- @click="toggleIsKnown" -->
         </div>
-        <contextMenu></contextMenu>
+        <contextMenu :targetLanguage="targetLanguage"></contextMenu>
       </div>
     </transition>
   </div>
@@ -93,7 +94,28 @@ export default {
       hoveredWord: null,
       showReaderDrawer: false,
       clickedWord: "",
-      ontouchmove: false
+      ontouchmove: false,
+      // TODO: move this isPunctDict in a dedicated file
+      isPunctDict: {
+        // english punct
+        ".": true,
+        "\n": true,
+        "\t": true,
+        "?": true,
+        "!": true,
+        " ": true,
+        ",": true,
+        // chinese punct
+        "，": true,
+        "。": true,
+        "”": true,
+        "“": true,
+        "：": true,
+        "《": true,
+        "》": true,
+        "—": true,
+        "；": true,
+      }
     };
   },
   watch: {
@@ -138,7 +160,7 @@ export default {
     onLoad() {
       // console.log("apiBooks.defaults.headers", apiBooks.defaults.headers);
       apiBooks
-        .get("/api/books/book", {
+        .get(`/api/books/${this.targetLanguage}`, {
           params: this.$route.params
         })
         .then(response => {
@@ -153,21 +175,25 @@ export default {
     },
     toggleIsKnown(wordSpan) {
       // const spanTarget = e.currentTarget;
-      const textContent = wordSpan.textContent;
-      this.$store.dispatch("toggleKnownWord", textContent);
+      let data = {};
+      data["word"] = wordSpan.textContent;
+      data["targetLanguage"] = this.targetLanguage;
+      console.log(data);
+      // const textContent = wordSpan.textContent;
+      this.$store.dispatch("toggleKnownWord", data);
       // this.$forceUpdate();
     },
-    wordInfo: function(e) {
-      // console.log(e.target.innerText);
-      apiBooks.get("/api/words/mandarin/", {
-        params: {
-          simplified: e.target.innerText
-        }
-        // })
-        // .then(({ data }) => {
-        //   console.log(data);
-      });
-    },
+    // wordInfo: function(e) {
+    //   // console.log(e.target.innerText);
+    //   apiBooks.get("/api/words/mandarin/", {
+    //     params: {
+    //       simplified: e.target.innerText
+    //     }
+    //     // })
+    //     // .then(({ data }) => {
+    //     //   console.log(data);
+    //   });
+    // },
     openContextMenu: function(e) {
       // console.log("the event in parent", e);
       this.$emit("openContextMenu", e);
@@ -216,6 +242,10 @@ export default {
 
 .active > span:not([isKnown="true"]) {
   color: red;
+}
+
+span[isPunct="true"] {
+  pointer-events: none;
 }
 /* .active > span[isKnown="true"] {
   color:#00ff80; 

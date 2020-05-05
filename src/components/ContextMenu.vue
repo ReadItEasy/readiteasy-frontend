@@ -23,6 +23,11 @@ import { authComputed } from "@/store/helpers.js";
 
 export default {
   name: "ContextMenu",
+  props: {
+    targetLanguage: {
+      type: String
+    }
+  },
   data: () => ({
     viewMenu: false,
     targetWord: null,
@@ -105,7 +110,12 @@ export default {
       this.closeMenu();
     },
     toggleIsKnown() {
-      this.$store.dispatch("toggleKnownWord", this.targetWord);
+      let data = {};
+      data["word"] = this.targetWord;
+      data["targetLanguage"] = this.targetLanguage;
+      console.log(data)
+      this.$store.dispatch("toggleKnownWord", data);
+      // this.$store.dispatch("toggleKnownWord", this.targetWord);
       this.closeMenu();
     }
   },

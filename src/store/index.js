@@ -19,14 +19,22 @@ export default new Vuex.Store({
       state.userKnownWordsDict = data.mandarinKnownWordsDict;
       state.targetLanguage = data.targetLanguage;
     },
-    TOGGLE_WORD(state, word) {
+    TOGGLE_WORD(state, data) {
+      const word = data.word;
+      const targetLanguage = data.targetLanguage;
       if (state.userKnownWordsDict[word]) {
         state.userKnownWordsDict[word] = false;
-        apiBooks.post(`api/users/${state.userId}/remove_word/`, { word: word });
+        apiBooks.post(`api/users/${state.userId}/remove_word/`, {
+          word: word,
+          targetLanguage: targetLanguage
+        });
       } else {
         Vue.set(state.userKnownWordsDict, word, true);
         // this.$set(state.userKnownWordsDict, word, true)
-        apiBooks.post(`api/users/${state.userId}/add_word/`, { word: word });
+        apiBooks.post(`api/users/${state.userId}/add_word/`, {
+          word: word,
+          targetLanguage: targetLanguage
+        });
       }
     },
     LOGIN(state, tokens) {
@@ -57,8 +65,9 @@ export default new Vuex.Store({
     loadKnownWords({ commit }, targetLanguage) {
       if (targetLanguage && targetLanguage != this.state.targetLanguage) {
         apiBooks.get(`api/users/${this.state.userId}/`).then(response => {
+          console.log("load known,", response.data.profile);
           var mandarinKnownWordsField =
-            response.data.profile.mandarin_known_words;
+            response.data.profile[`${targetLanguage}_known_words`];
           var mandarinKnownWordsList = mandarinKnownWordsField.split("\n");
           var mandarinKnownWordsDict = {};
           for (const word of mandarinKnownWordsList) {
@@ -76,8 +85,8 @@ export default new Vuex.Store({
         });
       }
     },
-    toggleKnownWord({ commit }, word) {
-      commit("TOGGLE_WORD", word);
+    toggleKnownWord({ commit }, data) {
+      commit("TOGGLE_WORD", data);
     },
     login({ commit }, credentials) {
       return apiBooks.post("api/users/token/", credentials).then(response => {
