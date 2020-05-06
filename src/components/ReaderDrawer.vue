@@ -29,11 +29,20 @@
       <div class="slide-container">
         <transition name="slide">
           <div v-if="tab == 0" :key="0" class="slide-item">
-            <WordCardMandarin
-              v-for="word in processedWord"
-              :key="word.id"
-              :word="word"
-            ></WordCardMandarin>
+            <template v-if="targetLanguage == 'mandarin'">
+              <WordCardMandarin
+                v-for="word in processedWord"
+                :key="word.id"
+                :word="word"
+              ></WordCardMandarin>
+            </template>
+            <template v-if="targetLanguage == 'english'">
+              <WordCardEnglish
+                v-for="(englishWord, index) in englishWords"
+                :key="index"
+                :englishWord="englishWord"
+              ></WordCardEnglish>
+            </template>
           </div>
 
           <div v-if="tab == 1" :key="1" class="slide-item">
@@ -87,12 +96,15 @@
 </template>
 
 <script>
-import { apiBooks } from "@/services/ApiService.js";
+import { apiReaditeasy } from "@/services/ApiService.js";
+import { apiWiktionary } from "@/services/Scrapper.js";
 import WordCardMandarin from "@/components/WordCardMandarin.vue";
+import WordCardEnglish from "@/components/WordCardEnglish.vue";
 
 export default {
   components: {
-    WordCardMandarin
+    WordCardMandarin,
+    WordCardEnglish
   },
   props: {
     clickedWord: {
@@ -112,53 +124,158 @@ export default {
       wordCorpusStatistics: {},
       wordBookStatistics: {},
       wordSimilarWords: {},
-      tab: 0
+      tab: 0,
+      englishWords: []
     };
   },
   watch: {
     clickedWord(newValue) {
-      apiBooks
-        .get("/api/words/mandarin/", {
-          params: {
-            simplified: newValue
+      // TODO : better refactoring for different languages
+      if (this.targetLanguage == "mandarin") {
+        apiReaditeasy
+          .get("/api/words/mandarin/", {
+            params: {
+              simplified: newValue
+            }
+          })
+          .then(({ data }) => {
+            // console.log("clickedWord watcher ReaderDrawer", data);
+            this.processedWord = this.wordJSONToObject(data);
+          });
+        apiReaditeasy
+          .get("/api/words/mandarin/word_corpus_statistics", {
+            params: {
+              word: newValue
+            }
+          })
+          .then(({ data }) => {
+            // console.log("clickedWord watcher statistics", data);
+            this.wordCorpusStatistics = data;
+          });
+        apiReaditeasy
+          .get("/api/words/mandarin/word_book_statistics", {
+            params: {
+              word: newValue,
+              bookName: this.bookName,
+              targetLanguage: this.targetLanguage
+            }
+          })
+          .then(({ data }) => {
+            // console.log("clickedWord watcher statistics", data);
+            this.wordBookStatistics = data;
+          });
+        apiReaditeasy
+          .get("/api/words/mandarin/word_similar_words", {
+            params: {
+              word: newValue
+            }
+          })
+          .then(({ data }) => {
+            // console.log("clickedWord watcher statistics", data);
+            this.wordSimilarWords = data;
+          });
+      } else {
+        this.englishWords = [];
+        var nextUntil = function(elem, selector) {
+          // Setup siblings array
+          var siblingsHtml = document.createElement("div");
+          var siblings = [elem];
+
+          // Get the next sibling element
+          elem = elem.nextElementSibling;
+
+          // As long as a sibling exists
+          while (elem) {
+            // If we've reached our match, bail
+            if (elem.matches(selector)) break;
+
+            // If filtering by a selector, check if the sibling matches
+            // if (filter && !elem.matches(filter)) {
+            //   elem = elem.nextElementSibling;
+            //   continue;
+            // }
+
+            // Otherwise, push it to the siblings array
+            siblings.push(elem);
+
+            // Get the next sibling element
+            elem = elem.nextElementSibling;
           }
-        })
-        .then(({ data }) => {
-          // console.log("clickedWord watcher ReaderDrawer", data);
-          this.processedWord = this.wordJSONToObject(data);
-        });
-      apiBooks
-        .get("/api/words/mandarin/word_corpus_statistics", {
-          params: {
-            word: newValue
+
+          for (const sibling of siblings) {
+            siblingsHtml.innerHTML += sibling.outerHTML;
           }
-        })
-        .then(({ data }) => {
-          // console.log("clickedWord watcher statistics", data);
-          this.wordCorpusStatistics = data;
-        });
-      apiBooks
-        .get("/api/words/mandarin/word_book_statistics", {
-          params: {
-            word: newValue,
-            bookName: this.bookName,
-            targetLanguage: this.targetLanguage
-          }
-        })
-        .then(({ data }) => {
-          // console.log("clickedWord watcher statistics", data);
-          this.wordBookStatistics = data;
-        });
-      apiBooks
-        .get("/api/words/mandarin/word_similar_words", {
-          params: {
-            word: newValue
-          }
-        })
-        .then(({ data }) => {
-          // console.log("clickedWord watcher statistics", data);
-          this.wordSimilarWords = data;
-        });
+
+          return siblingsHtml;
+        };
+        console.log("TODO : import scrapper.js");
+        // scrapeEnglishWiktionary("www.google.com")
+        apiWiktionary
+          .get("api.php", {
+            params: {
+              action: "parse",
+              format: "json",
+              page: newValue,
+              origin: "*"
+            }
+          })
+          .then(({ data }) => {
+            // console.log(data.parse.text['*']);
+            var parsedHtml = document.createElement("html");
+            parsedHtml.innerHTML = data.parse.text["*"];
+            // console.log(parsedHtml.getElementsByClassName("tocnumber"))
+            console.log(parsedHtml.children);
+            var h2_section_starts = parsedHtml.querySelectorAll(
+              "div.mw-parser-output > h2"
+            );
+            for (const h2_section_start of h2_section_starts) {
+              if (
+                h2_section_start.querySelectorAll("#Anglais.mw-headline").length
+              ) {
+                var h2_section = nextUntil(h2_section_start, "h2");
+              }
+            }
+            var h3_section_starts = h2_section.querySelectorAll("h3");
+            for (const h3_section_start of h3_section_starts) {
+              const POS = h3_section_start
+                .querySelector(".mw-headline")
+                .getAttribute("id");
+              console.log(POS);
+              // if (h3_section_start.querySelector(".mw-headline").getAttribute("id") != '' )
+              var h3_section = nextUntil(h3_section_start, "h3");
+
+              // TODO : make a positive field list to include (ex : ["forme_de_verbe", "adjectif" ,..])
+              if (
+                !POS.includes("mologi") && //ethymologie
+                !POS.includes("onciatio") && //prononciation
+                !POS.includes("oir_auss") && //voir_aussi
+                !POS.includes("éférenc") && //référence
+                !POS.includes("agra") // anagrame
+              ) {
+                // console.log()
+                var englishWord = {};
+                var definitions = [];
+                h3_section.querySelectorAll("ol > li").forEach(e => {
+                  const ulChild = e.querySelector("ul");
+                  if (ulChild) {
+                    e.removeChild(ulChild);
+                  }
+                  console.log(e);
+                  definitions.push(e.innerText);
+                });
+                englishWord["definitions"] = definitions;
+                const pronunciation = h3_section.querySelector(".API");
+                if (pronunciation) {
+                  englishWord["pronunciation"] = pronunciation.innerText;
+                }
+                englishWord["POS"] = POS;
+                this.englishWords.push(englishWord);
+              }
+            }
+            // console.log(section)
+            // console.log(nextUntil(parsedHtml.querySelector("div.mw-parser-output > h2"), "h2"))
+          });
+      }
     }
   },
   methods: {

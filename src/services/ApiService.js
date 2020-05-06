@@ -2,7 +2,7 @@ import axios from "axios";
 import NProgress from "nprogress";
 
 // console.log("process.env.NODE_ENV", process.env.NODE_ENV);
-const apiBooks = axios.create({
+const apiReaditeasy = axios.create({
   // baseURL: `https://readiteasy.com`,
   baseURL:
     process.env.NODE_ENV === "production"
@@ -18,14 +18,14 @@ const apiBooks = axios.create({
   xsrfCookieName: "XCSRF-TOKEN"
 });
 
-apiBooks.interceptors.request.use(config => {
+apiReaditeasy.interceptors.request.use(config => {
   NProgress.start();
   return config;
 });
 
-apiBooks.interceptors.response.use(response => {
+apiReaditeasy.interceptors.response.use(response => {
   NProgress.done();
   return response;
 });
 
-export { apiBooks };
+export { apiReaditeasy };

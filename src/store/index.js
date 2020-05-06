@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import { apiBooks } from "@/services/ApiService.js";
+import { apiReaditeasy } from "@/services/ApiService.js";
 import VueJwtDecode from "vue-jwt-decode";
 
 Vue.use(Vuex);
@@ -24,14 +24,14 @@ export default new Vuex.Store({
       const targetLanguage = data.targetLanguage;
       if (state.userKnownWordsDict[word]) {
         state.userKnownWordsDict[word] = false;
-        apiBooks.post(`api/users/${state.userId}/remove_word/`, {
+        apiReaditeasy.post(`api/users/${state.userId}/remove_word/`, {
           word: word,
           targetLanguage: targetLanguage
         });
       } else {
         Vue.set(state.userKnownWordsDict, word, true);
         // this.$set(state.userKnownWordsDict, word, true)
-        apiBooks.post(`api/users/${state.userId}/add_word/`, {
+        apiReaditeasy.post(`api/users/${state.userId}/add_word/`, {
           word: word,
           targetLanguage: targetLanguage
         });
@@ -40,7 +40,7 @@ export default new Vuex.Store({
     LOGIN(state, tokens) {
       state.tokens = tokens;
       localStorage.setItem("tokens", JSON.stringify(tokens));
-      apiBooks.defaults.headers.common[
+      apiReaditeasy.defaults.headers.common[
         "Authorization"
       ] = `Bearer ${tokens.access}`;
       state.userId = VueJwtDecode.decode(tokens.access).user_id;
@@ -51,7 +51,7 @@ export default new Vuex.Store({
       location.reload();
     },
     SET_JWT_HEADERS(state) {
-      apiBooks.defaults.headers.common[
+      apiReaditeasy.defaults.headers.common[
         "Authorization"
       ] = `Bearer ${state.tokens.access}`;
       state.userId = VueJwtDecode.decode(state.tokens.access).user_id;
@@ -64,7 +64,7 @@ export default new Vuex.Store({
   actions: {
     loadKnownWords({ commit }, targetLanguage) {
       if (targetLanguage && targetLanguage != this.state.targetLanguage) {
-        apiBooks.get(`api/users/${this.state.userId}/`).then(response => {
+        apiReaditeasy.get(`api/users/${this.state.userId}/`).then(response => {
           console.log("load known,", response.data.profile);
           var mandarinKnownWordsField =
             response.data.profile[`${targetLanguage}_known_words`];
@@ -89,7 +89,7 @@ export default new Vuex.Store({
       commit("TOGGLE_WORD", data);
     },
     login({ commit }, credentials) {
-      return apiBooks.post("api/users/token/", credentials).then(response => {
+      return apiReaditeasy.post("api/users/token/", credentials).then(response => {
         // console.log("login response", response);
         commit("LOGIN", response.data);
       });
@@ -102,7 +102,7 @@ export default new Vuex.Store({
     },
     refreshTokens({ commit }) {
       commit("TODO : Create a commit");
-      apiBooks.post("/api/users/token/refresh/", {
+      apiReaditeasy.post("/api/users/token/refresh/", {
         refresh: this.$store.state.tokens.refresh
       });
       // .then(response => {

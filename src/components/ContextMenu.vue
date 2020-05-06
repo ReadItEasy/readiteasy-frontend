@@ -64,7 +64,7 @@ export default {
     openMenu(e) {
       // console.log("this event in child", e);
       this.viewMenu = true;
-      this.targetWord = e.target.textContent;
+      this.targetWord = e.target.getAttribute("lemma");
       this.isKnown = e.target.getAttribute("isKnown");
       const myfunc = () => {
         var contextMenuDiv = this.$refs.contextMenu;
@@ -113,7 +113,7 @@ export default {
       let data = {};
       data["word"] = this.targetWord;
       data["targetLanguage"] = this.targetLanguage;
-      console.log(data)
+      // console.log(data)
       this.$store.dispatch("toggleKnownWord", data);
       // this.$store.dispatch("toggleKnownWord", this.targetWord);
       this.closeMenu();

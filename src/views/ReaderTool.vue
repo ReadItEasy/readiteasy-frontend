@@ -63,6 +63,7 @@
             :key="key"
             :isKnown="$store.state.userKnownWordsDict[token.toLowerCase()]"
             :isPunct="isPunctDict[token]"
+            :lemma="token.toLowerCase()"
             @mouseenter="mouseEnter"
             @mouseleave="mouseLeave"
             @contextmenu.prevent="openContextMenu"
@@ -77,7 +78,7 @@
 </template>
 
 <script>
-import { apiBooks } from "@/services/ApiService.js";
+import { apiReaditeasy } from "@/services/ApiService.js";
 import { authComputed } from "@/store/helpers.js";
 import ContextMenu from "@/components/ContextMenu.vue";
 import ReaderDrawer from "@/components/ReaderDrawer.vue";
@@ -105,6 +106,7 @@ export default {
         "!": true,
         " ": true,
         ",": true,
+        "’": true,
         // chinese punct
         "，": true,
         "。": true,
@@ -158,8 +160,8 @@ export default {
   },
   methods: {
     onLoad() {
-      // console.log("apiBooks.defaults.headers", apiBooks.defaults.headers);
-      apiBooks
+      // console.log("apiReaditeasy.defaults.headers", apiReaditeasy.defaults.headers);
+      apiReaditeasy
         .get(`/api/books/${this.targetLanguage}`, {
           params: this.$route.params
         })
@@ -176,7 +178,7 @@ export default {
     toggleIsKnown(wordSpan) {
       // const spanTarget = e.currentTarget;
       let data = {};
-      data["word"] = wordSpan.textContent;
+      data["word"] = wordSpan.getAttribute("lemma");
       data["targetLanguage"] = this.targetLanguage;
       console.log(data);
       // const textContent = wordSpan.textContent;
@@ -185,7 +187,7 @@ export default {
     },
     // wordInfo: function(e) {
     //   // console.log(e.target.innerText);
-    //   apiBooks.get("/api/words/mandarin/", {
+    //   apiReaditeasy.get("/api/words/mandarin/", {
     //     params: {
     //       simplified: e.target.innerText
     //     }
@@ -240,7 +242,7 @@ export default {
   max-width: 100%;
 }
 
-.active > span:not([isKnown="true"]) {
+.active > span:not([isKnown="true"]):not([isPunct="true"]) {
   color: red;
 }
 

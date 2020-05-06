@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { apiBooks } from "@/services/ApiService.js";
+import { apiReaditeasy } from "@/services/ApiService.js";
 import LanguageSection from "@/components/LanguageSection.vue";
 
 export default {
@@ -24,7 +24,7 @@ export default {
     };
   },
   created() {
-    apiBooks.get("/api/books/languages").then(response => {
+    apiReaditeasy.get("/api/books/languages").then(response => {
       this.languages = response.data.languages;
       // console.log(response.data)
       // })

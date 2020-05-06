@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { apiBooks } from "@/services/ApiService.js";
+import { apiReaditeasy } from "@/services/ApiService.js";
 
 export default {
   data() {
@@ -25,7 +25,7 @@ export default {
   },
   methods: {
     guessLanguage() {
-      apiBooks
+      apiReaditeasy
         .get("/api/books/language-detector", {
           params: {
             textInput: this.textInput
@@ -40,7 +40,7 @@ export default {
     }
   },
   created() {
-    apiBooks.get("api/users/hello").then(({ data }) => {
+    apiReaditeasy.get("api/users/hello").then(({ data }) => {
       this.message = data.message;
     });
   }

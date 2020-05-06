@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import { apiBooks } from "@/services/ApiService.js";
+import { apiReaditeasy } from "@/services/ApiService.js";
 import { authComputed } from "@/store/helpers.js";
 
 export default {
@@ -65,7 +65,7 @@ export default {
   created() {
     if (this.loggedIn) {
       for (const bookName of this.books) {
-        apiBooks
+        apiReaditeasy
           .get(`/api/users/${this.$store.state.userId}/book_known_words`, {
             params: {
               bookName: bookName,

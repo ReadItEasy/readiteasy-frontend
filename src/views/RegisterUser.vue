@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { apiBooks } from "@/services/ApiService.js";
+import { apiReaditeasy } from "@/services/ApiService.js";
 export default {
   data() {
     return {
@@ -33,7 +33,7 @@ export default {
   },
   methods: {
     register() {
-      apiBooks
+      apiReaditeasy
         .post("api/users/", {
           email: this.email,
           first_name: this.firstName,
