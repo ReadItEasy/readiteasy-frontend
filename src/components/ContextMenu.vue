@@ -64,7 +64,7 @@ export default {
     openMenu(e) {
       // console.log("this event in child", e);
       this.viewMenu = true;
-      this.targetWord = e.target.getAttribute("lemma");
+      this.targetWord = e.target.innerText;
       this.isKnown = e.target.getAttribute("isKnown");
       const myfunc = () => {
         var contextMenuDiv = this.$refs.contextMenu;

@@ -7,6 +7,7 @@
         :bookName="bookName"
         :targetLanguage="targetLanguage"
       />
+        <!-- :clickedWordLemma="clickedWordLemma" -->
     </v-touch>
     <transition name="slide-fade">
       <div
@@ -63,12 +64,12 @@
             :key="key"
             :isKnown="$store.state.userKnownWordsDict[token.toLowerCase()]"
             :isPunct="isPunctDict[token]"
-            :lemma="token.toLowerCase()"
             @mouseenter="mouseEnter"
             @mouseleave="mouseLeave"
             @contextmenu.prevent="openContextMenu"
             >{{ token }}</span
           >
+            <!-- :lemma="lemmaText[key]" -->
           <!-- @click="toggleIsKnown" -->
         </div>
         <contextMenu :targetLanguage="targetLanguage"></contextMenu>
@@ -95,6 +96,7 @@ export default {
       hoveredWord: null,
       showReaderDrawer: false,
       clickedWord: "",
+      clickedWordLemma: "",
       ontouchmove: false,
       // TODO: move this isPunctDict in a dedicated file
       isPunctDict: {
@@ -116,7 +118,7 @@ export default {
         "《": true,
         "》": true,
         "—": true,
-        "；": true,
+        "；": true
       }
     };
   },
@@ -134,7 +136,6 @@ export default {
         this.toggleIsKnown(this.hoveredWord);
       }
     });
-    // document.addEventListener("touchstart", () => {console.log("touchstart")})
     document.addEventListener("touchmove", () => {
       if (this.ontouchmove == false) {
         // console.log("touchmove");
@@ -167,6 +168,7 @@ export default {
         })
         .then(response => {
           this.chapterText = response.data.tokenized_chapter_text;
+          // this.lemmaText = response.data.tokenized_chapter_lemma;
           // })
           // .catch(error => {
           //   console.log("there was an error :" + error.response);
@@ -178,7 +180,7 @@ export default {
     toggleIsKnown(wordSpan) {
       // const spanTarget = e.currentTarget;
       let data = {};
-      data["word"] = wordSpan.getAttribute("lemma");
+      data["word"] = wordSpan.innerText;
       data["targetLanguage"] = this.targetLanguage;
       console.log(data);
       // const textContent = wordSpan.textContent;
@@ -214,6 +216,7 @@ export default {
         this.drawerHandler();
         if (this.hoveredWord) {
           this.clickedWord = this.hoveredWord.innerText;
+          this.clickedWordLemma = this.hoveredWord.getAttribute("lemma");
         }
       }
     },

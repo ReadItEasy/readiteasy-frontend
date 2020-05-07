@@ -65,7 +65,7 @@ export default new Vuex.Store({
     loadKnownWords({ commit }, targetLanguage) {
       if (targetLanguage && targetLanguage != this.state.targetLanguage) {
         apiReaditeasy.get(`api/users/${this.state.userId}/`).then(response => {
-          console.log("load known,", response.data.profile);
+          // console.log("load known,", response.data.profile);
           var mandarinKnownWordsField =
             response.data.profile[`${targetLanguage}_known_words`];
           var mandarinKnownWordsList = mandarinKnownWordsField.split("\n");
@@ -89,10 +89,12 @@ export default new Vuex.Store({
       commit("TOGGLE_WORD", data);
     },
     login({ commit }, credentials) {
-      return apiReaditeasy.post("api/users/token/", credentials).then(response => {
-        // console.log("login response", response);
-        commit("LOGIN", response.data);
-      });
+      return apiReaditeasy
+        .post("api/users/token/", credentials)
+        .then(response => {
+          // console.log("login response", response);
+          commit("LOGIN", response.data);
+        });
     },
     logout({ commit }) {
       commit("LOGOUT");
