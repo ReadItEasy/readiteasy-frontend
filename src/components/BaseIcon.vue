@@ -1,6 +1,6 @@
 <template>
   <div class="icon-wrapper">
-    <svg class="icon" :width="width" :height="height">
+    <svg class="icon" :width="width" :height="height" :color="color">
       <use v-bind="{ 'xlink:href': '/feather-sprite.svg#' + name }" />
     </svg>
   </div>
@@ -17,6 +17,10 @@ export default {
     height: {
       type: [Number, String],
       default: 24
+    },
+    color: {
+      type: [String],
+      default: "#00000066"
     }
   }
 };
@@ -26,7 +30,7 @@ export default {
 .icon-wrapper {
   display: inline-flex;
   align-items: center;
-  color: rgba(0, 0, 0, 0.4);
+  color: #00000066;
   font-size: 1rem;
   font-weight: 600;
 }
@@ -36,6 +40,5 @@ export default {
   stroke-linecap: round;
   stroke-linejoin: round;
   fill: none;
-  margin-right: 6px;
 }
 </style>

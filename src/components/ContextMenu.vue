@@ -50,7 +50,6 @@ export default {
     // TODO : should we change the "right clicking on a normal element while
     //        the custom contextMenu is open" behavior
     // onWindowContextMenu(e) {
-    //   console.log("on window context menu", e);
     //   if (this.viewMenu) {
     //     var contextMenuDiv = this.$refs.contextMenu;
     //     if (e.target.closest("#context-menu") !== contextMenuDiv) {
@@ -62,15 +61,12 @@ export default {
 
     // },
     openMenu(e) {
-      // console.log("this event in child", e);
       this.viewMenu = true;
       this.targetWord = e.target.innerText;
       this.isKnown = e.target.getAttribute("isKnown");
       const myfunc = () => {
         var contextMenuDiv = this.$refs.contextMenu;
-        // console.log("contextMenuDiv", contextMenuDiv);
         this.contextMenuDiv = contextMenuDiv;
-        // console.log("e.target.textContent", e.target.textContent);
         const pageWidth = document.documentElement.clientWidth;
         const pageHeight = document.documentElement.clientHeight;
         const ctxWidth = contextMenuDiv.offsetWidth;
@@ -97,7 +93,6 @@ export default {
       setTimeout(myfunc, 0);
     },
     closeMenu() {
-      // console.log("close menu");
       this.viewMenu = false;
       this.targetWord = null;
       this.isKnown = null;

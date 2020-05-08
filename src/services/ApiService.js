@@ -1,14 +1,13 @@
 import axios from "axios";
 import NProgress from "nprogress";
 
-// console.log("process.env.NODE_ENV", process.env.NODE_ENV);
 const apiReaditeasy = axios.create({
   // baseURL: `https://readiteasy.com`,
   baseURL:
     process.env.NODE_ENV === "production"
       ? `https://readiteasy.com`
-    //  : `https://readiteasy.com`,
-       : `http://127.0.0.1:8000/`,
+     : `https://readiteasy.com`,
+      //  : `http://127.0.0.1:8000/`,
   withCredentials: false, // This is the default
   headers: {
     Accept: "application/json",

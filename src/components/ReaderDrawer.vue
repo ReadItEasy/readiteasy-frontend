@@ -144,7 +144,6 @@ export default {
             }
           })
           .then(({ data }) => {
-            // console.log("clickedWord watcher ReaderDrawer", data);
             this.processedWord = this.wordJSONToObject(data);
           });
         apiReaditeasy
@@ -154,7 +153,6 @@ export default {
             }
           })
           .then(({ data }) => {
-            // console.log("clickedWord watcher statistics", data);
             this.wordCorpusStatistics = data;
           });
         apiReaditeasy
@@ -166,7 +164,6 @@ export default {
             }
           })
           .then(({ data }) => {
-            // console.log("clickedWord watcher statistics", data);
             this.wordBookStatistics = data;
           });
         apiReaditeasy
@@ -176,16 +173,14 @@ export default {
             }
           })
           .then(({ data }) => {
-            // console.log("clickedWord watcher statistics", data);
             this.wordSimilarWords = data;
           });
       } else if (this.targetLanguage == "english") {
         // TODO : Improve this nested recursive loop
-        fetchWordFromWiktionary(newValue).then(englishWords => {
+        fetchWordFromWiktionary(newValue.toLowerCase()).then(englishWords => {
           const lemmasDone = [];
           for (const englishWord of englishWords) {
             this.englishWords.push(englishWord);
-            console.log(englishWord["lemmas"]);
             for (const lemma of englishWord["lemmas"]) {
               if (!lemmasDone.includes(lemma)) {
                 lemmasDone.push(lemma);
@@ -198,34 +193,30 @@ export default {
             }
           }
         });
-        // if (this.clickedWordLemma != newValue) {
-        //   fetchWordFromWiktionary(this.clickedWordLemma).then(englishWords => {
-        //     for (const englishWord of englishWords) {
-        //       this.englishWords.push(englishWord);
-        //     }
-        //   });
-        // }
+        if (newValue.toLowerCase()[0] != newValue[0]) {
+          fetchWordFromWiktionary(newValue).then(englishWords => {
+            for (const englishWord of englishWords) {
+              this.englishWords.push(englishWord);
+            }
+          });
+        }
       }
     }
   },
   methods: {
     wordJSONToObject: function(wordJSON) {
       if (wordJSON) {
-        // console.log("COMP", wordJSON);
         var clickedWordProcessed = [];
         for (var word of wordJSON) {
-          // console.log("check", word.definitions.split("/").filter(Boolean));
           word.definitions = word.definitions.split("/").filter(Boolean);
           clickedWordProcessed.push(word);
         }
-        // console.log("finished list", clickedWordProcessed);
         return clickedWordProcessed;
       } else {
         return null;
       }
     },
     btnTabClick: function(e) {
-      // console.log("e.target", e.target);
       let clikedTab = e.target.getAttribute("tab");
       if (this.tab != clikedTab) {
         this.tab = clikedTab;

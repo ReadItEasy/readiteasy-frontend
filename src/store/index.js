@@ -5,7 +5,57 @@ import VueJwtDecode from "vue-jwt-decode";
 
 Vue.use(Vuex);
 
+const bookModule = {
+  state: {
+    targetLanguage: ""
+  },
+  mutations: {
+    SET_TARGET_LANGUAGE(state, targetLanguage) {
+      state.targetLanguage = targetLanguage;
+    }
+  },
+  actions: {
+    setTargetLanguage({ commit }, targetLanguage) {
+      commit("SET_TARGET_LANGUAGE", targetLanguage);
+    }
+  }
+};
+
+const settingsModule = {
+  state: {
+    fontSize: 28,
+    showSettings: false,
+    showUnknown: true
+  },
+  mutations: {
+    INCREMENT_FONT_SIZE(state, increment) {
+      state.fontSize = state.fontSize + increment;
+    },
+    TOGGLE_SHOW_SETTINGS(state) {
+      state.showSettings = !state.showSettings;
+    },
+    TOGGLE_SHOW_UNKNOWN(state) {
+      state.showUnknown = !state.showUnknown;
+    }
+  },
+  actions: {
+    incrementFontSize({ commit }, increment) {
+      commit("INCREMENT_FONT_SIZE", increment);
+    },
+    toggleShowSettings({ commit }) {
+      commit("TOGGLE_SHOW_SETTINGS");
+    },
+    toggleShowUnknown({ commit }) {
+      commit("TOGGLE_SHOW_UNKNOWN");
+    }
+  }
+};
+
 export default new Vuex.Store({
+  modules: {
+    book: bookModule,
+    settings: settingsModule
+  },
   state: {
     userKnownWordsDict: {},
     targetLanguage: "",
@@ -65,7 +115,6 @@ export default new Vuex.Store({
     loadKnownWords({ commit }, targetLanguage) {
       if (targetLanguage && targetLanguage != this.state.targetLanguage) {
         apiReaditeasy.get(`api/users/${this.state.userId}/`).then(response => {
-          // console.log("load known,", response.data.profile);
           var mandarinKnownWordsField =
             response.data.profile[`${targetLanguage}_known_words`];
           var mandarinKnownWordsList = mandarinKnownWordsField.split("\n");
@@ -79,7 +128,6 @@ export default new Vuex.Store({
           commit("LOAD_KNOWN_WORDS", data);
           // })
           // .catch(error => {
-          //   console.log(
           //     "there was an error in actions store :" + error.response
           //   );
         });
@@ -92,7 +140,7 @@ export default new Vuex.Store({
       return apiReaditeasy
         .post("api/users/token/", credentials)
         .then(response => {
-          // console.log("login response", response);
+          // ("login response", response);
           commit("LOGIN", response.data);
         });
     },
@@ -119,6 +167,5 @@ export default new Vuex.Store({
     loggedIn(state) {
       return !!state.tokens;
     }
-  },
-  modules: {}
+  }
 });

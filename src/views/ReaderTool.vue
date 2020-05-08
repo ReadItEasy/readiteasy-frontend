@@ -7,7 +7,6 @@
         :bookName="bookName"
         :targetLanguage="targetLanguage"
       />
-        <!-- :clickedWordLemma="clickedWordLemma" -->
     </v-touch>
     <transition name="slide-fade">
       <div
@@ -22,43 +21,17 @@
         @click="onClickHandler"
       >
         <h1>{{ bookName.replace(/_/g, " ") }}</h1>
-        <h2>Chapter {{ chapterNumber }}</h2>
-        <div>
-          <router-link
-            v-if="chapterNumber > 1"
-            class="book-link"
-            :to="{
-              name: 'reader-tool',
-              params: {
-                bookName: bookName,
-                targetLanguage: targetLanguage,
-                chapterNumber: parseInt(chapterNumber) - 1
-              }
-            }"
-          >
-            <span class="nav-chapter">previous chapter</span>
-          </router-link>
-          <router-link
-            class="book-link"
-            :to="{
-              name: 'reader-tool',
-              params: {
-                bookName: bookName,
-                targetLanguage: targetLanguage,
-                chapterNumber: parseInt(chapterNumber) + 1
-              }
-            }"
-          >
-            <span>next chapter</span>
-          </router-link>
-        </div>
-        <button v-if="loggedIn" @click="switchStylingKnownWords()">
-          button
-        </button>
+        <Pagination
+          :page="chapterNumber"
+          :bookName="bookName"
+          :targetLanguage="targetLanguage"
+        />
         <div
           class="text-container"
-          :class="isActiveColor && loggedIn ? 'active' : ''"
+          :class="$store.state.settings.showUnknown && loggedIn ? 'active' : ''"
+          :style="`font-size:${$store.state.settings.fontSize}px`"
         >
+          <!-- :style="`'font-size':${$store.state.settings.fontSize}px`" -->
           <span
             v-for="(token, key) in chapterText"
             :key="key"
@@ -69,9 +42,14 @@
             @contextmenu.prevent="openContextMenu"
             >{{ token }}</span
           >
-            <!-- :lemma="lemmaText[key]" -->
+          <!-- :lemma="lemmaText[key]" -->
           <!-- @click="toggleIsKnown" -->
         </div>
+        <Pagination
+          :page="chapterNumber"
+          :bookName="bookName"
+          :targetLanguage="targetLanguage"
+        />
         <contextMenu :targetLanguage="targetLanguage"></contextMenu>
       </div>
     </transition>
@@ -80,15 +58,17 @@
 
 <script>
 import { apiReaditeasy } from "@/services/ApiService.js";
-import { authComputed } from "@/store/helpers.js";
+import { authComputed, bookState } from "@/store/helpers.js";
 import ContextMenu from "@/components/ContextMenu.vue";
 import ReaderDrawer from "@/components/ReaderDrawer.vue";
+import Pagination from "@/components/lab/Pagination.vue";
 export default {
   components: {
     ContextMenu: ContextMenu,
-    ReaderDrawer: ReaderDrawer
+    ReaderDrawer: ReaderDrawer,
+    Pagination: Pagination
   },
-  props: ["bookName", "targetLanguage", "chapterNumber"],
+  props: ["bookName", "chapterNumber"],
   data() {
     return {
       chapterText: [],
@@ -182,7 +162,6 @@ export default {
       let data = {};
       data["word"] = wordSpan.innerText;
       data["targetLanguage"] = this.targetLanguage;
-      console.log(data);
       // const textContent = wordSpan.textContent;
       this.$store.dispatch("toggleKnownWord", data);
       // this.$forceUpdate();
@@ -235,7 +214,11 @@ export default {
     }
   },
   computed: {
-    ...authComputed
+    ...authComputed,
+    ...bookState
+    // targetLanguage: function() {
+    //   return this.$store.state.book.targetLanguage
+    // }
   }
 };
 </script>
@@ -243,6 +226,11 @@ export default {
 <style scoped>
 #reader-tool {
   max-width: 100%;
+}
+
+h1 {
+  display: block;
+  text-align: center;
 }
 
 .active > span:not([isKnown="true"]):not([isPunct="true"]) {
@@ -257,7 +245,7 @@ span[isPunct="true"] {
 } */
 .text-container {
   white-space: pre-line;
-  font-size: 28px;
+  /* font-size: 28px; */
 }
 .text-container > span {
   /* transition: 0.3s; */

@@ -1,6 +1,5 @@
 import axios from "axios";
 
-// console.log("process.env.NODE_ENV", process.env.NODE_ENV);
 const apiWiktionary = axios.create({
   // baseURL: `https://readiteasy.com`,
   baseURL: "https://fr.wiktionary.org/w/",
@@ -92,7 +91,6 @@ const fetchWordFromWiktionary = word => {
             const ulChild = e.querySelector("ul");
             if (POS.includes("orme_de")) {
               const lemma = e.querySelector("a").getAttribute("title")
-              // console.log(e.querySelector('a').getAttribute('title'))
               if (!lemmas.includes(lemma)) {
                 lemmas.push(lemma);
               }

@@ -32,6 +32,7 @@ body {
   font-family: "Noto Sans CJK SC", "Open Sans", sans-serif;
   font-size: 20px;
   line-height: 1.5;
+  /* scroll-behavior: smooth; */
 }
 #app {
   box-sizing: border-box;
@@ -63,6 +64,8 @@ h6 {
   display: flex;
   align-items: center;
   font-family: "Montserrat", sans-serif;
+  margin: 0;
+  padding: 0;
 }
 h1 {
   font-size: 50px;

@@ -2,7 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import ReaderTool from "../views/ReaderTool.vue";
-import LanguagesList from "../views/LanguagesList.vue";
+import Books from "../views/Books.vue";
 import LanguageDetector from "../views/LanguageDetector.vue";
 import store from "../store/index.js";
 import LoginUser from "../views/LoginUser.vue";
@@ -18,9 +18,9 @@ const routes = [
     component: Home
   },
   {
-    path: "/languages",
-    name: "languages",
-    component: LanguagesList
+    path: "/books",
+    name: "books",
+    component: Books
   },
   {
     path: "/:targetLanguage/book/:bookName/:chapterNumber",
@@ -65,6 +65,12 @@ const router = new VueRouter({
 router.afterEach(to => {
   if (store.state.tokens) {
     store.dispatch("loadKnownWords", to.params.targetLanguage);
+  }
+  if (
+    to.params.targetLanguage &&
+    to.params.targetLanguage != store.state.book.targetLanguage
+  ) {
+    store.dispatch("setTargetLanguage", to.params.targetLanguage);
   }
 });
 

@@ -26,7 +26,7 @@ export default {
   },
   methods: {
     // beforeEnter(e) {
-      // console.log("beforeEnter", e);
+      
     // }
   }
 };

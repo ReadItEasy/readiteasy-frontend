@@ -29,6 +29,7 @@ export default {
 <style scoped>
 #burger {
   transform: scale(1.3);
+  z-index: 1000;
 }
 .hidden {
   visibility: hidden;
@@ -91,6 +92,10 @@ button:focus {
 
 .burger-bar--3 {
   transform: translateY(6px);
+}
+
+#burger.active {
+  color: red;
 }
 
 #burger.active .burger-button {

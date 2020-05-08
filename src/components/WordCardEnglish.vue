@@ -30,9 +30,6 @@ export default {
   computed: {
     ...authComputed
   },
-  created() {
-    // console.log("created", this.englishWord);
-  }
 };
 </script>
 

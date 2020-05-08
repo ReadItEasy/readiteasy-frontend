@@ -1,6 +1,6 @@
 <template>
-  <div class="languages">
-    <h1>Languages</h1>
+  <div>
+    <h1>Books</h1>
     <div v-for="(language, index) in languages" :key="index">
       <LanguageSection
         :targetLanguage="language.lang"
@@ -26,7 +26,6 @@ export default {
   created() {
     apiReaditeasy.get("/api/books/languages").then(response => {
       this.languages = response.data.languages;
-      // console.log(response.data)
       // })
       // .catch(error => {
       //   console.log("there was an error :" + error.response);
