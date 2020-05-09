@@ -66,7 +66,7 @@ export default {
     if (this.loggedIn) {
       for (const bookName of this.books) {
         apiReaditeasy
-          .get(`/api/users/${this.$store.state.userId}/book_known_words`, {
+          .get(`/api/users/${this.$store.state.user.userId}/book_known_words`, {
             params: {
               bookName: bookName,
               targetLanguage: this.targetLanguage

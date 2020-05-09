@@ -1,7 +1,11 @@
 <template>
   <div class="icon-wrapper">
     <svg class="icon" :width="width" :height="height" :color="color">
-      <use v-bind="{ 'xlink:href': '/feather-sprite.svg#' + name }" />
+      <use
+        v-bind="{
+          'xlink:href': href
+        }"
+      />
     </svg>
   </div>
 </template>
@@ -21,6 +25,13 @@ export default {
     color: {
       type: [String],
       default: "#00000066"
+    }
+  },
+  computed: {
+    href() {
+      const prodHref = "/readiteasy-frontend/feather-sprite.svg#" + this.name;
+      const devHref = "/feather-sprite.svg#" + this.name;
+      return process.env.NODE_ENV === "production" ? prodHref : devHref;
     }
   }
 };

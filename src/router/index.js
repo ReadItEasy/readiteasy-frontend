@@ -63,7 +63,7 @@ const router = new VueRouter({
 });
 
 router.afterEach(to => {
-  if (store.state.tokens) {
+  if (store.getters.loggedIn) {
     store.dispatch("loadKnownWords", to.params.targetLanguage);
   }
   if (
@@ -75,14 +75,13 @@ router.afterEach(to => {
 });
 
 router.beforeResolve((to, from, next) => {
-  if (!store.state.tokens) {
-    store.state.tokens = JSON.parse(localStorage.getItem("tokens"));
-    if (store.state.tokens) {
-      store.dispatch("setJwtHeaders");
-    }
+  store.dispatch("checkLocalStorage");
+
+  const loggedIn = store.getters.loggedIn;
+  if (loggedIn) {
+    store.dispatch("refreshTokens");
   }
 
-  const loggedIn = !!store.state.tokens;
   if (to.matched.some(record => record.meta.requiresAuth) && !loggedIn) {
     next({ name: "login" }); // TOSOLVE: if from same route than the one in next, it doesnt work
   }

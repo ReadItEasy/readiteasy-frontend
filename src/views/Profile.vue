@@ -2,7 +2,7 @@
   <div>
     <h1>Profile</h1>
     <p>
-      Hello <strong>{{ $store.state.firstName }}</strong
+      Hello <strong>{{ $store.state.user.firstName }}</strong
       >. Here will soon be displayed tons of statistics about your known words,
       target languages and time spent reading !
     </p>

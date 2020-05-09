@@ -23,7 +23,7 @@ export default {
   methods: {
     login() {
       this.$store
-        .dispatch("login", {
+        .dispatch("credentialsLogin", {
           email: this.email,
           password: this.password
         })
