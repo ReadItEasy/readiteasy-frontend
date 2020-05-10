@@ -3,7 +3,7 @@
     <svg class="icon" :width="width" :height="height" :color="color">
       <use
         v-bind="{
-          'xlink:href': href
+          'xlink:href': '/feather-sprite.svg#' + name
         }"
       />
     </svg>

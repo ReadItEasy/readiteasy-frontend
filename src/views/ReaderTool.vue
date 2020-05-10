@@ -35,7 +35,8 @@
           <span
             v-for="(token, key) in chapterText"
             :key="key"
-            :isKnown="$store.state.userKnownWordsDict[token.toLowerCase()]"
+            :isKnown="$store.state.userWords.knownDict[token.toLowerCase()]"
+            :isStudy="$store.state.userWords.studyDict[token.toLowerCase()]"
             :isPunct="isPunctDict[token]"
             @mouseenter="mouseEnter"
             @mouseleave="mouseLeave"
@@ -109,6 +110,7 @@ export default {
   },
   created() {
     this.onLoad();
+    this.$store.dispatch("loadLocalStorageSettings");
   },
   mounted() {
     document.addEventListener("keydown", () => {
@@ -235,6 +237,10 @@ h1 {
 
 .active > span:not([isKnown="true"]):not([isPunct="true"]) {
   color: red;
+}
+
+.active > span[isStudy="true"]:not([isPunct="true"]) {
+  color: blue;
 }
 
 span[isPunct="true"] {

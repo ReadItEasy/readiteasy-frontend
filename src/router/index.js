@@ -15,7 +15,17 @@ const routes = [
   {
     path: "/",
     name: "home",
-    component: Home
+    component: Home,
+    // This is only useful when using frontend server like github page due to the fact ...
+    //... that these servers can't serve directly a route like 'mywebsite.com/custom/route'
+    beforeEnter: (to, from, next) => { // eslint-disable-line no-unused-vars
+      const queryRoute = to.query.p;
+      if (queryRoute) {
+        router.push(queryRoute);
+      } else {
+        next()
+      }
+    }
   },
   {
     path: "/books",
@@ -63,14 +73,17 @@ const router = new VueRouter({
 });
 
 router.afterEach(to => {
-  if (store.getters.loggedIn) {
-    store.dispatch("loadKnownWords", to.params.targetLanguage);
-  }
   if (
     to.params.targetLanguage &&
     to.params.targetLanguage != store.state.book.targetLanguage
   ) {
     store.dispatch("setTargetLanguage", to.params.targetLanguage);
+  }
+  if (
+    store.getters.loggedIn &&
+    store.state.book.targetLanguage != store.state.userWords.targetLanguage
+  ) {
+    store.dispatch("loadKnownWords", to.params.targetLanguage);
   }
 });
 

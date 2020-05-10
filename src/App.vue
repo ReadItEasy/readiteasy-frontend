@@ -11,7 +11,10 @@ import NavBar from "@/components/NavBar.vue";
 export default {
   components: {
     NavBar
-  }
+  },
+  // beforeRouteEnter (to) {
+  // console.log(to)
+  // }
 };
 </script>
 

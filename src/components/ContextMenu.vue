@@ -8,8 +8,17 @@
     <ul>
       <li @click="openWikt">See in wiktionary</li>
       <template v-if="loggedIn">
-        <li v-if="isKnown" @click="toggleIsKnown">Remove from known words</li>
-        <li v-else @click="toggleIsKnown">Add to known words</li>
+        <li v-if="isKnown" @click="toggleIsKnown('known')">
+          Remove from known words
+        </li>
+        <li v-else @click="toggleIsKnown('known')">Add to known words</li>
+      </template>
+      <template v-if="loggedIn">
+        <li v-if="isStudy" @click="toggleIsKnown('study')">
+          Remove from study list
+        </li>
+
+        <li v-else @click="toggleIsKnown('study')">Add to study list</li>
       </template>
 
       <!-- <li>option 3</li>
@@ -31,7 +40,8 @@ export default {
   data: () => ({
     viewMenu: false,
     targetWord: null,
-    isKnown: null
+    isKnown: null,
+    isStudy: null
   }),
   created: function() {
     this.$parent.$on("openContextMenu", this.openMenu);
@@ -64,6 +74,7 @@ export default {
       this.viewMenu = true;
       this.targetWord = e.target.innerText;
       this.isKnown = e.target.getAttribute("isKnown");
+      this.isStudy = e.target.getAttribute("isStudy");
       const myfunc = () => {
         var contextMenuDiv = this.$refs.contextMenu;
         this.contextMenuDiv = contextMenuDiv;
@@ -104,11 +115,11 @@ export default {
       );
       this.closeMenu();
     },
-    toggleIsKnown() {
+    toggleIsKnown(list) {
       let data = {};
       data["word"] = this.targetWord;
       data["targetLanguage"] = this.targetLanguage;
-      // console.log(data)
+      data["list"] = list;
       this.$store.dispatch("toggleKnownWord", data);
       // this.$store.dispatch("toggleKnownWord", this.targetWord);
       this.closeMenu();
