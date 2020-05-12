@@ -164,6 +164,7 @@ export default {
       let data = {};
       data["word"] = wordSpan.innerText;
       data["targetLanguage"] = this.targetLanguage;
+      data["list"] = "known";
       // const textContent = wordSpan.textContent;
       this.$store.dispatch("toggleKnownWord", data);
       // this.$forceUpdate();
@@ -251,6 +252,7 @@ span[isPunct="true"] {
 } */
 .text-container {
   white-space: pre-line;
+  /* text-align: center; */
   /* font-size: 28px; */
 }
 .text-container > span {

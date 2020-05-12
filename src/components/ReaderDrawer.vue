@@ -2,6 +2,10 @@
   <transition name="slide-fade">
     <div id="reader-drawer" class="drawer">
       <span class="clicked-word">{{ clickedWord }}</span>
+      <div v-if="$store.getters.loggedIn" class="lists">
+        <a class="btn-list" :class="$store.state.userWords.knownDict[clickedWord.toLowerCase()] ? 'active' : ''" @click="toggleInList('known')">known </a>
+        <a class="btn-list" :class="$store.state.userWords.studyDict[clickedWord.toLowerCase()] ? 'active' : ''" @click="toggleInList('study')">study</a>
+      </div>
       <div class="tab-header">
         <a
           class="btn-tab"
@@ -221,6 +225,14 @@ export default {
       if (this.tab != clikedTab) {
         this.tab = clikedTab;
       }
+    },
+    toggleInList: function(list) {
+      let data = {};
+      data["word"] = this.clickedWord;
+      data["targetLanguage"] = this.targetLanguage;
+      data["list"] = list;
+      // const textContent = wordSpan.textContent;
+      this.$store.dispatch("toggleKnownWord", data);
     }
   }
 };
@@ -269,8 +281,46 @@ export default {
   transform: translateX(100%);
 }
 
+.lists {
+  display: flex;
+  /* height: 50px; */
+  /* display: flex; */
+  /* justify-content: center;
+  align-items: center; */
+}
+
+.lists a {
+  flex-basis: 100%;
+  text-align: center;
+  cursor: pointer;
+  font-weight: 300;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  /* height: 100%; */
+  /* -webkit-box-align: center;
+  height: 100px;
+  line-height: 100px; */
+}
+
+.lists a:hover {
+  background-color: rgba(212, 212, 212, 0.1);
+}
+
+.btn-list:not(.active) {
+  color: grey;
+}
+
+.btn-list.active {
+  /* border-bottom: solid 2px; */
+}
+
+.btn-list.active:hover {
+  background-color: rgba(57, 185, 130, 0.1);
+}
+
 .tab-header {
   display: flex;
+  border-top: 1px rgba(212, 212, 212) solid;
   /* height: 50px; */
   /* display: flex; */
   /* justify-content: center;
@@ -282,8 +332,8 @@ export default {
   text-align: center;
   cursor: pointer;
   font-weight: 300;
-  padding-top: 15px;
-  padding-bottom: 15px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   /* height: 100%; */
   /* -webkit-box-align: center;
   height: 100px;

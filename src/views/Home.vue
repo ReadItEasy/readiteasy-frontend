@@ -4,7 +4,7 @@
     <p>
       Welcome to ReadItEasy, an app with the purpose of helping you read in a
       target language. Currently, we have just a few books in only chinese, but
-      more content will arrive soon!
+      more content will arrive soon!!
     </p>
     <p>
       Start reading right now with one of my favorite chinese books:

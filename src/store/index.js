@@ -163,11 +163,10 @@ const userWordsModule = {
       state.targetLanguage = data.targetLanguage;
     },
     TOGGLE_WORD(state, data) {
-      const word = data.word;
+      const word = data.word.toLowerCase();
       const targetLanguage = data.targetLanguage;
       const list = data.list;
-      console.log(state["studyDict"])
-      
+
       if (state[`${data.list}Dict`][word]) {
         state[`${data.list}Dict`][word] = false;
         apiReaditeasy.post(`api/users/${data.userId}/remove_word/`, {
@@ -235,111 +234,13 @@ export default new Vuex.Store({
     isNavOpen: false
   },
   mutations: {
-    // LOAD_KNOWN_WORDS(state, data) {
-    //   state.knownDict = data.mandarinKnownWordsDict;
-    //   state.targetLanguage = data.targetLanguage;
-    // },
-    // TOGGLE_WORD(state, data) {
-    //   const word = data.word;
-    //   const targetLanguage = data.targetLanguage;
-    //   if (state.knownDict[word]) {
-    //     state.knownDict[word] = false;
-    //     apiReaditeasy.post(`api/users/${state.user.userId}/remove_word/`, {
-    //       word: word,
-    //       targetLanguage: targetLanguage
-    //     });
-    //   } else {
-    //     Vue.set(state.knownDict, word, true);
-    //     // this.$set(state.knownDict, word, true)
-    //     apiReaditeasy.post(`api/users/${state.user.userId}/add_word/`, {
-    //       word: word,
-    //       targetLanguage: targetLanguage
-    //     });
-    //   }
-    // },
-    // LOGIN(state, tokens) {
-    //   state.tokens = tokens;
-    //   localStorage.setItem("tokens", JSON.stringify(tokens));
-    //   apiReaditeasy.defaults.headers.common[
-    //     "Authorization"
-    //   ] = `Bearer ${tokens.access}`;
-    //   state.userId = VueJwtDecode.decode(tokens.access).user_id;
-    //   state.firstName = VueJwtDecode.decode(tokens.access).first_name;
-    // },
-    // LOGOUT() {
-    //   localStorage.removeItem("tokens");
-    //   location.reload();
-    // },
-    // SET_JWT_HEADERS(state) {
-    //   apiReaditeasy.defaults.headers.common[
-    //     "Authorization"
-    //   ] = `Bearer ${state.tokens.access}`;
-    //   state.userId = VueJwtDecode.decode(state.tokens.access).user_id;
-    //   state.firstName = VueJwtDecode.decode(state.tokens.access).first_name;
-    // },
     TOGGLE_NAV(state) {
       state.isNavOpen = !state.isNavOpen;
     }
   },
   actions: {
-    // loadKnownWords({ commit }, targetLanguage) {
-    //   console.log("loadKnownWords");
-    //   // if (targetLanguage && targetLanguage != this.state.book.targetLanguage) {
-    //   console.log("after if");
-    //   apiReaditeasy
-    //     .get(`api/users/${this.state.user.userId}/`)
-    //     .then(response => {
-    //       var mandarinKnownWordsField =
-    //         response.data.profile[`${targetLanguage}_known_words`];
-    //       var mandarinKnownWordsList = mandarinKnownWordsField.split("\n");
-    //       var mandarinKnownWordsDict = {};
-    //       for (const word of mandarinKnownWordsList) {
-    //         mandarinKnownWordsDict[word] = true;
-    //       }
-    //       var data = {};
-    //       data["mandarinKnownWordsDict"] = mandarinKnownWordsDict;
-    //       data["targetLanguage"] = targetLanguage;
-    //       commit("LOAD_KNOWN_WORDS", data);
-    //       // })
-    //       // .catch(error => {
-    //       //     "there was an error in actions store :" + error.response
-    //       //   );
-    //     });
-    //   // }
-    // },
-    // toggleKnownWord({ commit }, data) {
-    //   commit("TOGGLE_WORD", data);
-    // },
-    // login({ commit }, credentials) {
-    //   return apiReaditeasy
-    //     .post("api/users/token/", credentials)
-    //     .then(response => {
-    //       // ("login response", response);
-    //       commit("LOGIN", response.data);
-    //     });
-    // },
-    // logout({ commit }) {
-    //   commit("LOGOUT");
-    // },
-    // setJwtHeaders({ commit }) {
-    //   commit("SET_JWT_HEADERS");
-    // },
-    // refreshTokens({ commit }) {
-    //   commit("TODO : Create a commit");
-    //   apiReaditeasy.post("/api/users/token/refresh/", {
-    //     refresh: this.$store.state.tokens.refresh
-    //   });
-    //   // .then(response => {
-    //   //   console.log("this is the new access", response.data.access);
-    //   // });
-    // },
     toggleNav({ commit }) {
       commit("TOGGLE_NAV");
     }
   }
-  // getters: {
-  //   loggedIn(state) {
-  //     return !!state.tokens;
-  //   }
-  // }
 });
