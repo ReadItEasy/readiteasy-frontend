@@ -43,8 +43,15 @@ export default {
     isKnown: null,
     isStudy: null
   }),
+  watch: {
+    "$store.state.reader.e": function(e) {
+      if (e) {
+        this.openMenu(e);
+      }
+    }
+  },
   created: function() {
-    this.$parent.$on("openContextMenu", this.openMenu);
+    // this.$parent.$on("openContextMenu", this.openMenu);
     document.addEventListener("click", this.onWindowClick);
   },
 

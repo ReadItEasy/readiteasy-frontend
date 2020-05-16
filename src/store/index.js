@@ -223,12 +223,37 @@ const userWordsModule = {
   }
 };
 
+const readerModule = {
+  state: {
+    hoveredWord: null,
+    isContextMenuOpen: null,
+    e: null
+  },
+  mutations: {
+    SET_HOVERED_WORD(state, hoveredWord) {
+      state.hoveredWord = hoveredWord;
+    },
+    OPEN_CONTEXT_MENU(state, e) {
+      state.e = e;
+    }
+  },
+  actions: {
+    setHoveredWord({ commit }, hoveredWord) {
+      commit("SET_HOVERED_WORD", hoveredWord);
+    },
+    openContextMenu({ commit }, e) {
+      commit("OPEN_CONTEXT_MENU", e);
+    }
+  }
+};
+
 export default new Vuex.Store({
   modules: {
     book: bookModule,
     settings: settingsModule,
     user: userModule,
-    userWords: userWordsModule
+    userWords: userWordsModule,
+    reader: readerModule
   },
   state: {
     isNavOpen: false

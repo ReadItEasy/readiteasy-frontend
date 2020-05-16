@@ -35,6 +35,8 @@ body {
   font-family: "Noto Sans CJK SC", "Open Sans", sans-serif;
   font-size: 20px;
   line-height: 1.5;
+  overflow-y: hidden;
+  /* height: 100vh; */
   /* scroll-behavior: smooth; */
 }
 #app {

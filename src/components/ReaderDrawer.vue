@@ -3,8 +3,26 @@
     <div id="reader-drawer" class="drawer">
       <span class="clicked-word">{{ clickedWord }}</span>
       <div v-if="$store.getters.loggedIn" class="lists">
-        <a class="btn-list" :class="$store.state.userWords.knownDict[clickedWord.toLowerCase()] ? 'active' : ''" @click="toggleInList('known')">known </a>
-        <a class="btn-list" :class="$store.state.userWords.studyDict[clickedWord.toLowerCase()] ? 'active' : ''" @click="toggleInList('study')">study</a>
+        <a
+          class="btn-list"
+          :class="
+            $store.state.userWords.knownDict[clickedWord.toLowerCase()]
+              ? 'active'
+              : ''
+          "
+          @click="toggleInList('known')"
+          >known
+        </a>
+        <a
+          class="btn-list"
+          :class="
+            $store.state.userWords.studyDict[clickedWord.toLowerCase()]
+              ? 'active'
+              : ''
+          "
+          @click="toggleInList('study')"
+          >study</a
+        >
       </div>
       <div class="tab-header">
         <a

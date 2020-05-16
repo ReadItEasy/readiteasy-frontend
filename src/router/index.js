@@ -90,6 +90,7 @@ router.afterEach(to => {
 });
 
 router.beforeResolve((to, from, next) => {
+  // do only if not logged in
   store.dispatch("checkLocalStorage");
 
   const loggedIn = store.getters.loggedIn;
