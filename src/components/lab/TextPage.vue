@@ -1,11 +1,12 @@
 <template>
-  <div>
-    <button @click="setPage">next page</button>
+  <div id="flex-container">
+    
     <!-- <div 
       :style="`font-size:${$store.state.settings.fontSize}px`"
     ></div> -->
+    <div class="flex-item item1"><button @click="setPage">prev</button></div>
     <div
-      class="text-container"
+      class="text-container flex-item"
       id="text-page"
       :class="$store.state.settings.showUnknown && loggedIn ? 'active' : ''"
       :style="`font-size:${$store.state.settings.fontSize}px`"
@@ -23,6 +24,7 @@
       >{{ token }}</span
     > -->
     </div>
+    <div class="flex-item"><button @click="setPage">next</button></div>
   </div>
 </template>
 
@@ -120,6 +122,7 @@ export default {
       // this.$forceUpdate();
     },
     openContextMenu(e) {
+      e.preventDefault()
       this.$store.dispatch("openContextMenu", e);
     },
     setPage() {
@@ -148,6 +151,9 @@ export default {
         const isStudy = this.$store.state.userWords.studyDict[token.toLowerCase()] ? true : ""
         span.setAttribute("is-study", isStudy)
         containerPage.appendChild(span);
+        span.addEventListener("mouseenter", this.mouseEnter)
+        span.addEventListener("mouseleave", this.mouseLeave)
+        span.addEventListener("contextmenu", this.openContextMenu)
         var rect = span.getBoundingClientRect();
         // console.log(span);
         // console.log(rect.top, rect.bottom, clientHeight);
@@ -205,5 +211,22 @@ span[is-punct="true"] {
 .text-container > span::selection {
   background-color: red;
   box-shadow: 0 0 6px rgba(33, 33, 33, 0.2);
+}
+
+#flex-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+#flex-container > .flex-item {
+
+}
+#flex-container > .item1 {
+  background-color: red;
+    display: flex;
+align-items: center;
+  height:calc(100vh - 60px);
+
 }
 </style>

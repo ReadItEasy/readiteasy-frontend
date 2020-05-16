@@ -154,7 +154,8 @@ const userWordsModule = {
   state: {
     knownDict: {},
     studyDict: {},
-    targetLanguage: null
+    targetLanguage: null,
+    _: null
   },
   mutations: {
     LOAD_KNOWN_WORDS(state, data) {
@@ -219,6 +220,28 @@ const userWordsModule = {
     toggleKnownWord({ commit, rootState }, data) {
       data.userId = rootState.user.userId;
       commit("TOGGLE_WORD", data);
+      console.log("toggleKnownWord")
+      this.dispatch('propagateToggleOnPage', data);
+    },
+    propagateToggleOnPage({state}, data) {
+      console.log("propagateToggleOnPage", data)
+      state._ = null
+      var toToggleSpans = Array.from(document.querySelectorAll(".text-container > span")).filter(el => el.textContent === data.word)
+      
+      // console.log(myArray.filter(el => el.textContent === data.word))
+      for (var toToggleSpan of toToggleSpans) {
+        const currentBool = toToggleSpan.getAttribute(`is-${data['list']}`)
+        if (currentBool) {
+          toToggleSpan.setAttribute(`is-${data['list']}`, '')
+        } else {
+          toToggleSpan.setAttribute(`is-${data['list']}`, true)
+          
+        }
+        // console.log("list :", data['list'])
+        // console.log(toToggleSpan.getAttribute(`is-${data['list']}`))
+      }
+      // Array.from(document.querySelectorAll('div')).find(el => el.textContent === 'SomeText, text continues.');
+
     }
   }
 };

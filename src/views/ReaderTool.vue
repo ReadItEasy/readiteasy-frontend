@@ -169,6 +169,10 @@ export default {
   max-width: 100%;
 }
 
+#reader-content {
+  height: 100%;
+}
+
 /* h1 {
   display: block;
   text-align: center;
