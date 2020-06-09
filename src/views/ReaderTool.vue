@@ -35,6 +35,7 @@
           <span
             v-for="(token, key) in chapterText"
             :key="key"
+            :position="key"
             :isKnown="$store.state.userWords.knownDict[token.toLowerCase()]"
             :isStudy="$store.state.userWords.studyDict[token.toLowerCase()]"
             :isPunct="isPunctDict[token]"

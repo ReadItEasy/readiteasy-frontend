@@ -6,8 +6,8 @@ const apiReaditeasy = axios.create({
   baseURL:
     process.env.NODE_ENV === "production"
       ? `https://api.readiteasy.com`
-      : `https://api.readiteasy.com`,
-      // : `http://127.0.0.1:8000/`,
+      // : `https://api.readiteasy.com`,
+      : `http://127.0.0.1:8000/`,
   withCredentials: false, // This is the default
   headers: {
     Accept: "application/json",
