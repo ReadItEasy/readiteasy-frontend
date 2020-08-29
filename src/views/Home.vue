@@ -32,4 +32,9 @@
 export default {};
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped>
+
+h1 {
+  color: $test-color;
+}
+</style>
