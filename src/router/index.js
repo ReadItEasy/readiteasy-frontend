@@ -8,6 +8,7 @@ import store from "../store/index.js";
 import LoginUser from "../views/LoginUser.vue";
 import RegisterUser from "../views/RegisterUser.vue";
 import Profile from "../views/Profile.vue";
+import KnownWords from "../views/KnownWords.vue";
 
 Vue.use(VueRouter);
 
@@ -63,6 +64,12 @@ const routes = [
     path: "/profile",
     name: "profile",
     component: Profile,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: "/profile/known-words/:targetLanguage",
+    name: "known-words",
+    component: KnownWords,
     meta: { requiresAuth: true }
   }
 ];

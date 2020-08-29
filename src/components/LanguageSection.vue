@@ -1,5 +1,5 @@
 <template>
-  <div class="language-card">
+  <div class="language-card" v-if="books">
     <div class="title">
       <h2 @click="switchShow()">{{ targetLanguage }}</h2>
       <BaseIcon name="book" />
@@ -43,6 +43,21 @@
           </p>
         </template>
       </div>
+    </div>
+  </div>
+  <div class="language-card" v-else>
+    <div class="title">
+      <router-link
+          class="book-link"
+          :to="{
+            name: 'known-words',
+            params: {
+              targetLanguage: targetLanguage,
+            }
+          }"
+        >
+          {{ targetLanguage }}
+        </router-link>
     </div>
   </div>
 </template>
