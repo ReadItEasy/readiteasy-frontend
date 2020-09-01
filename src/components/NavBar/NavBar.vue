@@ -36,10 +36,10 @@
 </template>
 
 <script>
-import Burger from "@/components/lab/Burger.vue";
-import Sidebar from "@/components/lab/Sidebar.vue";
-import Settings from "@/components/lab/Settings.vue";
-import { authComputed } from "../store/helpers.js";
+import Burger from "./Burger.vue";
+import Sidebar from "./LeftDrawer.vue";
+import Settings from "./Settings.vue";
+import { authComputed } from "@/store/helpers.js";
 
 export default {
   components: {

@@ -1,9 +1,8 @@
-
 import Vue from "vue";
-import VueIziToast from 'vue-izitoast';
+import VueIziToast from "vue-izitoast";
 
 // import 'izitoast/dist/css/iziToast.css';
-import 'izitoast/dist/css/iziToast.min.css';
+import "izitoast/dist/css/iziToast.min.css";
 
 const notificationSystem = {
   options: {
@@ -18,7 +17,7 @@ const notificationSystem = {
           function() {
             alert("Hello world!");
           },
-          true
+          true,
         ],
         [
           "<button>Close</button>",
@@ -28,37 +27,37 @@ const notificationSystem = {
                 transitionOut: "fadeOutUp",
                 onClosing: function(instance, toast, closedBy) {
                   console.info("closedBy: " + closedBy);
-                }
+                },
               },
               toast,
               "buttonName"
             );
-          }
-        ]
+          },
+        ],
       ],
       onOpening: function() {
         console.info("callback abriu!");
       },
       onClosing: function(instance, toast, closedBy) {
         console.info("closedBy: " + closedBy);
-        console.log(instance, toast)
-      }
+        console.log(instance, toast);
+      },
     },
     ballon: {
       balloon: true,
-      position: "bottomCenter"
+      position: "bottomCenter",
     },
     info: {
-      position: "bottomLeft"
+      position: "bottomLeft",
     },
     success: {
-      position: "bottomRight"
+      position: "bottomRight",
     },
     warning: {
-      position: "topLeft"
+      position: "topLeft",
     },
     error: {
-      position: "topRight"
+      position: "topRight",
     },
     question: {
       timeout: 20000,
@@ -74,25 +73,25 @@ const notificationSystem = {
           function(instance, toast) {
             instance.hide({ transitionOut: "fadeOut" }, toast, "button");
           },
-          true
+          true,
         ],
         [
           "<button>NO</button>",
           function(instance, toast) {
             instance.hide({ transitionOut: "fadeOut" }, toast, "button");
-          }
-        ]
+          },
+        ],
       ],
       onClosing: function(instance, toast, closedBy) {
         console.info("Closing | closedBy: " + closedBy);
       },
       onClosed: function(instance, toast, closedBy) {
         console.info("Closed | closedBy: " + closedBy);
-      }
-    }
-  }
-}
+      },
+    },
+  },
+};
 
-Vue.prototype.$notificationSystem = notificationSystem
+Vue.prototype.$notificationSystem = notificationSystem;
 
 Vue.use(VueIziToast);

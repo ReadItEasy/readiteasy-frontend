@@ -95,7 +95,7 @@ export default {
             },
             onClosing: function(instance, toast, closedBy) {
               console.info("closedBy: " + closedBy);
-              console.log(instance, toast)
+              console.log(instance, toast);
             }
           },
           ballon: {
@@ -153,6 +153,6 @@ export default {
 
 <style lang="scss" scoped>
 h1 {
-  color: $test-color;
+  color: $primary-color;
 }
 </style>

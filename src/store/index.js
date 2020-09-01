@@ -7,25 +7,25 @@ Vue.use(Vuex);
 
 const bookModule = {
   state: {
-    targetLanguage: ""
+    targetLanguage: "",
   },
   mutations: {
     SET_TARGET_LANGUAGE(state, targetLanguage) {
       state.targetLanguage = targetLanguage;
-    }
+    },
   },
   actions: {
     setTargetLanguage({ commit }, targetLanguage) {
       commit("SET_TARGET_LANGUAGE", targetLanguage);
-    }
-  }
+    },
+  },
 };
 
 const settingsModule = {
   state: {
     fontSize: 28,
     showSettings: false,
-    showUnknown: true
+    showUnknown: true,
   },
   mutations: {
     INCREMENT_FONT_SIZE(state, increment) {
@@ -42,7 +42,7 @@ const settingsModule = {
     LOAD_LOCAL_STORAGE_SETTINGS(state, localSettings) {
       state.fontSize = localSettings.fontSize;
       state.showUnknown = localSettings.showUnknown;
-    }
+    },
   },
   actions: {
     incrementFontSize({ commit }, increment) {
@@ -59,15 +59,15 @@ const settingsModule = {
       if (localSettings) {
         commit("LOAD_LOCAL_STORAGE_SETTINGS", localSettings);
       }
-    }
-  }
+    },
+  },
 };
 
 const userModule = {
   state: {
     tokens: null,
     userId: null,
-    firstName: null
+    firstName: null,
   },
   mutations: {
     LOGIN(state, tokens) {
@@ -96,13 +96,13 @@ const userModule = {
     SET_USER_INFO(state) {
       state.userId = VueJwtDecode.decode(state.tokens.access).user_id;
       state.firstName = VueJwtDecode.decode(state.tokens.access).first_name;
-    }
+    },
   },
   actions: {
     credentialsLogin({ commit }, credentials) {
       return apiReaditeasy
         .post("api/users/token/", credentials)
-        .then(response => {
+        .then((response) => {
           const tokens = response.data;
           commit("SET_TOKENS", tokens);
           commit("SET_JWT_HEADERS");
@@ -122,9 +122,9 @@ const userModule = {
       if (currentDate > accessExpiredDate) {
         apiReaditeasy
           .post("/api/users/token/refresh/", {
-            refresh: state.tokens.refresh
+            refresh: state.tokens.refresh,
           })
-          .then(response => {
+          .then((response) => {
             const tokens = response.data;
             commit("SET_TOKENS", tokens);
             commit("SET_JWT_HEADERS");
@@ -141,20 +141,20 @@ const userModule = {
           commit("SET_USER_INFO");
         }
       }
-    }
+    },
   },
   getters: {
     loggedIn(state) {
       return !!state.tokens;
-    }
-  }
+    },
+  },
 };
 
 const userWordsModule = {
   state: {
     knownDict: {},
     studyDict: {},
-    targetLanguage: null
+    targetLanguage: null,
   },
   mutations: {
     LOAD_KNOWN_WORDS(state, data) {
@@ -172,7 +172,7 @@ const userWordsModule = {
         apiReaditeasy.post(`api/users/${data.userId}/remove_word/`, {
           word: word,
           targetLanguage: targetLanguage,
-          list: list
+          list: list,
         });
       } else {
         Vue.set(state[`${data.list}Dict`], word, true);
@@ -180,16 +180,16 @@ const userWordsModule = {
         apiReaditeasy.post(`api/users/${data.userId}/add_word/`, {
           word: word,
           targetLanguage: targetLanguage,
-          list: list
+          list: list,
         });
       }
-    }
+    },
   },
   actions: {
     loadKnownWords({ commit, rootState }, targetLanguage) {
       apiReaditeasy
         .get(`api/users/${rootState.user.userId}/`)
-        .then(response => {
+        .then((response) => {
           var knownField =
             response.data.profile[`${targetLanguage}_known_words`];
           var studyField =
@@ -219,8 +219,13 @@ const userWordsModule = {
     toggleKnownWord({ commit, rootState }, data) {
       data.userId = rootState.user.userId;
       commit("TOGGLE_WORD", data);
-    }
-  }
+    },
+  },
+};
+
+const notificationModule = {
+  namespaced: true,
+  state: {},
 };
 
 export default new Vuex.Store({
@@ -228,19 +233,20 @@ export default new Vuex.Store({
     book: bookModule,
     settings: settingsModule,
     user: userModule,
-    userWords: userWordsModule
+    userWords: userWordsModule,
+    notification: notificationModule,
   },
   state: {
-    isNavOpen: false
+    isNavOpen: false,
   },
   mutations: {
     TOGGLE_NAV(state) {
       state.isNavOpen = !state.isNavOpen;
-    }
+    },
   },
   actions: {
     toggleNav({ commit }) {
       commit("TOGGLE_NAV");
-    }
-  }
+    },
+  },
 });
