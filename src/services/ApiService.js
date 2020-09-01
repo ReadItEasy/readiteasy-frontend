@@ -17,14 +17,38 @@ const apiReaditeasy = axios.create({
   xsrfCookieName: "XCSRF-TOKEN"
 });
 
-apiReaditeasy.interceptors.request.use(config => {
+// apiReaditeasy.interceptors.request.use(config => {
+//   NProgress.start();
+//   return config;
+// });
+
+// apiReaditeasy.interceptors.response.use(response => {
+//   NProgress.done();
+//   return response;
+// });
+
+// Add a request interceptor
+apiReaditeasy.interceptors.request.use(function (config) {
+  // Do something before request is sent
   NProgress.start();
   return config;
+}, function (error) {
+  // Do something with request error
+  console.error("error config", error)
+  return Promise.reject(error);
 });
 
-apiReaditeasy.interceptors.response.use(response => {
+// Add a response interceptor
+apiReaditeasy.interceptors.response.use(function (response) {
+  // Do something with response data
   NProgress.done();
   return response;
+}, function (error) {
+  // Do something with response error
+  NProgress.done();
+  
+  console.error("error response", error)
+  return Promise.reject(error);
 });
 
 export { apiReaditeasy };

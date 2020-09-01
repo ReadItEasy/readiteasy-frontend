@@ -8,8 +8,10 @@ import "nprogress/nprogress.css";
 import VueMq from "vue-mq";
 import VueTouch from "vue-touch";
 
-
 import "./utils/notifications.js"
+
+import "bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 Vue.use(VueMq, {
   breakpoints: {

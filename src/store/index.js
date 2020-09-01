@@ -58,6 +58,10 @@ const settingsModule = {
       const localSettings = JSON.parse(localStorage.getItem("settings"));
       if (localSettings) {
         commit("LOAD_LOCAL_STORAGE_SETTINGS", localSettings);
+        // dispatch("notification/addNotification", {
+        //   message: "Successfully loaded local settings",
+        //   type: "success",
+        // });
       }
     },
   },
@@ -99,7 +103,7 @@ const userModule = {
     },
   },
   actions: {
-    credentialsLogin({ commit }, credentials) {
+    credentialsLogin({ commit, dispatch }, credentials) {
       return apiReaditeasy
         .post("api/users/token/", credentials)
         .then((response) => {
@@ -107,6 +111,17 @@ const userModule = {
           commit("SET_TOKENS", tokens);
           commit("SET_JWT_HEADERS");
           commit("SET_USER_INFO");
+          dispatch("notification/addNotification", {
+            message: "Successfully logged in",
+            type: "success",
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+          dispatch("notification/addNotification", {
+            message: "Error : Couldn't log in",
+            type: "danger",
+          });
         });
     },
     logout({ commit }) {
@@ -225,7 +240,29 @@ const userWordsModule = {
 
 const notificationModule = {
   namespaced: true,
-  state: {},
+  state: { notifications: [] },
+  mutations: {
+    PUSH_NOTIFICATION(state, notification) {
+      state.notifications.push(notification);
+    },
+    REMOVE_NOTIFICATION(state, notificationToRemove) {
+      state.notifications = state.notifications.filter((notification) => {
+        return notification.id != notificationToRemove.id;
+      });
+    },
+  },
+  actions: {
+    addNotification({ commit }, notification) {
+      notification.id = new Date().getTime();
+      commit("PUSH_NOTIFICATION", notification);
+    },
+    removeNotification({ commit }, notification) {
+      commit("REMOVE_NOTIFICATION", notification);
+    },
+  },
+  getters: {
+    notifications: (state) => state.notifications,
+  },
 };
 
 export default new Vuex.Store({

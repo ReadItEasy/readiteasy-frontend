@@ -2,16 +2,21 @@
 <template>
   <div id="app">
     <NavBar class="fixed-header" />
-    <router-view class="content" />
+    <div class="content">
+    <NotificationsList />
+      <router-view />
+    </div>
   </div>
 </template>
 
 <script>
-import NavBar from "@/components/NavBar/NavBar.vue";
+import NavBar from "@/components/navbar/NavBar.vue";
+import NotificationsList from "@/components/notifications/NotificationsList.vue";
 export default {
   components: {
-    NavBar
-  },
+    NavBar,
+    NotificationsList
+  }
   // beforeRouteEnter (to) {
   // console.log(to)
   // }
@@ -260,6 +265,7 @@ select::ms-expand {
   z-index: 100;
   background-color: white;
   box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28);
+  z-index: 5;
 }
 
 @media screen and (max-width: 900px) {
