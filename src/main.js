@@ -8,6 +8,9 @@ import "nprogress/nprogress.css";
 import VueMq from "vue-mq";
 import VueTouch from "vue-touch";
 
+import "./utils/notifications.js"
+
+
 Vue.use(VueMq, {
   breakpoints: {
     mobile: 450,
