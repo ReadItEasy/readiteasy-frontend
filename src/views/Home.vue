@@ -8,7 +8,7 @@
     </p>
     <p>
       Start reading right now with one of my favorite chinese books:
-      <router-link :to="{ path: '/mandarin/book/活着/1' }">To Live</router-link>by Hua Yu.
+      <router-link :to="{ path: '/mandarin/book/活着/1' }" class="primary-color">To Live</router-link> by Hua Yu.
     </p>
     <br />
     <p>
@@ -24,6 +24,10 @@
       know half of the words. For both cases, ReadItEasy can help you quickly
       look up definitions and statistics for a given word.
     </p>
+    <button
+      class="btn btn-outline-primary"
+      v-on:click="$store.dispatch('notification/addNotification', {message: 'hello you', type:'success'})"
+    >VuexNotif</button>&nbsp;
     <button
       class="btn btn-outline-primary"
       v-on:click="$toast.show('Welcome!', 'Hey', $notificationSystem.options.show)"

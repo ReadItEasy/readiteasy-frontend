@@ -3,7 +3,7 @@
   <div id="app">
     <NavBar class="fixed-header" />
     <div class="content">
-    <NotificationsList />
+      <NotificationsList />
       <router-view />
     </div>
   </div>
@@ -23,11 +23,13 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 *,
 *::before,
 *::after {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 html {
@@ -54,15 +56,15 @@ hr {
   height: 0;
   overflow: visible;
 }
-a {
+/* a {
   color: #39b982;
   font-weight: 600;
   background-color: transparent;
-}
-img {
+} */
+/* img {
   border-style: none;
   width: 100%;
-}
+} */
 h1,
 h2,
 h3,
@@ -278,6 +280,10 @@ select::ms-expand {
   .content {
     max-width: 80%;
   }
+}
+
+.primary-color {
+  color: $primary-color;
 }
 
 .content {

@@ -83,9 +83,13 @@ const userModule = {
       state.userId = VueJwtDecode.decode(tokens.access).user_id;
       state.firstName = VueJwtDecode.decode(tokens.access).first_name;
     },
-    LOGOUT() {
+    LOGOUT(state) {
       localStorage.removeItem("tokens");
-      location.reload();
+      state.tokens = null;
+      state.userId = null;
+      state.firstName = null;
+      
+
     },
 
     SET_TOKENS(state, tokens) {
@@ -124,8 +128,13 @@ const userModule = {
           });
         });
     },
-    logout({ commit }) {
+    logout({ commit, dispatch }) {
       commit("LOGOUT");
+      // location.reload();
+      dispatch("notification/addNotification", {
+        message: "Correctly logged out",
+        type: "success",
+      });
     },
     setJwtHeaders({ commit }) {
       commit("SET_JWT_HEADERS");
