@@ -7,6 +7,7 @@ import camelCase from "lodash/camelCase";
 import "nprogress/nprogress.css";
 import VueMq from "vue-mq";
 import VueTouch from "vue-touch";
+import VueCompositionAPI from '@vue/composition-api'
 
 import "./utils/notifications.js"
 
@@ -23,6 +24,8 @@ Vue.use(VueMq, {
 });
 
 Vue.use(VueTouch);
+
+Vue.use(VueCompositionAPI)
 
 const requireComponent = require.context(
   "./components",

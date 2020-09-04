@@ -40,7 +40,6 @@ const notificationSystem = {
       },
       onClosing: function(instance, toast, closedBy) {
         console.info("closedBy: " + closedBy);
-        console.log(instance, toast);
       },
     },
     ballon: {

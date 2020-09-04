@@ -14,7 +14,7 @@ export default {
   props: ["notification"],
   data() {
     return {
-      timeout: null
+      timeout: null,
     };
   },
   computed: {

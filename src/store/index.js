@@ -35,6 +35,9 @@ const settingsModule = {
     TOGGLE_SHOW_SETTINGS(state) {
       state.showSettings = !state.showSettings;
     },
+    HIDE_SETTINGS(state) {
+      state.showSettings = false;
+    },
     TOGGLE_SHOW_UNKNOWN(state) {
       state.showUnknown = !state.showUnknown;
       localStorage.setItem("settings", JSON.stringify(state));
@@ -50,6 +53,9 @@ const settingsModule = {
     },
     toggleShowSettings({ commit }) {
       commit("TOGGLE_SHOW_SETTINGS");
+    },
+    hideSettings({ commit }) {
+      commit("HIDE_SETTINGS");
     },
     toggleShowUnknown({ commit }) {
       commit("TOGGLE_SHOW_UNKNOWN");
@@ -88,8 +94,6 @@ const userModule = {
       state.tokens = null;
       state.userId = null;
       state.firstName = null;
-      
-
     },
 
     SET_TOKENS(state, tokens) {
@@ -120,8 +124,7 @@ const userModule = {
             type: "success",
           });
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(() => {
           dispatch("notification/addNotification", {
             message: "Error : Couldn't log in",
             type: "danger",

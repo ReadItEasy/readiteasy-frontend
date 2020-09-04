@@ -227,7 +227,6 @@ export default {
       
       if (this.tab != clikedTab) {
         this.direction = clikedTab - this.tab < 0 ? "left" : "right"
-        console.log("KK direcition", this.direction)
         this.tab = clikedTab;
 
       }

@@ -11,7 +11,7 @@
           </template>
           <template v-else>
             <router-link :to="{ name: 'profile' }">Profile</router-link>
-            <a @click.prevent="logout" href="">Logout</a>
+            <a @click.prevent="logout" href>Logout</a>
           </template>
         </nav>
       </Sidebar>
@@ -20,18 +20,14 @@
     <button
       v-show="$route.name == 'reader-tool'"
       class="settings-btn"
+      id="settings__opener"
       @click="toggleShowSettings()"
     >
-      <BaseIcon
-        :color="$store.state.settings.showSettings ? '#39b982' : ''"
-        name="settings"
-      >
-      </BaseIcon>
+      <BaseIcon :color="$store.state.settings.showSettings ? '#39b982' : ''" name="settings"></BaseIcon>
     </button>
-    <Settings
-      v-show="$route.name == 'reader-tool'"
-      v-if="$store.state.settings.showSettings"
-    />
+    <div v-show="$route.name == 'reader-tool'">
+      <Settings />
+    </div>
   </div>
 </template>
 
