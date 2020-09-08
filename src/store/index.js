@@ -126,8 +126,9 @@ const userModule = {
         })
         .catch(() => {
           dispatch("notification/addNotification", {
-            message: "Error : Couldn't log in",
-            type: "danger",
+            title: "Error",
+            message: "Couldn't login",
+            type: "error",
           });
         });
     },

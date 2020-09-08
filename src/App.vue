@@ -142,32 +142,32 @@ small {
   background: linear-gradient(to right, #16c0b0, #84cf6a);
   color: #fff;
 }
-button,
-label,
-input,
-optgroup,
-select,
-textarea {
-  display: inline-flex;
-  font-family: "Open sans", sans-serif;
-  font-size: 100%;
-  line-height: 1.15;
-  margin: 0;
-}
-button,
-input {
-  overflow: visible;
-}
-button,
-select {
-  text-transform: none;
-}
-button,
-[type="button"],
-[type="reset"],
-[type="submit"] {
-  -webkit-appearance: none;
-}
+// button,
+// label,
+// input,
+// optgroup,
+// select,
+// textarea {
+//   display: inline-flex;
+//   font-family: "Open sans", sans-serif;
+//   font-size: 100%;
+//   line-height: 1.15;
+//   margin: 0;
+// }
+// button,
+// input {
+//   overflow: visible;
+// }
+// button,
+// select {
+//   text-transform: none;
+// }
+// button,
+// [type="button"],
+// [type="reset"],
+// [type="submit"] {
+//   -webkit-appearance: none;
+// }
 button::-moz-focus-inner,
 [type="button"]::-moz-focus-inner,
 [type="reset"]::-moz-focus-inner,
