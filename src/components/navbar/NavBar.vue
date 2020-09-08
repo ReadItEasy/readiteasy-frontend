@@ -17,16 +17,17 @@
       </Sidebar>
     </template>
     <router-link to="/" class="brand nav-item">ReadItEasy</router-link>
-    <button
-      v-show="$route.name == 'reader-tool'"
-      class="settings-btn"
-      id="settings__opener"
-      @click="toggleShowSettings()"
-    >
-      <BaseIcon :color="$store.state.settings.showSettings ? '#39b982' : ''" name="settings"></BaseIcon>
-    </button>
-    <div v-show="$route.name == 'reader-tool'">
-      <Settings />
+    <div id="reader-teleport" v-show="$route.name == 'reader-tool'">
+      <div id="pagintation">
+        <Pagination />
+
+      </div>
+      <button class="settings-btn" id="settings__opener" @click="toggleShowSettings()">
+        <BaseIcon :color="$store.state.settings.showSettings ? '#39b982' : ''" name="settings"></BaseIcon>
+      </button>
+      <div>
+        <Settings />
+      </div>
     </div>
   </div>
 </template>
@@ -37,11 +38,14 @@ import Sidebar from "./LeftDrawer.vue";
 import Settings from "./Settings.vue";
 import { authComputed } from "@/store/helpers.js";
 
+import Pagination from "@/components/lab/Pagination2.vue"
+
 export default {
   components: {
     Burger,
     Sidebar,
-    Settings
+    Settings,
+    Pagination
   },
   methods: {
     logout() {
@@ -77,19 +81,6 @@ export default {
   text-decoration: none;
   padding: 0 20px;
 }
-/* .nav .nav-item {
-  box-sizing: border-box;
-  margin: 0 5px;
-  color: rgba(0, 0, 0, 0.5);
-  text-decoration: none;
-}
-.nav .nav-item.router-link-exact-active {
-  color: #39b982;
-  border-bottom: solid 2px #39b982;
-} */
-/* nav > a {
-  margin-right: 10px;
-} */
 
 .router-link-exact-active {
   color: rgb(138, 124, 124) !important;
@@ -103,8 +94,18 @@ export default {
   padding-bottom: 0.5em;
 }
 
-.settings-btn {
+#reader-teleport {
   margin-left: auto;
+  display: flex;
+  flex-direction: row;
+}
+
+#pagintation {
+  margin: 0 10px;
+  display: flex;
+}
+
+.settings-btn {
   display: flex;
   align-items: center;
   background: none;

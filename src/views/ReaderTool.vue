@@ -21,11 +21,11 @@
         @click="onClickHandler"
       >
         <h1>{{ bookName.replace(/_/g, " ") }}</h1>
-        <Pagination
+        <!-- <Pagination
           :page="chapterNumber"
           :bookName="bookName"
           :targetLanguage="targetLanguage"
-        />
+        /> -->
         <div
           class="text-container"
           :class="$store.state.settings.showUnknown && loggedIn ? 'active' : ''"
@@ -44,11 +44,11 @@
             >{{ token }}</span
           >
         </div>
-        <Pagination
+        <!-- <Pagination
           :page="chapterNumber"
           :bookName="bookName"
           :targetLanguage="targetLanguage"
-        />
+        /> -->
         <contextMenu :targetLanguage="targetLanguage"></contextMenu>
       </div>
     </transition>
@@ -60,12 +60,12 @@ import { apiReaditeasy } from "@/services/ApiService.js";
 import { authComputed, bookState } from "@/store/helpers.js";
 import ContextMenu from "@/components/ContextMenu.vue";
 import ReaderDrawer from "@/components/ReaderDrawer.vue";
-import Pagination from "@/components/lab/Pagination.vue";
+// import Pagination from "@/components/lab/Pagination.vue";
 export default {
   components: {
     ContextMenu: ContextMenu,
     ReaderDrawer: ReaderDrawer,
-    Pagination: Pagination
+    // Pagination: Pagination
   },
   props: ["bookName", "chapterNumber"],
   data() {

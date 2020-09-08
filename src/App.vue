@@ -142,6 +142,7 @@ small {
   background: linear-gradient(to right, #16c0b0, #84cf6a);
   color: #fff;
 }
+
 // button,
 // label,
 // input,
@@ -168,6 +169,7 @@ small {
 // [type="submit"] {
 //   -webkit-appearance: none;
 // }
+
 button::-moz-focus-inner,
 [type="button"]::-moz-focus-inner,
 [type="reset"]::-moz-focus-inner,

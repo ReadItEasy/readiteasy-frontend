@@ -47,6 +47,8 @@ export default {
   background-color: transparent;
   cursor: pointer;
   margin: 0 auto;
+  // for centering in wrapper
+  display: inline-flex;
 }
 
 .btn-icon:hover {
