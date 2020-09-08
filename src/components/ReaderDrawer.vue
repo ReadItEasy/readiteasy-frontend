@@ -3,12 +3,12 @@
     <div id="reader-drawer" class="drawer">
       <span class="clicked-word">{{ clickedWord }}</span>
       <div v-if="$store.getters.loggedIn" class="lists">
-        <a class="btn-list" :class="$store.state.userWords.knownDict[clickedWord.toLowerCase()] ? 'active' : ''" @click="toggleInList('known')">known </a>
+        <a class="btn-list primary-color" :class="$store.state.userWords.knownDict[clickedWord.toLowerCase()] ? 'active' : ''" @click="toggleInList('known')">known </a>
         <a class="btn-list" :class="$store.state.userWords.studyDict[clickedWord.toLowerCase()] ? 'active' : ''" @click="toggleInList('study')">study</a>
       </div>
       <div class="tab-header">
         <a
-          class="btn-tab"
+          class="btn-tab primary-color"
           @click="btnTabClick"
           tab="0"
           :class="tab == 0 ? 'active' : ''"
@@ -31,7 +31,7 @@
       </div>
 
       <div class="slide-container">
-        <transition name="slide">
+        <transition :name="'slide-' + direction">
           <div v-if="tab == 0" :key="0" class="slide-item">
             <template v-if="targetLanguage == 'mandarin'">
               <WordCardMandarin
@@ -133,7 +133,9 @@ export default {
       wordBookStatistics: {},
       wordSimilarWords: {},
       tab: 0,
-      englishWords: []
+      direction : "right",
+      englishWords: [],
+
     };
   },
   watch: {
@@ -222,8 +224,11 @@ export default {
     },
     btnTabClick: function(e) {
       let clikedTab = e.target.getAttribute("tab");
+      
       if (this.tab != clikedTab) {
+        this.direction = clikedTab - this.tab < 0 ? "left" : "right"
         this.tab = clikedTab;
+
       }
     },
     toggleInList: function(list) {
@@ -238,7 +243,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 .drawer {
   z-index: 1;
   overflow-y: scroll;
@@ -334,6 +339,7 @@ export default {
   font-weight: 300;
   padding-top: 10px;
   padding-bottom: 10px;
+  /* color: $primary-color */
   /* height: 100%; */
   /* -webkit-box-align: center;
   height: 100px;
@@ -350,6 +356,7 @@ export default {
 
 .btn-tab.active {
   border-bottom: solid 2px;
+  color: $primary-color;
 }
 
 .btn-tab.active:hover {
@@ -361,16 +368,16 @@ export default {
   position: absolute;
 }
 
-.slide-enter-active {
+.slide-left-enter-active, .slide-right-enter-active {
   transition: all 0.3s ease;
 }
-.slide-leave-active {
+.slide-left-leave-active, .slide-right-leave-active {
   transition: all 0.3s ease;
 }
-.slide-enter {
+.slide-right-enter, .slide-left-leave-to {
   transform: translateX(100%);
 }
-.slide-leave-to {
+.slide-right-leave-to, .slide-left-enter {
   transform: translateX(-100%);
 }
 </style>

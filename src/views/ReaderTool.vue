@@ -78,7 +78,7 @@ export default {
       hoveredWord: null,
       showReaderDrawer: false,
       clickedWord: "",
-      clickedWordLemma: "",
+      // clickedWordLemma: "",
       ontouchmove: false,
       // TODO: move this isPunctDict in a dedicated file
       isPunctDict: {
@@ -133,14 +133,6 @@ export default {
         }, 1500);
       }
     });
-    // document.addEventListener("click", () => {
-    //   if (this.hoveredWord && !this.showReaderDrawer) {
-    //     this.showReaderDrawer = true;
-    //   }
-    //   if (!this.hoveredWord && this.showReaderDrawer) {
-    //     this.showReaderDrawer = false;
-    //   }
-    // });
   },
   methods: {
     onLoad() {
@@ -191,6 +183,8 @@ export default {
     mouseLeave: function() {
       this.hoveredWord = null;
     },
+    
+    
     toggleDrawer: function() {
       this.showReaderDrawer = !this.showReaderDrawer;
     },
@@ -199,7 +193,7 @@ export default {
         this.drawerHandler();
         if (this.hoveredWord) {
           this.clickedWord = this.hoveredWord.innerText;
-          this.clickedWordLemma = this.hoveredWord.getAttribute("lemma");
+          // this.clickedWordLemma = this.hoveredWord.getAttribute("lemma");
         }
       }
     },
