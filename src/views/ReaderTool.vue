@@ -31,7 +31,6 @@
           :class="$store.state.settings.showUnknown && loggedIn ? 'active' : ''"
           :style="`font-size:${$store.state.settings.fontSize}px`"
         >
-          <!-- :style="`'font-size':${$store.state.settings.fontSize}px`" -->
           <span
             v-for="(token, key) in chapterText"
             :key="key"
@@ -44,8 +43,6 @@
             @contextmenu.prevent="openContextMenu"
             >{{ token }}</span
           >
-          <!-- :lemma="lemmaText[key]" -->
-          <!-- @click="toggleIsKnown" -->
         </div>
         <Pagination
           :page="chapterNumber"
@@ -78,7 +75,6 @@ export default {
       hoveredWord: null,
       showReaderDrawer: false,
       clickedWord: "",
-      // clickedWordLemma: "",
       ontouchmove: false,
       // TODO: move this isPunctDict in a dedicated file
       isPunctDict: {
@@ -121,7 +117,6 @@ export default {
     });
     document.addEventListener("touchmove", () => {
       if (this.ontouchmove == false) {
-        // console.log("touchmove");
         this.ontouchmove = true;
       }
     });
@@ -129,52 +124,31 @@ export default {
       if (this.ontouchmove == true) {
         setTimeout(() => {
           this.ontouchmove = false;
-          // console.log("touchend");
         }, 1500);
       }
     });
   },
   methods: {
     onLoad() {
-      // console.log("apiReaditeasy.defaults.headers", apiReaditeasy.defaults.headers);
       apiReaditeasy
         .get(`/api/books/${this.targetLanguage}`, {
           params: this.$route.params
         })
         .then(response => {
           this.chapterText = response.data.tokenized_chapter_text;
-          // this.lemmaText = response.data.tokenized_chapter_lemma;
-          // })
-          // .catch(error => {
-          //   console.log("there was an error :" + error.response);
         });
     },
     switchStylingKnownWords() {
       this.isActiveColor = !this.isActiveColor;
     },
     toggleIsKnown(wordSpan) {
-      // const spanTarget = e.currentTarget;
       let data = {};
       data["word"] = wordSpan.innerText;
       data["targetLanguage"] = this.targetLanguage;
       data["list"] = "known";
-      // const textContent = wordSpan.textContent;
       this.$store.dispatch("toggleKnownWord", data);
-      // this.$forceUpdate();
     },
-    // wordInfo: function(e) {
-    //   // console.log(e.target.innerText);
-    //   apiReaditeasy.get("/api/words/mandarin/", {
-    //     params: {
-    //       simplified: e.target.innerText
-    //     }
-    //     // })
-    //     // .then(({ data }) => {
-    //     //   console.log(data);
-    //   });
-    // },
     openContextMenu: function(e) {
-      // console.log("the event in parent", e);
       this.$emit("openContextMenu", e);
     },
     mouseEnter: function(e) {
@@ -193,7 +167,6 @@ export default {
         this.drawerHandler();
         if (this.hoveredWord) {
           this.clickedWord = this.hoveredWord.innerText;
-          // this.clickedWordLemma = this.hoveredWord.getAttribute("lemma");
         }
       }
     },
@@ -214,9 +187,6 @@ export default {
   computed: {
     ...authComputed,
     ...bookState
-    // targetLanguage: function() {
-    //   return this.$store.state.book.targetLanguage
-    // }
   }
 };
 </script>
@@ -242,38 +212,24 @@ h1 {
 span[isPunct="true"] {
   pointer-events: none;
 }
-/* .active > span[isKnown="true"] {
-  color:#00ff80; 
-} */
 .text-container {
   white-space: pre-line;
-  /* text-align: center; */
-  /* font-size: 28px; */
 }
 .text-container > span {
-  /* transition: 0.3s; */
   border-radius: 5px;
   padding: 5px 0px;
   font-family: "Noto Sans", "Noto Sans CJK SC", sans-serif;
-  /* margin: 0px; */
 }
 .text-container > span:hover {
-  /* transition: .3s; */
   background-color: #35ea614d;
   cursor: pointer;
   box-shadow: 0 0 6px rgba(33, 33, 33, 0.2);
 }
 
 .text-container > span::selection {
-  /* transition: .3s; */
   background-color: red;
-  /* cursor: pointer; */
   box-shadow: 0 0 6px rgba(33, 33, 33, 0.2);
 }
-/* .text-container > span:hover {
-  background-color: #39b982;
-  cursor: pointer;
-} */
 .location {
   margin-bottom: 0;
 }
