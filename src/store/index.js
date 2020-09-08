@@ -266,6 +266,9 @@ const notificationModule = {
   actions: {
     addNotification({ commit }, notification) {
       notification.id = new Date().getTime();
+      if (typeof notification.timeout !== "number") {
+        notification.timeout = 3000
+      } 
       commit("PUSH_NOTIFICATION", notification);
     },
     removeNotification({ commit }, notification) {

@@ -1,1 +1,18 @@
 $primary-color: #39b982;
+
+$success-color: rgba(166, 239, 184, 0.9);
+$warning-color: rgba(255, 207, 165, 0.9);
+$error-color: rgba(255, 175, 180, 0.9);
+$info-color: rgba(157, 222, 255, 0.9);
+
+$main-font: "Noto Sans", "Noto Sans CJK SC", sans-serif;
+$alt-font: "Comfortaa", cursive;
+
+@mixin button-reset {
+  padding: 0;
+  border: none;
+  font: inherit;
+  color: inherit;
+  background-color: transparent;
+  cursor: pointer;
+}

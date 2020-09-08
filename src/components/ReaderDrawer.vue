@@ -368,6 +368,10 @@ export default {
   position: absolute;
 }
 
+.btn-list, .btn-tab {
+  font-family: $alt-font;
+}
+
 .slide-left-enter-active, .slide-right-enter-active {
   transition: all 0.3s ease;
 }

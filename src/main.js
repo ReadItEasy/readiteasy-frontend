@@ -7,25 +7,29 @@ import camelCase from "lodash/camelCase";
 import "nprogress/nprogress.css";
 import VueMq from "vue-mq";
 import VueTouch from "vue-touch";
-import VueCompositionAPI from '@vue/composition-api'
+import VueCompositionAPI from "@vue/composition-api";
 
-import "./utils/notifications.js"
+import "./utils/notifications.js";
 
-import "bootstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
+// import "bootstrap";
+// import "bootstrap/dist/css/bootstrap.min.css";
+
+import ToggleButton from "vue-js-toggle-button";
 
 Vue.use(VueMq, {
   breakpoints: {
     mobile: 450,
     tablet: 800,
     laptop: 1250,
-    desktop: Infinity
-  }
+    desktop: Infinity,
+  },
 });
 
 Vue.use(VueTouch);
 
-Vue.use(VueCompositionAPI)
+Vue.use(VueCompositionAPI);
+
+Vue.use(ToggleButton);
 
 const requireComponent = require.context(
   "./components",
@@ -33,7 +37,7 @@ const requireComponent = require.context(
   /Base[A-Z]\w+\.(vue|js)$/
 );
 
-requireComponent.keys().forEach(fileName => {
+requireComponent.keys().forEach((fileName) => {
   const componentConfig = requireComponent(fileName);
 
   const componentName = upperFirst(
@@ -48,5 +52,5 @@ Vue.config.productionTip = false;
 new Vue({
   router,
   store,
-  render: h => h(App)
+  render: (h) => h(App),
 }).$mount("#app");
