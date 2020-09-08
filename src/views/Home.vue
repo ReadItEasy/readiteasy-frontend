@@ -8,7 +8,7 @@
     </p>
     <p>
       Start reading right now with one of my favorite chinese books:
-      <router-link :to="{ path: '/mandarin/book/活着/1' }" class="primary-color">To Live</router-link> by Hua Yu.
+      <router-link :to="{ path: '/mandarin/book/活着/1' }" class="primary-color">To Live</router-link>by Hua Yu.
     </p>
     <br />
     <p>
@@ -26,8 +26,23 @@
     </p>
     <button
       class="btn btn-outline-primary"
-      v-on:click="$store.dispatch('notification/addNotification', {message: 'hello you', type:'success'})"
+      v-on:click="$store.dispatch('notification/addNotification', {title: 'OK', message: 'Notification working', type:'success', })"
     >VuexNotif</button>&nbsp;
+    <button
+      class="btn btn-outline-primary"
+      v-on:click="$store.dispatch('notification/addNotification', {title: 'Caution', message: 'You forgot important data', type:'warning', timeout: 3000 })"
+    >VuexWarning</button>&nbsp;
+
+    <button
+      class="btn btn-outline-primary"
+      v-on:click="$store.dispatch('notification/addNotification', {title: 'Error', message: 'Illegal operation', type:'error', timeout: 1000000 })"
+    >Vuexerror</button>&nbsp;
+    <button
+      class="btn btn-outline-primary"
+      v-on:click="$store.dispatch('notification/addNotification', {title: 'Info', message: 'You are on ReadItEasy', type:'info', timeout: 3000 })"
+    >Vuexinfo</button>&nbsp;
+
+
     <button
       class="btn btn-outline-primary"
       v-on:click="$toast.show('Welcome!', 'Hey', $notificationSystem.options.show)"
@@ -38,23 +53,23 @@
     >Ballon</button>&nbsp;
     <button
       class="btn btn-outline-info"
-      v-on:click="$toast.info('Welcome!', 'Hello', $notificationSystem.options.info)"
+      v-on:click="$toast.info('Welcome!', 'Hello', notificationSystem.options.info)"
     >Info</button>&nbsp;
     <button
       class="btn btn-outline-success"
-      v-on:click="$toast.success('Successfully inserted record!', 'OK', $notificationSystem.options.success)"
+      v-on:click="$toast.success('Successfully inserted record!', 'OK', notificationSystem.options.success)"
     >Success</button>&nbsp;
     <button
       class="btn btn-outline-warning"
-      v-on:click="$toast.warning('You forgot important data', 'Caution', $notificationSystem.options.warning)"
+      v-on:click="$toast.warning('You forgot important data', 'Caution', notificationSystem.options.warning)"
     >Warning</button>&nbsp;
     <button
       class="btn btn-outline-danger"
-      v-on:click="$toast.error('Illegal operation', 'Error', $notificationSystem.options.error)"
+      v-on:click="$toast.error('Illegal operation', 'Error', notificationSystem.options.error)"
     >Error</button>&nbsp;
     <button
       class="btn btn-outline-dark"
-      v-on:click="$toast.question('Are you sure about that?', 'Hey', $notificationSystem.options.question)"
+      v-on:click="$toast.question('Are you sure about that?', 'Hey', notificationSystem.options.question)"
     >Question</button>
   </div>
 </template>
@@ -103,19 +118,24 @@ export default {
           },
           ballon: {
             balloon: true,
-            position: "bottomCenter"
+            position: "bottomCenter",
+            timeout: 200000
           },
           info: {
-            position: "bottomLeft"
+            position: "bottomLeft",
+            timeout: 200000
           },
           success: {
-            position: "bottomRight"
+            position: "bottomRight",
+            timeout: 200000
           },
           warning: {
-            position: "topLeft"
+            position: "topLeft",
+            timeout: 30000
           },
           error: {
-            position: "topRight"
+            position: "topRight",
+            timeout: 200000
           },
           question: {
             timeout: 20000,

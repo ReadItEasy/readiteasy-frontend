@@ -62,7 +62,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .nav {
   display: flex;
   /* justify-content: space-between; */
@@ -70,7 +70,7 @@ export default {
   padding: 0 20px;
 }
 .nav > .brand {
-  font-family: "Montserrat", sans-serif;
+  font-family: $alt-font;
   font-weight: 700;
   font-size: 1.5em;
   color: #39b982;

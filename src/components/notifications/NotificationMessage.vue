@@ -1,11 +1,16 @@
 <template>
-  <div :class="typeClass" class="notification alert alert-dismissible fade show" role="alert">
-    <button type="button" class="close" @click="removeNotification(notification)">
+<div class="capsule">
+
+  <div :class="typeClass" class="notification" role="alert">
+    <!-- <div :class="typeClass" class="notification alert alert-dismissible fade show" role="alert"> -->
+    <button type="button" class="notification__close" @click="removeNotification(notification)">
       <span aria-hidden="true">&times;</span>
     </button>
-    {{ notification.message }}
-    <!-- <span class="notification__message">{{ notification.message }}</span> -->
+    <div class="notification__progress-bar" ref="bar"></div>
+    <span class="notification__title">{{ notification.title }}</span>
+    <span class="notification__message">{{ notification.message }}</span>
   </div>
+</div>
 </template>
 
 <script>
@@ -14,7 +19,7 @@ export default {
   props: ["notification"],
   data() {
     return {
-      timeout: null,
+      timeout: null
     };
   },
   computed: {
@@ -27,6 +32,14 @@ export default {
       this.removeNotification(this.notification);
     }, this.notification.timeout || 3000);
   },
+  mounted() {
+    setTimeout(() => {
+      this.$refs.bar.setAttribute(
+        "style",
+        `width: 0%; transition-duration: ${this.notification.timeout}ms;`
+      );
+    }, 30);
+  },
   beforeDestroy() {
     clearTimeout(this.timeout);
   },
@@ -35,12 +48,67 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.capsule {
+  width: 100%;
+}
 .notification {
-  font-size: 12px;
+  position: relative;
+  float: right;
+  display: inline-flex;
+  clear: both;
+  text-align: right;
+  width: auto;
+  // display: flex;
+  font-size: 14px;
+  font-family: "Lato", Tahoma, Arial;
+  margin-bottom: 10px;
+  padding: 15px 30px 15px 15px;
+  border-radius: 3px;
+  box-shadow: inset 0 -10px 20px -10px rgba(0, 0, 0, 0.2),
+    inset 0 0 5px rgba(0, 0, 0, 0.1), 0 8px 8px -5px rgba(0, 0, 0, 0.25);
 
   // was used when i added a div for wrapping the notif__message
+  &__title {
+    font-weight: bolder;
+    padding-right: 10px;
+  }
   &__message {
-    font-size: 10px;
+    color: rgba(0, 0, 0, 0.6);
+  }
+  &__progress-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 0 0 3px 3px;
+    width: 100%;
+    transition-property: width;
+    transition-timing-function: linear;
+  }
+  &__close {
+    @include button-reset;
+    position: absolute;
+    right: 15px;
+  }
+}
+
+.alert {
+  &-success {
+    background-color: $success-color;
+    border-color: $success-color;
+  }
+  &-warning {
+    background-color: $warning-color;
+    border-color: $warning-color;
+  }
+  &-error {
+    background-color: $error-color;
+    border-color: $error-color;
+  }
+  &-info {
+    background-color: $info-color;
+    border-color: $info-color;
   }
 }
 
