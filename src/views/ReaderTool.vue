@@ -1,57 +1,58 @@
 <template>
-  <div id="reader-tool">
-    <v-touch @swiperight="doSomething">
-      <ReaderDrawer
-        v-show="showReaderDrawer"
-        :clickedWord="clickedWord"
-        :bookName="bookName"
-        :targetLanguage="targetLanguage"
-      />
-    </v-touch>
-    <transition name="slide-fade">
-      <div
-        id="reader-content"
-        :style="
+  <div class="reader__wrapper">
+    <!-- <div id="reader__content"> -->
+      <v-touch @swiperight="doSomething">
+        <ReaderDrawer
+          v-show="showReaderDrawer"
+          :clickedWord="clickedWord"
+          :bookName="bookName"
+          :targetLanguage="targetLanguage"
+        />
+      </v-touch>
+      <transition name="slide-fade">
+        <div
+          id="reader-content"
+          :style="
           $mq === 'tablet' || $mq === 'mobile'
             ? 'no-resize'
             : showReaderDrawer
             ? 'padding-left:10px;padding-right:310px'
             : 'padding-left:160px;padding-right:160px'
         "
-        @click="onClickHandler"
-      >
-        <h1>{{ bookName.replace(/_/g, " ") }}</h1>
-        <!-- <Pagination
-          :page="chapterNumber"
-          :bookName="bookName"
-          :targetLanguage="targetLanguage"
-        /> -->
-        <div
-          class="text-container"
-          :class="$store.state.settings.showUnknown && loggedIn ? 'active' : ''"
-          :style="`font-size:${$store.state.settings.fontSize}px`"
+          @click="onClickHandler"
         >
-          <span
-            v-for="(token, key) in chapterText"
-            :key="key"
-            :position="key"
-            :isKnown="$store.state.userWords.knownDict[token.toLowerCase()]"
-            :isStudy="$store.state.userWords.studyDict[token.toLowerCase()]"
-            :isPunct="isPunctDict[token]"
-            @mouseenter="mouseEnter"
-            @mouseleave="mouseLeave"
-            @contextmenu.prevent="openContextMenu"
-            >{{ token }}</span
-          >
-        </div>
-        <!-- <Pagination
+          <h1>{{ bookName.replace(/_/g, " ") }}</h1>
+          <!-- <Pagination
           :page="chapterNumber"
           :bookName="bookName"
           :targetLanguage="targetLanguage"
-        /> -->
-        <contextMenu :targetLanguage="targetLanguage"></contextMenu>
-      </div>
-    </transition>
+          />-->
+          <div
+            class="text-container"
+            :class="$store.state.settings.showUnknown && loggedIn ? 'active' : ''"
+            :style="`font-size:${$store.state.settings.fontSize}px`"
+          >
+            <span
+              v-for="(token, key) in chapterText"
+              :key="key"
+              :position="key"
+              :isKnown="$store.state.userWords.knownDict[token.toLowerCase()]"
+              :isStudy="$store.state.userWords.studyDict[token.toLowerCase()]"
+              :isPunct="isPunctDict[token]"
+              @mouseenter="mouseEnter"
+              @mouseleave="mouseLeave"
+              @contextmenu.prevent="openContextMenu"
+            >{{ token }}</span>
+          </div>
+          <!-- <Pagination
+          :page="chapterNumber"
+          :bookName="bookName"
+          :targetLanguage="targetLanguage"
+          />-->
+          <contextMenu :targetLanguage="targetLanguage"></contextMenu>
+        </div>
+      </transition>
+    <!-- </div> -->
   </div>
 </template>
 
@@ -64,7 +65,7 @@ import ReaderDrawer from "@/components/ReaderDrawer.vue";
 export default {
   components: {
     ContextMenu: ContextMenu,
-    ReaderDrawer: ReaderDrawer,
+    ReaderDrawer: ReaderDrawer
     // Pagination: Pagination
   },
   props: ["bookName", "chapterNumber"],
@@ -157,8 +158,7 @@ export default {
     mouseLeave: function() {
       this.hoveredWord = null;
     },
-    
-    
+
     toggleDrawer: function() {
       this.showReaderDrawer = !this.showReaderDrawer;
     },
@@ -191,10 +191,29 @@ export default {
 };
 </script>
 
-<style scoped>
-#reader-tool {
-  max-width: 100%;
+<style lang="scss" scoped>
+@media screen and (max-width: 900px) {
+  .reader__wrapper {
+    max-width: 90%;
+  }
 }
+
+@media screen and (min-width: 900px) {
+  .reader__wrapper {
+    max-width: 80%;
+  }
+}
+
+.reader__wrapper {
+  position: relative;
+  top: 60px;
+  margin: auto; 
+  margin-bottom: 100px;
+}
+
+// .reader__content {
+//   max-width: 100%;
+// }
 
 h1 {
   display: block;

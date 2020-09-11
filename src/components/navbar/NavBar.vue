@@ -1,34 +1,36 @@
 <template>
-  <div id="nav" class="nav header">
-    <template>
-      <Burger class="nav-item" />
-      <Sidebar>
-        <nav @click="clickLinkToggleNav" class="sidebar-panel-nav">
-          <router-link :to="{ name: 'books' }">Books</router-link>
-          <template v-if="!loggedIn">
-            <router-link :to="{ name: 'login' }">Login</router-link>
-            <router-link :to="{ name: 'register' }">Register</router-link>
-          </template>
-          <template v-else>
-            <router-link :to="{ name: 'profile' }">Profile</router-link>
-            <a @click.prevent="logout" href>Logout</a>
-          </template>
-        </nav>
-      </Sidebar>
-    </template>
-    <router-link to="/" class="brand nav-item">ReadItEasy</router-link>
-    <div id="reader-teleport" v-show="$route.name == 'reader-tool'">
-      <div id="pagintation">
-        <Pagination />
-
-      </div>
-      <button class="settings-btn" id="settings__opener" @click="toggleShowSettings()">
-        <BaseIcon :color="$store.state.settings.showSettings ? '#39b982' : ''" name="settings"></BaseIcon>
-      </button>
-      <div>
-        <Settings />
+  <div class="navbar">
+    <div class="navbar__front fixed nav header">
+      <template>
+        <Burger class="nav-item" />
+        <Sidebar>
+          <nav @click="clickLinkToggleNav" class="sidebar-panel-nav">
+            <router-link :to="{ name: 'books' }">Books</router-link>
+            <template v-if="!loggedIn">
+              <router-link :to="{ name: 'login' }">Login</router-link>
+              <router-link :to="{ name: 'register' }">Register</router-link>
+            </template>
+            <template v-else>
+              <router-link :to="{ name: 'profile' }">Profile</router-link>
+              <a @click.prevent="logout" href>Logout</a>
+            </template>
+          </nav>
+        </Sidebar>
+      </template>
+      <router-link to="/" class="brand nav-item">ReadItEasy</router-link>
+      <div id="reader-teleport" v-show="$route.name == 'reader-tool'">
+        <div id="pagintation">
+          <Pagination />
+        </div>
+        <button class="settings-btn" id="settings__opener" @click="toggleShowSettings()">
+          <BaseIcon :color="$store.state.settings.showSettings ? '#39b982' : ''" name="settings"></BaseIcon>
+        </button>
+        <div>
+          <Settings />
+        </div>
       </div>
     </div>
+    <div class="navbar__reajuster"></div>
   </div>
 </template>
 
@@ -38,7 +40,7 @@ import Sidebar from "./LeftDrawer.vue";
 import Settings from "./Settings.vue";
 import { authComputed } from "@/store/helpers.js";
 
-import Pagination from "@/components/lab/Pagination2.vue"
+import Pagination from "@/components/lab/Pagination2.vue";
 
 export default {
   components: {
@@ -67,13 +69,33 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.nav {
+.navbar__reajuster {
+  height: 60px;
+  position: relative;
+  top: 0;
+  /* padding: 0 5%; */
+  text-align: left;
+}
+
+.fixed {
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 60px;
+  z-index: 100;
+  background-color: white;
+  box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28);
+  z-index: 5;
+}
+
+.navbar__front {
   display: flex;
   /* justify-content: space-between; */
   align-items: center;
   padding: 0 20px;
 }
-.nav > .brand {
+.navbar__front > .brand {
   font-family: $alt-font;
   font-weight: 700;
   font-size: 1.5em;

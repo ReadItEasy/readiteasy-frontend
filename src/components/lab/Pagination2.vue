@@ -80,10 +80,12 @@ export default {
   border-radius: 15px;
   &__input {
     width: 50px;
+    height: auto;
+    text-align: center;
+    margin: 0 4px;
     border: none;
     border-left: solid 1px rgba(0, 0, 0, 0.4);
     border-right: solid 1px rgba(0, 0, 0, 0.4);
-    margin: 0 4px;
     color: $primary-color;
   }
   &__icon {
@@ -96,8 +98,6 @@ export default {
   }
 }
 
-input {
-  text-align: center;
-  height: auto;
-}
+// input {
+// }
 </style>
