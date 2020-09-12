@@ -26,7 +26,7 @@ export default {
   }
 };
 </script>
-<style scoped>
+<style lang="scss" scoped>
 #burger {
   transform: scale(1.3);
   z-index: 1000;

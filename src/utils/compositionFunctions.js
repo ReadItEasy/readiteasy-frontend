@@ -11,7 +11,6 @@ export function callbackOnClickAway(callbackFonction, clickawayClassList) {
   function clickHandler(e) {
     const parentHasId = checkParentsHasClassname(e.target, clickawayClassList);
 
-    console.log(parentHasId);
     if (!parentHasId) {
       callbackFonction();
     }

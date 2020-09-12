@@ -86,11 +86,16 @@ export default {
   height: 0;
   overflow: hidden;
   background-color: #e8f4ff;
+  background-color: #fff;
 
   // box shadow
   -webkit-box-shadow: 11px 12px 14px -15px rgba(0, 0, 0, 0.75);
   -moz-box-shadow: 11px 12px 14px -15px rgba(0, 0, 0, 0.75);
   box-shadow: 11px 12px 14px -15px rgba(0, 0, 0, 0.75);
+
+  -webkit-box-shadow: 7px 10px 14px 5px rgba(0,0,0,0.34);
+-moz-box-shadow: 7px 10px 14px 5px rgba(0,0,0,0.34);
+box-shadow: 7px 10px 14px 5px rgba(0,0,0,0.34);
 
   &__header {
     display: flex;
@@ -101,14 +106,17 @@ export default {
 
   &__title {
     text-decoration: none;
-    font-size: 30px;
+    font-size: 24px;
     font-weight: 500;
     color: white;
+    // color:darken($color: #E26D5C, $amount: 10) ;
     font-family: "Courier New", Courier, monospace;
+    text-align: center;
   }
 
   &__statistics {
     padding: 30px;
+    color: grey
   }
 
   :hover {

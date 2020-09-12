@@ -30,7 +30,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.btn-icon {
+button {
   // min-width: 100px;
   // font-family: inherit;
   -webkit-appearance: none;
@@ -38,25 +38,24 @@ export default {
   appearance: none;
   border: 0;
   border-radius: 0;
-  background-color: Transparent;
+  background-color: inherit;
   outline: none;
-  padding: 0;
+  // padding: 0;
   border: none;
   font: inherit;
-  color: inherit;
-  background-color: transparent;
+  // color: inherit;
   cursor: pointer;
-  margin: 0 auto;
+  // margin: 0 auto;
   // for centering in wrapper
   display: inline-flex;
 }
 
-.btn-icon:hover {
+button:hover {
   // background: #1b063d;
   // color: lighten(red, 10%);
 }
 
-.btn-icon:active {
+button:active {
   // outline: none;
   // background-color: rgb(0,0,0, 30%);
 }

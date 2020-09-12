@@ -131,7 +131,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 div {
   background: white;
   border: 1px solid #bdbdbd;

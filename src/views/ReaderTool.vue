@@ -245,8 +245,14 @@ span[isPunct="true"] {
   box-shadow: 0 0 6px rgba(33, 33, 33, 0.2);
 }
 
+.text-container > span:active {
+  box-shadow: 0 0 3px rgba(33, 33, 33, 0.2);
+
+}
+
+
 .text-container > span::selection {
-  background-color: red;
+  background-color: #88e3e1;
   box-shadow: 0 0 6px rgba(33, 33, 33, 0.2);
 }
 .location {

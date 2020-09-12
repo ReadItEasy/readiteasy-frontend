@@ -19,6 +19,7 @@
           >english</a>
         </li>
       </ul>
+      <hr class="bookshelf__hr" />
       <LanguageSection v-if="language" :targetLanguage="language.lang" :books="language.books" />
       <!-- <div v-for="(language, index) in languages.filter(function(language){return language.lang==tab})" :key="index">
         <LanguageSection :targetLanguage="language.lang" :books="language.books" />
@@ -44,7 +45,7 @@ export default {
   created() {
     apiReaditeasy.get("/api/books/languages").then(response => {
       this.languages = response.data.languages;
-      console.log("KK typeof ", typeof this.languages, this.languages)
+      console.log("KK typeof ", typeof this.languages, this.languages);
       // })
       // .catch(error => {
       //   console.log("there was an error :" + error.response);
@@ -61,12 +62,11 @@ export default {
   },
   computed: {
     language() {
-        const language = this.languages.filter((language) =>{
-          return language.lang === this.tab;
-        });
-        console.log("KK language", language);
-        return language[0];
-
+      const language = this.languages.filter(language => {
+        return language.lang === this.tab;
+      });
+      console.log("KK language", language);
+      return language[0];
     }
   }
 };
@@ -74,14 +74,22 @@ export default {
 
 <style lang="scss" scoped>
 .bookshelf {
-  background-color: lighten($color: $primary-color, $amount: 40);
-  padding: 50px 50px;
+  // background-color: lighten($color: $primary-color, $amount: 40);
+  background-color: white;
+  background-color: rgb(238, 238, 238);
+  padding: 20px 50px;
   min-height: calc(100vh - 60px);
 
   &__content {
-    background-color: white;
+    // background-color: white;
     padding: 30px;
     border-radius: 10px;
+  }
+
+  &__hr {
+    border-top: 1px solid #e3e3e3;
+    border-bottom: none;
+    margin: 30px 0 40px 0;
   }
 }
 

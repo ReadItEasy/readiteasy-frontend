@@ -37,7 +37,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 div.tabs {
   border-style: none none solid none;
   border-color: rgba(212, 212, 212);

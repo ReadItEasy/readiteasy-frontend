@@ -1,10 +1,22 @@
 <template>
   <transition name="slide-fade">
     <div id="reader-drawer" class="drawer">
-      <span class="clicked-word">{{ clickedWord }}</span>
-      <div v-if="$store.getters.loggedIn" class="lists">
-        <a class="btn-list primary-color" :class="$store.state.userWords.knownDict[clickedWord.toLowerCase()] ? 'active' : ''" @click="toggleInList('known')">known </a>
-        <a class="btn-list" :class="$store.state.userWords.studyDict[clickedWord.toLowerCase()] ? 'active' : ''" @click="toggleInList('study')">study</a>
+      <div class="drawer__header">
+        <span class="clicked-word drawer__title">{{ clickedWord }}</span>
+        <div v-if="$store.getters.loggedIn" class="lists drawer__badges">
+          <BaseIconBtn
+            name="playlist-edit"
+            class="drawer__badge"
+            :class="$store.state.userWords.studyDict[clickedWord.toLowerCase()] ? 'drawer__badge--active' : ''"
+            @click.native="toggleInList('study')"
+          />
+          <BaseIconBtn
+            name="head-heart-outline"
+            class="drawer__badge"
+            :class="$store.state.userWords.knownDict[clickedWord.toLowerCase()] ? 'drawer__badge--active' : ''"
+            @click.native="toggleInList('known')"
+          />
+        </div>
       </div>
       <div class="tab-header">
         <a
@@ -12,33 +24,16 @@
           @click="btnTabClick"
           tab="0"
           :class="tab == 0 ? 'active' : ''"
-          >WORDS</a
-        >
-        <a
-          class="btn-tab"
-          @click="btnTabClick"
-          tab="1"
-          :class="tab == 1 ? 'active' : ''"
-          >STATS</a
-        >
-        <a
-          class="btn-tab"
-          @click="btnTabClick"
-          tab="2"
-          :class="tab == 2 ? 'active' : ''"
-          >SIMILAR</a
-        >
+        >WORDS</a>
+        <a class="btn-tab" @click="btnTabClick" tab="1" :class="tab == 1 ? 'active' : ''">STATS</a>
+        <a class="btn-tab" @click="btnTabClick" tab="2" :class="tab == 2 ? 'active' : ''">SIMILAR</a>
       </div>
 
       <div class="slide-container">
         <transition :name="'slide-' + direction">
           <div v-if="tab == 0" :key="0" class="slide-item">
             <template v-if="targetLanguage == 'mandarin'">
-              <WordCardMandarin
-                v-for="word in processedWord"
-                :key="word.id"
-                :word="word"
-              ></WordCardMandarin>
+              <WordCardMandarin v-for="word in processedWord" :key="word.id" :word="word"></WordCardMandarin>
             </template>
             <template v-if="targetLanguage == 'english'">
               <WordCardEnglish
@@ -65,18 +60,18 @@
                 <th>freq</th>
                 <td>
                   {{
-                    (
-                      (1000000 * wordBookStatistics.count) /
-                      wordBookStatistics.n_tokens
-                    ).toFixed(0)
+                  (
+                  (1000000 * wordBookStatistics.count) /
+                  wordBookStatistics.n_tokens
+                  ).toFixed(0)
                   }}
                 </td>
                 <td>
                   {{
-                    (
-                      (1000000 * wordCorpusStatistics.count) /
-                      wordCorpusStatistics.n_tokens
-                    ).toFixed(0)
+                  (
+                  (1000000 * wordCorpusStatistics.count) /
+                  wordCorpusStatistics.n_tokens
+                  ).toFixed(0)
                   }}
                 </td>
               </tr>
@@ -88,9 +83,7 @@
                 v-for="(similarWord,
                 index) in wordSimilarWords.target_similar_words"
                 :key="index"
-              >
-                {{ similarWord }}
-              </li>
+              >{{ similarWord }}</li>
             </ol>
           </div>
         </transition>
@@ -104,11 +97,13 @@ import { apiReaditeasy } from "@/services/ApiService.js";
 import { fetchWordFromWiktionary } from "@/services/Scrapper.js";
 import WordCardMandarin from "@/components/WordCardMandarin.vue";
 import WordCardEnglish from "@/components/WordCardEnglish.vue";
+import BaseIconBtn from "@/components/base/BaseIconBtn.vue";
 
 export default {
   components: {
     WordCardMandarin,
-    WordCardEnglish
+    WordCardEnglish,
+    BaseIconBtn
   },
   props: {
     clickedWord: {
@@ -133,9 +128,8 @@ export default {
       wordBookStatistics: {},
       wordSimilarWords: {},
       tab: 0,
-      direction : "right",
-      englishWords: [],
-
+      direction: "right",
+      englishWords: []
     };
   },
   watch: {
@@ -224,11 +218,10 @@ export default {
     },
     btnTabClick: function(e) {
       let clikedTab = e.target.getAttribute("tab");
-      
-      if (this.tab != clikedTab) {
-        this.direction = clikedTab - this.tab < 0 ? "left" : "right"
-        this.tab = clikedTab;
 
+      if (this.tab != clikedTab) {
+        this.direction = clikedTab - this.tab < 0 ? "left" : "right";
+        this.tab = clikedTab;
       }
     },
     toggleInList: function(list) {
@@ -243,7 +236,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .drawer {
   z-index: 1;
   overflow-y: scroll;
@@ -263,6 +256,57 @@ export default {
   border-width: 1px;
   display: flex;
   flex-direction: column;
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__title {
+    margin-top: 0.5em;
+  }
+
+  &__badges {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &__badge {
+    // width: 40px;
+    transform: scale(1.2);
+    // margin: 5px;
+    padding: 0.2em;
+    margin: 0.2em;
+    border-radius: 0.3em;
+    color: rgb(150, 150, 150);
+    // background-color: red ;
+
+    &:hover {
+      background-color: lighten(#d9d9d9, 5);
+
+    }
+
+    &:active {
+      background-color: lighten(#d9d9d9, 5);
+      background-color: #d9d9d9;
+
+      // filter: brightness(2)
+    }
+
+    &--active {
+      color: darken($primary-color,10);
+
+      &:hover {
+        background-color: lighten($primary-color, 40);
+      }
+
+      &:active {
+        background-color: lighten($primary-color, 30);
+        // color: white;
+
+      }
+    }
+  }
 }
 
 .drawer::-webkit-scrollbar {
@@ -368,20 +412,25 @@ export default {
   position: absolute;
 }
 
-.btn-list, .btn-tab {
+.btn-list,
+.btn-tab {
   font-family: $alt-font;
 }
 
-.slide-left-enter-active, .slide-right-enter-active {
+.slide-left-enter-active,
+.slide-right-enter-active {
   transition: all 0.3s ease;
 }
-.slide-left-leave-active, .slide-right-leave-active {
+.slide-left-leave-active,
+.slide-right-leave-active {
   transition: all 0.3s ease;
 }
-.slide-right-enter, .slide-left-leave-to {
+.slide-right-enter,
+.slide-left-leave-to {
   transform: translateX(100%);
 }
-.slide-right-leave-to, .slide-left-enter {
+.slide-right-leave-to,
+.slide-left-enter {
   transform: translateX(-100%);
 }
 </style>

@@ -68,7 +68,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .settings__menu {
   background-color: white;
   position: absolute;

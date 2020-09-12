@@ -1,10 +1,10 @@
 <template>
-  <div class="language-card">
-    <div class="title">
+  <div class="language-section">
+    <!-- <div class="title">
       <BaseIcon name="book" />
       <span>{{ books.length }} books</span>
       <div class="subheader"></div>
-    </div>
+    </div> -->
     <div class="books-section" v-show="showBoolean">
       <BookCard
         v-for="bookName in books"
@@ -19,7 +19,7 @@
 <script>
 import { apiReaditeasy } from "@/services/ApiService.js";
 import { authComputed } from "@/store/helpers.js";
-import BookCard from "@/components/BookCard.vue";
+import BookCard from "@/components/BookCardHorizontal.vue";
 
 export default {
   components: {
@@ -63,15 +63,19 @@ export default {
 };
 </script>
 
-<style scoped>
-.books-section {
-  /* display: flex;
-  flex-wrap: wrap; */
+<style lang="scss" scoped>
+/* .books-section {
   display: grid;
   list-style: none;
   grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
   grid-gap: 36px;
+} */
+.books-section {
+  /* display: grid; */
+  list-style: none;
 }
+
+
 /* * {
   margin: 0px;
 }
