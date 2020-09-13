@@ -18,7 +18,7 @@
         </Sidebar>
       </template>
       <router-link to="/" class="brand nav-item">ReadItEasy</router-link>
-      <div id="reader-teleport" v-show="$route.name == 'reader-tool'">
+      <div id="reader-teleport" v-if="$route.name == 'reader-tool'">
         <div id="pagintation">
           <Pagination />
         </div>

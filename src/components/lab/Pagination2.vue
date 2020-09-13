@@ -33,6 +33,7 @@ export default {
   },
   created() {
     this.pageInput = this.$route.params.chapterNumber;
+    console.log("KK pageinput", this.pageInput)
   },
   // watch: {
   //   page(newValue) {
