@@ -1,99 +1,104 @@
 <template>
   <transition name="slide-fade">
-    <div id="reader-drawer" class="drawer">
-      <span class="clicked-word">{{ clickedWord }}</span>
-      <div v-if="$store.getters.loggedIn" class="lists">
-        <a class="btn-list primary-color" :class="$store.state.userWords.knownDict[clickedWord.toLowerCase()] ? 'active' : ''" @click="toggleInList('known')">known </a>
-        <a class="btn-list" :class="$store.state.userWords.studyDict[clickedWord.toLowerCase()] ? 'active' : ''" @click="toggleInList('study')">study</a>
+    <div class="drawer">
+      <div class="drawer__header">
+        <span class="drawer__title">{{ clickedWord }}</span>
+        <div v-if="$store.getters.loggedIn" class="drawer__badges">
+          <BaseIconBtn
+            name="playlist-edit"
+            class="drawer__badge"
+            :class="$store.state.userWords.studyDict[clickedWord.toLowerCase()] ? 'drawer__badge--active' : ''"
+            @click.native="toggleInList('study')"
+          />
+          <BaseIconBtn
+            name="head-heart-outline"
+            class="drawer__badge"
+            :class="$store.state.userWords.knownDict[clickedWord.toLowerCase()] ? 'drawer__badge--active' : ''"
+            @click.native="toggleInList('known')"
+          />
+        </div>
       </div>
-      <div class="tab-header">
-        <a
-          class="btn-tab primary-color"
-          @click="btnTabClick"
-          tab="0"
-          :class="tab == 0 ? 'active' : ''"
-          >WORDS</a
-        >
-        <a
-          class="btn-tab"
-          @click="btnTabClick"
-          tab="1"
-          :class="tab == 1 ? 'active' : ''"
-          >STATS</a
-        >
-        <a
-          class="btn-tab"
-          @click="btnTabClick"
-          tab="2"
-          :class="tab == 2 ? 'active' : ''"
-          >SIMILAR</a
-        >
-      </div>
+      <div class="drawer__content tabs">
+        <div class="tabs__header">
+          <a
+            class="tabs__tab"
+            @click="btnTabClick"
+            tab="0"
+            :class="tab == 0 ? 'active' : ''"
+          >WORDS</a>
+          <a
+            class="tabs__tab"
+            @click="btnTabClick"
+            tab="1"
+            :class="tab == 1 ? 'active' : ''"
+          >STATS</a>
+          <a
+            class="tabs__tab"
+            @click="btnTabClick"
+            tab="2"
+            :class="tab == 2 ? 'active' : ''"
+          >SIMILAR</a>
+        </div>
 
-      <div class="slide-container">
-        <transition :name="'slide-' + direction">
-          <div v-if="tab == 0" :key="0" class="slide-item">
-            <template v-if="targetLanguage == 'mandarin'">
-              <WordCardMandarin
-                v-for="word in processedWord"
-                :key="word.id"
-                :word="word"
-              ></WordCardMandarin>
-            </template>
-            <template v-if="targetLanguage == 'english'">
-              <WordCardEnglish
-                v-for="(englishWord, index) in englishWords"
-                :key="index"
-                :englishWord="englishWord"
-              ></WordCardEnglish>
-            </template>
-          </div>
+        <div class="tabs__content">
+          <transition :name="'slide-' + direction">
+            <div v-if="tab == 0" :key="0" class="tabs__slider">
+              <template v-if="targetLanguage == 'mandarin'">
+                <WordCardMandarin v-for="word in processedWord" :key="word.id" :word="word"></WordCardMandarin>
+              </template>
+              <template v-if="targetLanguage == 'english'">
+                <WordCardEnglish
+                  v-for="(englishWord, index) in englishWords"
+                  :key="index"
+                  :englishWord="englishWord"
+                ></WordCardEnglish>
+              </template>
+            </div>
 
-          <div v-if="tab == 1" :key="1" class="slide-item">
-            <table>
-              <tr>
-                <th></th>
-                <th>book</th>
-                <th>corpus</th>
-              </tr>
-              <tr>
-                <th>rank</th>
-                <td>{{ wordBookStatistics.rank }}</td>
-                <td>{{ wordCorpusStatistics.rank }}</td>
-              </tr>
-              <tr>
-                <th>freq</th>
-                <td>
-                  {{
+            <div v-if="tab == 1" :key="1" class="tabs__slider">
+              <table>
+                <tr>
+                  <th></th>
+                  <th>book</th>
+                  <th>corpus</th>
+                </tr>
+                <tr>
+                  <th>rank</th>
+                  <td>{{ wordBookStatistics.rank }}</td>
+                  <td>{{ wordCorpusStatistics.rank }}</td>
+                </tr>
+                <tr>
+                  <th>freq</th>
+                  <td>
+                    {{
                     (
-                      (1000000 * wordBookStatistics.count) /
-                      wordBookStatistics.n_tokens
+                    (1000000 * wordBookStatistics.count) /
+                    wordBookStatistics.n_tokens
                     ).toFixed(0)
-                  }}
-                </td>
-                <td>
-                  {{
+                    }}
+                  </td>
+                  <td>
+                    {{
                     (
-                      (1000000 * wordCorpusStatistics.count) /
-                      wordCorpusStatistics.n_tokens
+                    (1000000 * wordCorpusStatistics.count) /
+                    wordCorpusStatistics.n_tokens
                     ).toFixed(0)
-                  }}
-                </td>
-              </tr>
-            </table>
-          </div>
-          <div v-if="tab == 2" :key="2" class="slide-item">
-            <ol>
-              <li
-                v-for="(similarWord,
+                    }}
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <div v-if="tab == 2" :key="2" class="tabs__slider">
+              <ol>
+                <li
+                  v-for="(similarWord,
                 index) in wordSimilarWords.target_similar_words"
-                :key="index"
-              >
-                {{ similarWord }}
-              </li>
-            </ol>
-          </div>
-        </transition>
+                  :key="index"
+                >{{ similarWord }}</li>
+              </ol>
+            </div>
+          </transition>
+        </div>
       </div>
     </div>
   </transition>
@@ -104,11 +109,13 @@ import { apiReaditeasy } from "@/services/ApiService.js";
 import { fetchWordFromWiktionary } from "@/services/Scrapper.js";
 import WordCardMandarin from "@/components/WordCardMandarin.vue";
 import WordCardEnglish from "@/components/WordCardEnglish.vue";
+import BaseIconBtn from "@/components/base/BaseIconBtn.vue";
 
 export default {
   components: {
     WordCardMandarin,
-    WordCardEnglish
+    WordCardEnglish,
+    BaseIconBtn
   },
   props: {
     clickedWord: {
@@ -133,9 +140,8 @@ export default {
       wordBookStatistics: {},
       wordSimilarWords: {},
       tab: 0,
-      direction : "right",
-      englishWords: [],
-
+      direction: "right",
+      englishWords: []
     };
   },
   watch: {
@@ -224,11 +230,10 @@ export default {
     },
     btnTabClick: function(e) {
       let clikedTab = e.target.getAttribute("tab");
-      
-      if (this.tab != clikedTab) {
-        this.direction = clikedTab - this.tab < 0 ? "left" : "right"
-        this.tab = clikedTab;
 
+      if (this.tab != clikedTab) {
+        this.direction = clikedTab - this.tab < 0 ? "left" : "right";
+        this.tab = clikedTab;
       }
     },
     toggleInList: function(list) {
@@ -243,7 +248,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .drawer {
   z-index: 1;
   overflow-y: scroll;
@@ -263,18 +268,65 @@ export default {
   border-width: 1px;
   display: flex;
   flex-direction: column;
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__title {
+    text-align: center;
+
+    margin-top: 0.5em;
+    font-size: 1.5em;
+  }
+
+  &__badges {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &__badge {
+    // width: 40px;
+    transform: scale(1.2);
+    // margin: 5px;
+    padding: 0.2em;
+    margin: 0.2em;
+    border-radius: 0.3em;
+    color: rgb(150, 150, 150);
+    // background-color: red ;
+
+    &:hover {
+      background-color: lighten(#d9d9d9, 5);
+    }
+
+    &:active {
+      background-color: lighten(#d9d9d9, 5);
+      background-color: #d9d9d9;
+
+      // filter: brightness(2)
+    }
+
+    &--active {
+      color: darken($primary-color, 10);
+
+      &:hover {
+        background-color: lighten($primary-color, 40);
+      }
+
+      &:active {
+        background-color: lighten($primary-color, 30);
+        // color: white;
+      }
+    }
+  }
 }
 
 .drawer::-webkit-scrollbar {
   display: none;
 }
 
-.clicked-word {
-  text-align: center;
-  font-size: 30px;
-  font-weight: 800;
-}
-
+// drawer enter/leave transition effect
 .slide-fade-enter-active {
   transition: all 0.3s ease;
 }
@@ -286,102 +338,63 @@ export default {
   transform: translateX(100%);
 }
 
-.lists {
-  display: flex;
-  /* height: 50px; */
-  /* display: flex; */
-  /* justify-content: center;
-  align-items: center; */
+.tabs {
+  &__header {
+    display: flex;
+    border-top: 1px rgba(212, 212, 212) solid;
+  }
+
+  &__tab {
+    font-family: $alt-font;
+    flex-basis: 100%;
+    text-align: center;
+    cursor: pointer;
+    font-weight: 300;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    color: grey;
+
+    &:hover {
+      background-color: rgba(212, 212, 212, 0.1);
+    }
+
+    &.active {
+      border-bottom: solid 2px;
+      color: $primary-color;
+
+      &:hover {
+        background-color: rgba(57, 185, 130, 0.1);
+      }
+    }
+
+    //// This is similar to insert the rule in the &__tab part (as not active is equivalent to default expected)
+    // &:not(.active) {
+    //   color: grey;
+    // }
+  }
+
+  &__slider {
+    width: 300px;
+    position: absolute;
+  }
 }
 
-.lists a {
-  flex-basis: 100%;
-  text-align: center;
-  cursor: pointer;
-  font-weight: 300;
-  padding-top: 15px;
-  padding-bottom: 15px;
-  /* height: 100%; */
-  /* -webkit-box-align: center;
-  height: 100px;
-  line-height: 100px; */
-}
 
-.lists a:hover {
-  background-color: rgba(212, 212, 212, 0.1);
-}
-
-.btn-list:not(.active) {
-  color: grey;
-}
-
-.btn-list.active {
-  /* border-bottom: solid 2px; */
-}
-
-.btn-list.active:hover {
-  background-color: rgba(57, 185, 130, 0.1);
-}
-
-.tab-header {
-  display: flex;
-  border-top: 1px rgba(212, 212, 212) solid;
-  /* height: 50px; */
-  /* display: flex; */
-  /* justify-content: center;
-  align-items: center; */
-}
-
-.tab-header a {
-  flex-basis: 100%;
-  text-align: center;
-  cursor: pointer;
-  font-weight: 300;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  /* color: $primary-color */
-  /* height: 100%; */
-  /* -webkit-box-align: center;
-  height: 100px;
-  line-height: 100px; */
-}
-
-.tab-header a:hover {
-  background-color: rgba(212, 212, 212, 0.1);
-}
-
-.btn-tab:not(.active) {
-  color: grey;
-}
-
-.btn-tab.active {
-  border-bottom: solid 2px;
-  color: $primary-color;
-}
-
-.btn-tab.active:hover {
-  background-color: rgba(57, 185, 130, 0.1);
-}
-
-.slide-item {
-  width: 300px;
-  position: absolute;
-}
-
-.btn-list, .btn-tab {
-  font-family: $alt-font;
-}
-
-.slide-left-enter-active, .slide-right-enter-active {
+// tab slide right/left transtion effect
+.slide-left-enter-active,
+.slide-right-enter-active {
   transition: all 0.3s ease;
 }
-.slide-left-leave-active, .slide-right-leave-active {
+.slide-left-leave-active,
+.slide-right-leave-active {
   transition: all 0.3s ease;
 }
-.slide-right-enter, .slide-left-leave-to {
+.slide-right-enter,
+.slide-left-leave-to {
   transform: translateX(100%);
 }
-.slide-right-leave-to, .slide-left-enter {
+.slide-right-leave-to,
+.slide-left-enter {
   transform: translateX(-100%);
 }
 </style>

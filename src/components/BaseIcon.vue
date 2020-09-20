@@ -37,7 +37,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .icon-wrapper {
   display: inline-flex;
   align-items: center;

@@ -32,7 +32,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .word-card {
   /* border-style: solid none solid none;
   border-width: 1px;

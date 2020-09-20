@@ -1,63 +1,17 @@
 <template>
-  <div class="language-card" v-if="books">
-    <div class="title">
-      <h2 @click="switchShow()">{{ targetLanguage }}</h2>
+  <div class="language-section">
+    <!-- <div class="title">
       <BaseIcon name="book" />
       <span>{{ books.length }} books</span>
       <div class="subheader"></div>
-    </div>
+    </div> -->
     <div class="books-section" v-show="showBoolean">
-      <div v-for="bookName in books" :key="bookName" class="book-card">
-        <router-link
-          class="book-link"
-          :to="{
-            name: 'reader-tool',
-            params: {
-              bookName: bookName,
-              targetLanguage: targetLanguage,
-              chapterNumber: 1
-            }
-          }"
-        >
-          {{ bookName }}
-        </router-link>
-        <template v-if="booksStatistics">
-          <p v-if="booksStatistics[bookName]">
-            book lenght : {{ booksStatistics[bookName].n_book_tokens }} <br />
-            book unique words : {{ booksStatistics[bookName].n_book_types }}
-            <br />
-            known words : {{ booksStatistics[bookName].n_user_tokens }} <br />
-            ratio known words :
-            {{
-              (
-                (100 * booksStatistics[bookName].n_user_tokens) /
-                booksStatistics[bookName].n_book_tokens
-              ).toFixed(2)
-            }}
-            % <br />
-            95% percentile word :
-            {{ booksStatistics[bookName].book_char_95percentile }} <br />
-            95% percentile rank :{{
-              booksStatistics[bookName].book_rank_95percentile
-            }}
-          </p>
-        </template>
-      </div>
-    </div>
-  </div>
-  <div class="language-card" v-else>
-    <div class="title">
-      <router-link
-          class="book-link"
-          :to="{
-            name: 'known-words',
-            params: {
-              targetLanguage: targetLanguage,
-            }
-          }"
-        >
-          {{ targetLanguage }}
-        </router-link>
+      <BookCard
+        v-for="bookName in books"
+        :key="bookName"
+        :bookName="bookName"
+        :targetLanguage="targetLanguage"
+      />
     </div>
   </div>
 </template>
@@ -65,8 +19,12 @@
 <script>
 import { apiReaditeasy } from "@/services/ApiService.js";
 import { authComputed } from "@/store/helpers.js";
+import BookCard from "@/components/BookCardHorizontal.vue";
 
 export default {
+  components: {
+    BookCard
+  },
   props: {
     targetLanguage: String,
     books: Array
@@ -106,7 +64,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-* {
+/* .books-section {
+  display: grid;
+  list-style: none;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  grid-gap: 36px;
+} */
+.books-section {
+  /* display: grid; */
+  list-style: none;
+}
+
+
+/* * {
   margin: 0px;
 }
 
@@ -123,13 +93,10 @@ export default {
 .subheader {
   display: inline-flex;
   justify-content: center;
-  align-items: center; /* for single line flex container */
+  align-items: center; 
   align-content: center;
 }
 
-/* .title h3 {
-  display: inline;
-} */
 
 .book-card {
   padding: 20px;
@@ -151,5 +118,5 @@ export default {
   color: black;
   text-decoration: none;
   font-weight: 100;
-}
+} */
 </style>

@@ -62,7 +62,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .register-div {
   margin-top: 5%;
 }

@@ -47,7 +47,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .active > span[isKnown="true"] {
   color: green;
 }
