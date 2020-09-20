@@ -248,6 +248,12 @@ const userWordsModule = {
       commit("TOGGLE_WORD", data);
     },
   },
+  getters: {
+    knownDict(state) {
+      let knownDictKeys = Object.keys(state.knownDict);
+      return knownDictKeys;
+    },
+  },
 };
 
 const notificationModule = {
