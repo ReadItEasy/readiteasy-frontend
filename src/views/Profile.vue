@@ -1,33 +1,37 @@
 <template>
   <div>
     <h1>Profile</h1>
-    <p>
-      Hello <strong>{{ $store.state.user.firstName }}</strong
-      >. Here will soon be displayed tons of statistics about your known words,
-      target languages and time spent reading !
-    </p>
-    <p>
-      You can start reading
-      <router-link :to="{ path: '/mandarin/book/活着/1' }">To Live</router-link>
-      by Hua Yu
-    </p>
-    <div v-for="(language, index) in languages" :key="index">
-      <LanguageSection
-        :targetLanguage="language.lang"
-      />
+    
+    <div class="bookshelf__content">
+      <ul class="filter-subnav">
+        <li>
+          <a
+            title="info"
+            class="filter-subnav__link"
+            :class="tab === 'info' ? 'active' : ''"
+            @click="btnTabClick"
+          >User Info</a>
+        </li>
+        <li class="filter-subnav__item">
+          <a
+            title="known-words"
+            class="filter-subnav__link"
+            :class="tab === 'knownWords' ? 'active' : ''"
+            @click="btnTabClick"
+          >Known Words</a>
+        </li>
+      </ul>
+      <hr class="bookshelf__hr" />
     </div>
+    <router-view />
   </div>
   
 </template>
 
 <script>
 import { apiReaditeasy } from "@/services/ApiService.js";
-import LanguageSection from "@/components/LanguageSection.vue";
 
 export default {
-  components: {
-    LanguageSection: LanguageSection
-  },
   data() {
     return {
       languages: {}
@@ -40,8 +44,19 @@ export default {
       // .catch(error => {
       //   console.log("there was an error :" + error.response);
     });
+  },
+  methods: {
+    btnTabClick: function(e) {
+      let clickedTab = e.target.getAttribute("title");
+
+      if (this.tab != clickedTab) {
+        this.tab = clickedTab;
+      }
+
+      this.$router.push({ path: `/profile/${clickedTab}` });
+    }
   }
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss"></style>

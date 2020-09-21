@@ -72,7 +72,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .bookshelf {
   // background-color: lighten($color: $primary-color, $amount: 40);
   background-color: white;
