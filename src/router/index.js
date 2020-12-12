@@ -10,6 +10,7 @@ import RegisterUser from "../views/RegisterUser.vue";
 import Profile from "../views/Profile.vue";
 import KnownWords from "../components/profile/KnownWords.vue";
 import UserInfo from "../components/profile/UserInfo.vue";
+import WordList from "../components/profile/WordList.vue";
 
 Vue.use(VueRouter);
 
@@ -77,7 +78,15 @@ const routes = [
         path: "known-words",
         name: "known-words",
         component: KnownWords,
-        meta: { requiresAuth: true }
+        meta: { requiresAuth: true },
+        children: [
+          {
+            path: ":targetLanguage",
+            name: "word-list",
+            component: WordList,
+            meta: { requiresAuth: true }
+          }
+        ]
       }
     ]
   }

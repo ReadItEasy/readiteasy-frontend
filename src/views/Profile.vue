@@ -16,12 +16,11 @@
           <a
             title="known-words"
             class="filter-subnav__link"
-            :class="tab === 'knownWords' ? 'active' : ''"
+            :class="tab === 'known-words' ? 'active' : ''"
             @click="btnTabClick"
           >Known Words</a>
         </li>
       </ul>
-      <hr class="bookshelf__hr" />
     </div>
     <router-view />
   </div>
@@ -34,15 +33,12 @@ import { apiReaditeasy } from "@/services/ApiService.js";
 export default {
   data() {
     return {
-      languages: {}
+      tab: "info"
     };
   },
   created() {
     apiReaditeasy.get("/api/books/languages").then(response => {
       this.languages = response.data.languages;
-      // })
-      // .catch(error => {
-      //   console.log("there was an error :" + error.response);
     });
   },
   methods: {
@@ -59,4 +55,25 @@ export default {
 };
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.languageshelf {
+  // background-color: lighten($color: $primary-color, $amount: 40);
+  background-color: white;
+  background-color: rgb(238, 238, 238);
+  padding: 20px 50px;
+  min-height: calc(100vh - 60px);
+
+  &__content {
+    // background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+  }
+
+  &__hr {
+    border-top: 1px solid #e3e3e3;
+    border-bottom: none;
+    margin: 30px 0 40px 0;
+  }
+}
+</style>
